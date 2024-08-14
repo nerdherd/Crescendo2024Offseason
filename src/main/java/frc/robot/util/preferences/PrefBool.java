@@ -21,6 +21,7 @@ public class PrefBool {
         this.value = value;
         loadPreferences();
     }
+    
 
     /**
      * Load preference from robot memory
