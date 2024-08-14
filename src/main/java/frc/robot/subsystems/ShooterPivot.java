@@ -235,22 +235,37 @@ public class ShooterPivot extends SubsystemBase implements Reportable {
  
     //****************************** STATE METHODS ******************************/
  
+    /**
+     * @return target position according too motionMagic
+     */
     public double getTargetPositionRev() {
         return motionMagicRequest.Position;
     }
  
+    /**
+     * @return getTargetPositionRev in degrees
+     */
     public double getTargetPositionDegrees() {
         return getTargetPositionRev() * 360;
     }
  
+    /**
+     * @return current position according to motor encoders
+     */
     public double getPositionRev() {
         return pivot.getPosition().getValueAsDouble();
     }
  
+    /**
+     * @return getPositionRev in degrees
+     */
     public double getPositionDegrees() {
         return getPositionRev() * 360;
     }
  
+    /**
+     * @return absolute position, offset by a constant (accounting for inversion)
+     */
     public double getAbsolutePositionRev() {
         if (ShooterConstants.kPivotAbsoluteEncoderInverted) {
             return mapRev(throughBore.getPositionOffset() - throughBore.getAbsolutePosition());
@@ -258,11 +273,17 @@ public class ShooterPivot extends SubsystemBase implements Reportable {
         return mapRev(throughBore.getAbsolutePosition() - throughBore.getPositionOffset());
     }
  
+    /**
+     * @return getAbsolutePositionRev in degrees
+     */
     public double getAbsolutePositionDegrees() {
         return getAbsolutePositionRev() * 360;
     }
  
-    // Checks whether the pivot is within the deadband for a position
+    /** 
+     * Checks whether the pivot is within the deadband for a position
+     * @param positionDegrees position to check for reachment
+     */
     public boolean hasReachedPosition(double positionDegrees) {
         return NerdyMath.inRange(
             getPositionDegrees(),
@@ -274,17 +295,12 @@ public class ShooterPivot extends SubsystemBase implements Reportable {
             positionDegrees + ShooterConstants.kPivotDeadband.get()
         );
     }
- 
-    // Check if the shooter is in a safe position for the intake to move
-    public boolean hasReachedNeutral() {
-        return hasReachedPosition(ShooterConstants.kNeutralPosition.get());
-    }
- 
-    // Checks if the pivot is within deadband of the target pos
-    public boolean atTargetPosition() {
-        return hasReachedPosition(getTargetPositionDegrees());
-    }
- 
+    
+    /**
+     * Same as hasReachedPosition, but with kPivotDeadbandClose from ShooterConstants
+     * @param positionDegrees
+     * @return
+     */
     public boolean hasReachedPositionAccurate(double positionDegrees) {
         return NerdyMath.inRange(
             getPositionDegrees(),
@@ -297,6 +313,20 @@ public class ShooterPivot extends SubsystemBase implements Reportable {
         );
     }
  
+    /** 
+     * Check if the shooter is in a safe position for the intake to move
+     */
+    public boolean hasReachedNeutral() {
+        return hasReachedPosition(ShooterConstants.kNeutralPosition.get());
+    }
+    
+    /** 
+     * Checks if the pivot is within deadband of the target pos
+     */
+    public boolean atTargetPosition() {
+        return hasReachedPosition(getTargetPositionDegrees());
+    }
+    
     // Checks if the pivot is within deadband of the target pos
     public boolean atTargetPositionAccurate() {
         return hasReachedPositionAccurate(getTargetPositionDegrees());
