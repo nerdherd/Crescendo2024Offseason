@@ -25,7 +25,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.SuperStructureConstants;
 import frc.robot.util.NerdyMath;
 import frc.robot.Constants.ShooterConstants;
- 
+
+/**
+ * The single motor drive for the shooter's pivot
+ */
 public class ShooterPivot extends SubsystemBase implements Reportable {
     private final TalonFX pivot;
     private final TalonFXConfigurator pivotConfigurator;
@@ -50,7 +53,9 @@ public class ShooterPivot extends SubsystemBase implements Reportable {
     }
    
     //****************************** SETUP METHODS ******************************/
- 
+    /**
+     * Called once on construction for motor config initialization
+     */
     public void configureMotor() {
         TalonFXConfiguration pivotConfigs = new TalonFXConfiguration();
         pivotConfigurator.refresh(pivotConfigs);
@@ -83,7 +88,10 @@ public class ShooterPivot extends SubsystemBase implements Reportable {
             DriverStation.reportError("Could not apply pivot configs, error code:"+ statusPivot.toString(), new Error().getStackTrace());
         }
     }
- 
+
+    /**
+     * Called once on construction for motor PID config initialization
+     */
     public void configurePID() {
         ShooterConstants.kSpeakerPosition.loadPreferences();
         ShooterConstants.kSpeakerPosition2.loadPreferences();
@@ -121,6 +129,9 @@ public class ShooterPivot extends SubsystemBase implements Reportable {
         }
     }
  
+    /**
+     * Resets encoder and sets pivot position based on constant offset
+     */
     public void syncEncoder() {
         // Save a consistent position offset
         ShooterConstants.kPivotOffset.loadPreferences();
@@ -134,6 +145,9 @@ public class ShooterPivot extends SubsystemBase implements Reportable {
         pivot.setPosition(position);
     }
  
+    /**
+     * Syncs throughBore encoder with constant pivot offset
+     */
     public void syncAbsoluteEncoderToPigeon() {
         throughBore.reset();
         throughBore.setPositionOffset(throughBore.getPositionOffset() + getPositionRev());
@@ -154,6 +168,9 @@ public class ShooterPivot extends SubsystemBase implements Reportable {
         syncEncoder();
     }
  
+    /**
+     * Zeroes encoder assuming currently at full stow
+     */
     public void zeroAbsoluteEncoderFullStow() {
         throughBore.reset();
         ShooterConstants.kFullStowPosition.loadPreferences();
@@ -167,6 +184,9 @@ public class ShooterPivot extends SubsystemBase implements Reportable {
         syncEncoder();
     }
    
+    /**
+     * Called every 20 ms, checks for being enabled or disabled
+     */
     @Override
     public void periodic() {
         if (ShooterConstants.fullDisableShooter.get()) {
@@ -174,9 +194,6 @@ public class ShooterPivot extends SubsystemBase implements Reportable {
             enabled = false;
             return;
         }
-       
-        // rightPivot.setControl(brakeRequest);
-        // leftPivot.setControl(brakeRequest);
  
         if (enabled) {
             pivot.setControl(motionMagicRequest);
@@ -187,6 +204,7 @@ public class ShooterPivot extends SubsystemBase implements Reportable {
  
     /**
      * Maps the value to the range (-0.25, 0.75]
+     * @param rev Revolutions (any range, negative or positive)
      */
     public double mapRev(double rev) {
         rev = rev - Math.floor(rev);
@@ -196,6 +214,7 @@ public class ShooterPivot extends SubsystemBase implements Reportable {
  
     /**
      * Maps the value to the range (-180, 180]
+     * @param deg Degrees (any range, negative or positive)
      */
     public double mapDegrees(double deg) {
         deg = deg - (Math.floor(deg / 360.0) * 360.0);
@@ -203,6 +222,10 @@ public class ShooterPivot extends SubsystemBase implements Reportable {
         return deg;
     }
  
+    /**
+     * Sets and updates break mode
+     * @param breaking to break or not to break
+     */
     public void setBreakMode(boolean breaking) {
         TalonFXConfiguration pivotConfigs = new TalonFXConfiguration();
         pivotConfigurator.refresh(pivotConfigs);
