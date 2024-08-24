@@ -345,8 +345,6 @@ public final class Constants {
     public static final PrefDouble kPivotOffset = new PrefDouble("Shooter Pivot Offset", 248.4);
   }
 
-<<<<<<< Updated upstream
-=======
   public static final class IntakeConstants {
     public static final int kRightIntakeMotorID = 56;
     public static final int kLeftIntakeMotorID = 57; //change later
@@ -397,6 +395,13 @@ public final class Constants {
     public static final PrefDouble kDTrapMotor = new PrefDouble("kD Indexer Trap Motor", 0);
     public static final PrefDouble kVTrapMotor = new PrefDouble("kV Indexer Trap Motor", 0.12);
   }
->>>>>>> Stashed changes
+
+  public static final class TrapConstants {
+    public static final int kElevatorID = 99;
+    public static final int kElevatorAmpPosition = 200;
+    public static final int kElevatorTrapPosition = 100;
+    public static final int kElevatorDownPosition = 0;
+    public static final int kTrampSpeed = 900000000; // TODO make this a real value
+  }
 
 }
