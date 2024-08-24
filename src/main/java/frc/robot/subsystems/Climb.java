@@ -38,7 +38,9 @@ public class Climb extends SubsystemBase implements Reportable {
         
         configureMotor();
     }
-
+    /**
+     * configure motors things
+     */
     public void configureMotor() {
         TalonFXConfiguration climbMotorConfigs = new TalonFXConfiguration();
         climbConfigurator.refresh(climbMotorConfigs);
@@ -50,7 +52,9 @@ public class Climb extends SubsystemBase implements Reportable {
             DriverStation.reportError("Could not apply climb motor configs, error code: " + status.toString(), new Error().getStackTrace());
         }
     }
-
+    /**
+     * Configure motor PIDS
+     */
     public void configurePID() {
         // load Preferences (Constants.*Constants.property.loadPreferences())
         TalonFXConfiguration climbConfiguration = new TalonFXConfiguration();
@@ -88,7 +92,7 @@ public class Climb extends SubsystemBase implements Reportable {
         }
         
         climbMotor.setControl(climbMotorVelocityRequest);
-
+        // STATE MACHINE KYLE HUANG FOREVER
         switch (climbPositionState) {
             case TOP:
                 if (climbPID.atSetpoint()) {
@@ -115,41 +119,67 @@ public class Climb extends SubsystemBase implements Reportable {
     }
 
     // ~~~~~~ CONTROL FUNCTIONS ~~~~~~
-
+    /**
+     * sets climb position state to state
+     * @param state new state
+     */
     public void setPositionState(ClimbPostions state) {
         climbPositionState = state;
     }
-
+    /**
+     * sets current state to neutral
+     */
     public void setPositionStateNeutral() {
         setPositionState(ClimbPostions.NEUTRAL);
     }
-
+    /**
+     * sets current state to top
+     */
     public void setPositionStateTop() {
         setPositionState(ClimbPostions.TOP);
     }
-
+    /**
+     * sets current state to bottom
+     */
     public void setPositionStateBottom() {
         setPositionState(ClimbPostions.BOTTOM);
     }
-
+    /**
+     * sets climb velocity to verbosity (velocity)
+     * ONLY USED INTERNALLY
+     * @param verbosity velocity
+     */
     private void setClimbVelocity(double verbosity) {
         climbMotorVelocityRequest.Velocity = verbosity; // verbosity
     }
 
     // ~~~~~~ CONTROL COMMANDS ~~~~~~
-
+    /**
+     * sets current state to new state command
+     * @param state new state
+     * @return command
+     */
     public Command setPositionStateCommand(ClimbPostions state) {
         return Commands.runOnce(() -> setPositionState(state));
     }
-
+    /**
+     * sets current state to neutral command
+     * @return command
+     */
     public Command setPositionStateNeutralCommand() {
         return Commands.runOnce(() -> setPositionStateNeutral());
     }
-
+    /**
+     * sets current state to top command
+     * @return command
+     */
     public Command setPositionStateTopCommand() {
         return Commands.runOnce(() -> setPositionStateTop());
     }
-
+    /**
+     * sets current state to bottom command
+     * @return command
+     */
     public Command setPositionStateBottomCommand() {
         return Commands.runOnce(() -> setPositionStateBottom());
     }
