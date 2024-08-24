@@ -327,25 +327,38 @@ public class ShooterPivot extends SubsystemBase implements Reportable {
         return hasReachedPosition(getTargetPositionDegrees());
     }
     
-    // Checks if the pivot is within deadband of the target pos
+    
+    /**
+     * Checks if the pivot is within deadband of the target pos
+     */
     public boolean atTargetPositionAccurate() {
         return hasReachedPositionAccurate(getTargetPositionDegrees());
     }
- 
+    /**
+     * stop and disable
+     */
     public void stop() {
         motionMagicRequest.Position = getPositionRev();
         enabled = false;
         pivot.setControl(brakeRequest);
     }
- 
+    /**
+     * @return stop function as a command
+     */
     public Command stopCommand() {
         return Commands.runOnce(() -> stop());
     }
- 
+    /**
+     * set enabled 
+     * @param enabled On or off
+     */
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
- 
+    /**
+     * @param enabled on or off
+     * @return return enabled function as command
+     */
     public Command setEnabledCommand(boolean enabled) {
         return Commands.runOnce(() -> setEnabled(enabled));
     }
