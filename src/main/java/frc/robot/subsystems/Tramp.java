@@ -43,8 +43,38 @@ public class Tramp extends SubsystemBase implements Reportable{
         trampShot.setControl(trampVelocityRequest);
     }
 
+    
+    
     private void setElevatorVelocity(double velocity){
         elevator.set(velocity);
+    }
+
+    // state methods
+    public void stop() {
+        this.enabled = false;
+    }
+ 
+    public Command stopCommand() {
+        return Commands.runOnce(() -> stop());
+    }
+ 
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+ 
+    public Command setEnabledCommand(boolean enabled) {
+        return Commands.runOnce(() -> setEnabled(enabled));
+
+    public boolean hasReachedPosition(double positionDegrees) {
+        return NerdyMath.inRange(
+            elevator.getPosition(),
+            positionDegrees - TrapConstants.kElevatorDeadband.get(),
+            positionDegrees + TrapConstants.kElevatorDeadband.get()
+        ) && NerdyMath.inRange(
+            elevator.getPosition(),
+            positionDegrees - TrapConstants.kElevatorDeadband.get(),
+            positionDegrees + TrapConstants.kElevatorDeadband.get()
+        );
     }
 
     /**
@@ -80,6 +110,31 @@ public class Tramp extends SubsystemBase implements Reportable{
      */
     public void trampShoot(){
         trampVelocityRequest.Velocity = TrapConstants.kTrampSpeed;
+    }
+
+    // elevator amp command
+    public Command setElevatorAmpCommand() {
+        return Commands.runOnce(() -> elevatorAmp());
+    }
+
+    // elevator elevator Trap
+    public Command setElevatorTrapCommand() {
+        return Commands.runOnce(() -> elevatorTrap());
+    }
+
+    // elevator down command
+    public Command setElevatorDownCommand() {
+        return Commands.runOnce(() -> elevatorDown());
+    }
+
+    // elevator tramp stop
+    public Command setEtrampStopCommand() {
+        return Commands.runOnce(() -> trampStop());
+    }
+
+    // elevator tramp Shoot
+    public Command settrampShootCommand() {
+        return Commands.runOnce(() -> trampShoot());
     }
 
     @Override
