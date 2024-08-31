@@ -198,13 +198,12 @@ public class SuperSystem {
         return command;
     }
 
-    public Command intakeNew() { // ------------------------------------------------------------- hi //
+    public Command intakeNew() {
         Command command = Commands.sequence(
             shooterPivot.setEnabledCommand(true),
             Commands.deadline(
                 Commands.waitUntil(() -> 
                     shooterPivot.hasReachedPosition(ShooterConstants.kHandoffPosition.get())),
-                handoff(),
                 Commands.waitSeconds(1)
             ),
             shooterRoller.setEnabledCommand(true),
@@ -223,9 +222,9 @@ public class SuperSystem {
         return command;
     }
 
-    public Command intakeToElevator() { // ------------------------------------------------------------- hi //
+    public Command intakeToElevator() {
         Command command = Commands.sequence(
-            tramp.setElevatorDown(),
+            tramp.setElevatorDownCommand(),
             tramp.setEnabledCommand(true),
             Commands.deadline(
                 Commands.waitUntil(() -> 
@@ -245,6 +244,54 @@ public class SuperSystem {
         });
 
         command.addRequirements(indexer, intakeRoller, shooterPivot, shooterRoller);
+        return command;
+    }
+
+    public Command shootSpeaker() {
+        Command command = Commands.sequence(
+            shooterRoller.shootSpeakerRight(),
+            shooterRoller.setEnabledCommand(true),
+            Commands.deadline(
+                Commands.waitUntil(() ->
+                    shooterRoller.atTargetVelocityRight()),
+                Commands.waitSeconds(1)
+            ),
+            shooterPivot.moveToSpeaker(),
+            shooterPivot.setEnabledCommand(true),
+            indexer.indexToShooterCommand(),
+            indexer.setEnabledCommand(true)
+        ).finallyDo(() -> {
+            indexer.stop();
+            shooterPivot.stop();
+            shooterRoller.stop();
+        });
+
+        command.addRequirements(indexer, shooterPivot, shooterRoller);
+        return command;
+    }
+
+        public Command shootSpeakerAutoAim() {
+        Command command = Commands.sequence(
+            shooterRoller.shootSpeaker(),
+            shooterRoller.setEnabledCommand(true),
+
+            Commands.deadline(
+                Commands.waitUntil(() -> 
+                    shooterRoller.atTargetVelocityLeft() &&
+                    shooterRoller.atTargetVelocityRight()),
+                Commands.waitSeconds(1)
+            ),
+            shooterPivot.moveToSpeaker(),
+            shooterPivot.setEnabledCommand(true),
+            indexer.indexToShooterCommand(),
+            indexer.setEnabledCommand(true)
+        ).finallyDo(() -> {
+            indexer.stop();
+            shooterPivot.stop();
+            shooterRoller.stop();
+        });
+
+        command.addRequirements(indexer, shooterPivot, shooterRoller);
         return command;
     }
 
