@@ -3,8 +3,8 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import frc.robot.RobotContainer;
-import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.Constants.TrapConstants;
 //import frc.robot.subsystems.vision.DriverAssist;
 //import frc.robot.subsystems.vision.ShooterVisionAdjustment;
 import frc.robot.util.NerdyLine;
@@ -23,6 +23,12 @@ public class SuperSystem {
     public Tramp tramp;
     public BannerSensor bannerSensor;
 
+    private double[] distances = {1.2,   2.483,   3.015,    3.573,   4.267,   4.697}; // distances from 4/6
+    private double[] angles = {-52.470, -32.861, -29.114, -25.663, -21.413, -20.8}; // angles from 4/6
+    private double lastAngle = -0.2;
+    private double angleOffset = 0.0;
+    private NerdyLine angleLine;
+
     public SuperSystem(IntakeRoller intakeRoller, IndexerV2 indexer, ShooterPivot shooterPivot, ShooterRoller shooterRoller, Tramp tramp) {
         this.intakeRoller = intakeRoller;
         this.indexer = indexer;
@@ -37,11 +43,44 @@ public class SuperSystem {
         return bannerSensor.noteIntook();
     }
 
+    public double getShooterAngle(SwerveDrivetrain swerve)
+    {
+        return getShooterAngle(swerve, false);
+    }
+    public void incrementOffset(double increment)
+    {
+        angleOffset += increment;
+        angleOffset = NerdyMath.clamp(angleOffset, -10, 10);
+    }
+    public void resetOffset()
+    {
+        angleOffset = 0;
+    }
+
+    public double getShooterAngle(SwerveDrivetrain swerve, boolean preserveOldValue)
+    {
+        double distance = swerve.getDistanceFromTag(preserveOldValue, RobotContainer.IsRedSide() ? 4 : 7);
+        if(distance < distances[0]) {
+            SmartDashboard.putBoolean("Vision failed", true);
+            return (preserveOldValue ? lastAngle : -0.2);
+        }
+        if (distance > distances[distances.length - 1]) {
+            SmartDashboard.putBoolean("Vision failed", true);
+            return (preserveOldValue ? lastAngle : -0.3);
+        }
+        
+        double output = NerdyMath.clamp(angleLine.getOutput(distance), ShooterConstants.kFullStowPosition.get(), 20);
+        output += angleOffset;
+        lastAngle = output;
+        return output + 1.5;
+    }
+
+
     public Command stow() {
         Command command = Commands.sequence(
             intakeRoller.stopCommand(),
             //shooterRoller.stopCommand(),
-            indexer.stopCommand(),
+            indexer.stopCommand()
             //shooterPivot.setPositionCommand(ShooterConstants.kFullStowPosition.get())
         );
 
@@ -83,7 +122,26 @@ public class SuperSystem {
         return command;
     }
 
-     public Command backupIndexerManual() {
+    public Command backupIndexerAndShooter() {
+        Command command = Commands.sequence(
+            shooterRoller.setVelocityCommand(-20, -20),
+            shooterRoller.setEnabledCommand(true),
+            indexer.setEnabledCommand(true),
+            indexer.reverseIndexCommand(),
+            Commands.waitSeconds(0.2),
+            indexer.stopCommand(),
+            shooterRoller.stopCommand()
+        ).finallyDo(() -> {
+            indexer.stop();
+            shooterRoller.stop();    
+        });
+
+        command.addRequirements(indexer, shooterRoller);
+        
+        return command;
+    }
+
+    public Command backupIndexerManual() {
         Command command = Commands.sequence(
             // shooterPivot.moveToSpeaker(), Ignore Comment
             indexer.setEnabledCommand(true),
@@ -103,13 +161,13 @@ public class SuperSystem {
 
     public Command intakeUntilSensed() {
         Command command = Commands.sequence(
-            Commands.deadline(
-                /*Commands.waitUntil(() -> 
-                    shooterPivot.hasReachedPosition(ShooterConstants.kHandoffPosition.get())),
-                handoff(),
-                Commands.waitSeconds(1)
-                */
-            ),
+            // Commands.deadline(
+            //     /*Commands.waitUntil(() -> 
+            //         shooterPivot.hasReachedPosition(ShooterConstants.kHandoffPosition.get())),
+            //     handoff(),
+            //     Commands.waitSeconds(1)
+            //     */
+            // ),
            // shooterRoller.setVelocityCommand(0, 0),
            // shooterRoller.setEnabledCommand(true),
             intakeRoller.setEnabledCommand(true),
@@ -128,7 +186,7 @@ public class SuperSystem {
            // shooterRoller.setVelocityCommand(0, 0),
             Commands.waitSeconds(0.2), // Was 0.6   3/3/24   Code Orange
 
-            indexer.stopCommand(),
+            indexer.stopCommand()
             //shooterRoller.stopCommand()
         ).finallyDo(() -> {
             intakeRoller.stop();
@@ -142,12 +200,12 @@ public class SuperSystem {
 
     public Command intakeUntilSensedNoBackup() {
         Command command = Commands.sequence(
-            Commands.deadline(
-                /*Commands.waitUntil(() -> 
-                    shooterPivot.hasReachedPosition(ShooterConstants.kHandoffPosition.get())),
-                handoff(),
-                Commands.waitSeconds(1)*/
-            ),
+            // Commands.deadline(
+            //     /*Commands.waitUntil(() -> 
+            //         shooterPivot.hasReachedPosition(ShooterConstants.kHandoffPosition.get())),
+            //     handoff(),
+            //     Commands.waitSeconds(1)*/
+            // ),
            // shooterRoller.setVelocityCommand(-10, -10),
             //shooterRoller.setEnabledCommand(true),
             intakeRoller.setEnabledCommand(true),
@@ -171,12 +229,12 @@ public class SuperSystem {
 
     public Command intakeUntilSensedAuto(double timeout) {
         Command command = Commands.sequence(
-            Commands.deadline(
-                /*Commands.waitUntil(() -> 
-                    shooterPivot.hasReachedPosition(ShooterConstants.kHandoffPosition.get())),
-                handoff(),
-                Commands.waitSeconds(1)*/
-            ),
+            // Commands.deadline(
+            //     /*Commands.waitUntil(() -> 
+            //         shooterPivot.hasReachedPosition(ShooterConstants.kHandoffPosition.get())),
+            //     handoff(),
+            //     Commands.waitSeconds(1)*/
+            // ),
             //shooterRoller.setVelocityCommand(-10, -10),
            // shooterRoller.setEnabledCommand(true),
             intakeRoller.setEnabledCommand(true),
@@ -297,12 +355,12 @@ public class SuperSystem {
 
     public Command intakeBasic() {
         Command command = Commands.sequence(
-            shooterPivot.setEnabledCommand(true);
+            shooterPivot.setEnabledCommand(true),
             shooterPivot.moveToNeutral(),
             Commands.deadline(  // check if correct pls
                 Commands.waitUntil(() -> 
                     shooterPivot.hasReachedPosition(ShooterConstants.kNeutralPosition.get())),
-                handoff(),
+                // handoff(),
                 Commands.waitSeconds(1)
             ),
             intakeRoller.setEnabledCommand(true),
@@ -334,7 +392,8 @@ public class SuperSystem {
                 */
             intakeRoller.setEnabledCommand(true),
             indexer.setEnabledCommand(true),
-            Commands.runOnce(() -> SmartDashboard.putBoolean("Intaking", true)),
+            Commands.runOnce(() -> SmartDashboard.putBoolean("Intaking", true))
+            ),
             indexer.indexCommand(),
             intakeRoller.intakeCommand()
         );

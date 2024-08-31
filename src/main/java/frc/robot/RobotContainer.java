@@ -10,7 +10,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
@@ -24,31 +23,31 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ControllerConstants;
-import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.SwerveJoystickCommand;
-import frc.robot.commands.autos.DriveToNoteTest;
-import frc.robot.commands.autos.Mid4Piece;
-import frc.robot.commands.autos.Mid4PieceSide;
-import frc.robot.commands.autos.Mid5PieceMiddle;
-import frc.robot.commands.autos.PreloadTaxi;
-import frc.robot.commands.autos.Reliable4Piece;
-import frc.robot.commands.autos.ThreePieceMid;
-import frc.robot.commands.autos.PathVariants.PathA;
-import frc.robot.commands.autos.PathVariants.PathAPre;
-import frc.robot.commands.autos.PathVariants.PathB;
-import frc.robot.commands.autos.PathVariants.PathD;
-import frc.robot.commands.autos.PathVariants.PathE;
-import frc.robot.commands.autos.PathVariants.PathF;
-import frc.robot.subsystems.CANdleSubSystem;
+// import frc.robot.commands.autos.DriveToNoteTest;
+// import frc.robot.commands.autos.Mid4Piece;
+// import frc.robot.commands.autos.Mid4PieceSide;
+// import frc.robot.commands.autos.Mid5PieceMiddle;
+// import frc.robot.commands.autos.PreloadTaxi;
+// import frc.robot.commands.autos.Reliable4Piece;
+// import frc.robot.commands.autos.ThreePieceMid;
+// import frc.robot.commands.autos.PathVariants.PathA;
+// import frc.robot.commands.autos.PathVariants.PathAPre;
+// import frc.robot.commands.autos.PathVariants.PathB;
+// import frc.robot.commands.autos.PathVariants.PathD;
+// import frc.robot.commands.autos.PathVariants.PathE;
+// import frc.robot.commands.autos.PathVariants.PathF;
+// import frc.robot.subsystems.CANdleSubSystem;
 //import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.CANdleSubSystem.Status;
+// import frc.robot.subsystems.CANdleSubSystem.Status;
 import frc.robot.subsystems.IndexerV2;
 import frc.robot.subsystems.IntakeRoller;
 import frc.robot.subsystems.Reportable.LOG_LEVEL;
 import frc.robot.subsystems.ShooterPivot;
 import frc.robot.subsystems.ShooterRoller;
 import frc.robot.subsystems.SuperSystem;
+import frc.robot.subsystems.Tramp;
 import frc.robot.subsystems.imu.Gyro;
 import frc.robot.subsystems.imu.PigeonV2;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
@@ -62,9 +61,10 @@ public class RobotContainer {
   public ShooterPivot shooterPivot = new ShooterPivot();
   public IntakeRoller intakeRoller = new IntakeRoller();
   public IndexerV2 indexer = new IndexerV2();
+  public Tramp tramp = new Tramp();
   // public Climber climb = new Climber();
 
-  public SuperSystem superSystem = new SuperSystem(intakeRoller, shooterPivot, shooterRoller, indexer);
+  public SuperSystem superSystem = new SuperSystem(intakeRoller, indexer, shooterPivot, shooterRoller, tramp);
   
   public Gyro imu = new PigeonV2(2);
   
@@ -84,7 +84,7 @@ public class RobotContainer {
 
   private NoteAssistance noteCamera; 
   
-  public CANdleSubSystem CANdle = new CANdleSubSystem();
+  // public CANdleSubSystem CANdle = new CANdleSubSystem();
   private SwerveJoystickCommand swerveJoystickCommand;
 
   
@@ -106,7 +106,8 @@ public class RobotContainer {
     LimelightHelpers.setLEDMode_ForceBlink(VisionConstants.kLimelightFrontName);
 
     initAutoChoosers();
-    initShuffleboard();
+    // TODO? initvvv
+    // initShuffleboard();
 
     // Configure the trigger bindings
     // Moved to teleop init
@@ -139,7 +140,6 @@ public class RobotContainer {
   }
 
   public void initDefaultCommands_teleop() {
-    
     shooterPivot.setDefaultCommand(
       new RunCommand(
         () -> {
@@ -278,103 +278,10 @@ public class RobotContainer {
   public void initDefaultCommands_test() {}
 
   public void configureBindings_teleop() {
-    // Driver bindings
-
-    commandDriverController.share().whileTrue(
-      Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle())
-    );
-    // commandDriverController.cross().whileTrue(swerveDrive.driveToAmpCommand(3, 3));
-    commandDriverController.cross().whileTrue(superSystem.eject());
-    // commandDriverController.square().whileTrue(
-    //   Commands.parallel(
-    //     noteCamera.driveToNoteCommand(swerveDrive, 15, 0, 0, 10, 200, null),
-    //     superSystem.intakeUntilSensedNoBackup().andThen(superSystem.stow())
-    //   )                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
-    // ).whileFalse(superSystem.backupIndexerAndShooter().andThen(superSystem.stow()));    // commandDriverController.square().onTrue(apriltagCamera.TurnToTagCommand4Auto(swerveDrive, 5, 50));
-
-    commandDriverController.square().whileTrue(superSystem.intakeUntilSensedNoBackup().andThen(superSystem.stow()))
-                                    .whileFalse(superSystem.backupIndexerAndShooter().andThen(superSystem.stow()));
-
-    //commandDriverController.square().onTrue(apriltagCamera.TurnToAngleByTagCommand4Auto(swerveDrive, 2, 15));
-    commandOperatorController.povLeft().whileTrue(
-      Commands.repeatingSequence(
-        Commands.runOnce(() -> superSystem.getShooterAngle(swerveDrive))
-      )
-    );
-
-    commandOperatorController.povUp().onTrue(
-      Commands.runOnce(() -> superSystem.incrementOffset(0.5))
-    );
-    commandOperatorController.povDown().onTrue(
-      Commands.runOnce(() -> superSystem.incrementOffset(-0.5))
-    );
-    commandOperatorController.povRight().onTrue(
-      Commands.runOnce(() -> superSystem.resetOffset())
-    );
-    commandDriverController.touchpad().whileTrue(superSystem.shoot())
-                                      .whileFalse(superSystem.stow());
-    
-    commandDriverController.L2().whileTrue(Commands.sequence(
-      Commands.race(
-        superSystem.prepareShooterVision(swerveDrive),
-        Commands.sequence(
-          Commands.race(
-            Commands.waitUntil(() -> 
-              // aimTrigger.getAsBoolean() 
-              // && 
-              armTrigger.getAsBoolean()
-            ),
-            Commands.waitSeconds(1.5)
-          ),
-          Commands.waitSeconds(0.1),
-          superSystem.indexer.setEnabledCommand(true),
-          superSystem.indexer.indexCommand(),
-          Commands.either(
-            Commands.none(),
-            Commands.waitSeconds(0.5),
-            () -> superSystem.noteIntook()
-          ),
-          Commands.waitUntil(() -> !superSystem.noteIntook())
-        )
-      ),
-      superSystem.stow()
-    )).whileFalse(superSystem.stow());
-
-    // Operator bindings
-    commandOperatorController.triangle().whileTrue(superSystem.eject());
-    commandOperatorController.square().whileTrue(superSystem.getReadyForAmp())
-                                      .whileFalse(superSystem.stow()); // TODO: Can we try getting rid of this whileFalse line here **(field testing)**
-    commandOperatorController.cross().whileTrue(superSystem.shootAmp()).whileFalse(superSystem.stow());
-    // commandOperatorController.PS().whileTrue(superSystem.climbSequence());
-
-    commandOperatorController.L1().whileTrue(superSystem.backupIndexerManual());
-    
-    commandOperatorController.L2().whileTrue(superSystem.intakeUntilSensed().andThen(superSystem.stow()))
-                                  .whileFalse(superSystem.stow()); // Get rid of both stows
-
-    commandOperatorController.R2().whileTrue(superSystem.prepareShooterSpeaker())
-                                  .whileFalse(superSystem.stow());
-    commandOperatorController.R1().whileTrue(superSystem.prepareShooterPodium())
-                                  .whileFalse(superSystem.stow());
-
-    commandOperatorController.touchpad().whileTrue(superSystem.ejectIntakeOnly());
-    commandOperatorController.PS().whileTrue(superSystem.panicEject());
-    commandOperatorController.circle().whileTrue(superSystem.stow()); // TODO: Change this binding
-    // commandOperatorController.share().whileTrue(superSystem.intakeDirectShoot());
-    commandOperatorController.share().whileTrue(superSystem.advanceIndexerManual());
-    commandOperatorController.options().whileTrue(superSystem.prepareShooterVision(swerveDrive)) //
-                                  .whileFalse(superSystem.stow()); // TODO: Safety *Do nothing if April Tag is not seen*
+    // TODO configure bindings pwease
   }
 
   public void configureBindings_test() {}
-
-  Trigger armTrigger = new Trigger(
-    () -> superSystem.shooterPivot.atTargetPositionAccurate() 
-        && superSystem.shooterPivot.getTargetPositionDegrees() > ShooterConstants.kFullStowPosition.get()
-        && superSystem.shooterRoller.getVelocity() > (superSystem.shooterRoller.getTargetVelocity() * 0.6) 
-        && superSystem.shooterRoller.getTargetVelocity() > 0
-    );
-
   // AprilTag Trigger
   Trigger aimTrigger = new Trigger(() -> {
     double desiredAngle = swerveDrive.getTurnToSpecificTagAngle(IsRedSide() ? 4 : 7);// TODO, update?
@@ -456,7 +363,7 @@ public class RobotContainer {
         SmartDashboard.putBoolean("Tag aimed", false); 
       }
     ));
-    */
+    
 
     // if (driverController.getCircleButton()) { //turn to amp
     //         if (!IsRedSide()){
@@ -506,7 +413,7 @@ public class RobotContainer {
     // tagTrigger.onFalse(Commands.runOnce(
     //   () -> CANdle.setStatus(Status.TELEOP)
     // ));
-  }
+  }*/
 
   //PathPlannerPath a01 = PathPlannerPath.fromPathFile("a01Path");
   PathPlannerPath a02 = PathPlannerPath.fromPathFile("a02Path");
@@ -617,23 +524,23 @@ public class RobotContainer {
     //   autoChooser.addOption("Preload Taxi Podium Side", new PreloadTaxi(swerveDrive, List.of(PathPlannerPath.fromPathFile("PreloadTaxiPodiumSide")), superSystem));
     // }
 
-    if (paths.contains("TaxiOnly")) {
-      autoChooser.addOption("Taxi Only", AutoBuilder.buildAuto("TaxiOnly"));
-    }
+    // if (paths.contains("TaxiOnly")) {
+    //   autoChooser.addOption("Taxi Only", AutoBuilder.buildAuto("TaxiOnly"));
+    // }
     
 
-    if (paths.contains("Reliable4Piece")) {
-      autoChooser.setDefaultOption("Reliable 4 Piece", new Reliable4Piece(swerveDrive, "Reliable4Piece", superSystem));
-    }
+    // if (paths.contains("Reliable4Piece")) {
+    //   autoChooser.setDefaultOption("Reliable 4 Piece", new Reliable4Piece(swerveDrive, "Reliable4Piece", superSystem));
+    // }
 
-    if (paths.contains("NEW4Piece")) {
-      autoChooser.addOption("New 4 Piece", new Reliable4Piece(swerveDrive, "NEW4Piece", superSystem));
-    }
+    // if (paths.contains("NEW4Piece")) {
+    //   autoChooser.addOption("New 4 Piece", new Reliable4Piece(swerveDrive, "NEW4Piece", superSystem));
+    // }
 
-    autoChooser.addOption("4PieceMiddle",         new Mid4Piece(swerveDrive, superSystem, noteCamera, List.of(a02,b2p6,c26,    d26,e6Y,aY3)));
-    autoChooser.addOption("5PieceMiddle",   new Mid5PieceMiddle(swerveDrive, superSystem, noteCamera, List.of(a02,b2p6,c26Fast,d26,e6Y,aY3,b31)));
-    autoChooser.addOption("4PieceAmpSide",    new Mid4PieceSide(swerveDrive, superSystem, noteCamera, List.of(a02,b2p6,c26,    d25,e5Y,aY3)));
-    autoChooser.addOption("4PieceSourceSide", new Mid4PieceSide(swerveDrive, superSystem, noteCamera, List.of(a02,b2p6,c26,    d27,e7Y,aY3)));
+    // autoChooser.addOption("4PieceMiddle",         new Mid4Piece(swerveDrive, superSystem, noteCamera, List.of(a02,b2p6,c26,    d26,e6Y,aY3)));
+    // autoChooser.addOption("5PieceMiddle",   new Mid5PieceMiddle(swerveDrive, superSystem, noteCamera, List.of(a02,b2p6,c26Fast,d26,e6Y,aY3,b31)));
+    // autoChooser.addOption("4PieceAmpSide",    new Mid4PieceSide(swerveDrive, superSystem, noteCamera, List.of(a02,b2p6,c26,    d25,e5Y,aY3)));
+    // autoChooser.addOption("4PieceSourceSide", new Mid4PieceSide(swerveDrive, superSystem, noteCamera, List.of(a02,b2p6,c26,    d27,e7Y,aY3)));
 
     ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
 
@@ -659,7 +566,9 @@ public class RobotContainer {
     tab.addNumber("apriltag angle", () -> swerveDrive.getTurnToSpecificTagAngle(IsRedSide() ? 4 : 7));// TODO, update?
   }
   */
-  
+
+  public void initDefaultCommands() {} // TODO ????
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

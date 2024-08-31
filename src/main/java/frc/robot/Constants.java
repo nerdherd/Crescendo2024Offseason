@@ -10,6 +10,7 @@ import com.pathplanner.lib.util.PIDConstants;
 import edu.wpi.first.math.MatBuilder;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -80,7 +81,6 @@ public final class Constants {
   } 
 
   public static final class SwerveDriveConstants {
-
     public static final double kVisionSTDx = 0.7; //0.9
     public static final double kVisionSTDy = 0.7; //0.9
     public static final double kVisionSTDtheta = 1000; //Old: 69696969
@@ -91,6 +91,9 @@ public final class Constants {
                                                               kVisionSTDtheta);
     // VecBuilder.fill(kVisionSTDx, kVisionSTDy, kVisionSTDtheta);
 
+    public static final PrefDouble kPThetaTeleop = new PrefDouble("kP Theta Teleop", 4);
+    public static final PrefDouble kIThetaTeleop = new PrefDouble("kI Theta Teleop", 0);
+    public static final PrefDouble kDThetaTeleop = new PrefDouble("kD Theta Teleop", 0.1);
 
     // Distance between right and left wheels
     public static final double kTrackWidth = Units.inchesToMeters(21);
@@ -174,6 +177,7 @@ public final class Constants {
     public static final double kDTurnToAngle = SmartDashboard.getNumber("kD Theta Teleop", 0.2);
     public static final double kTurnToAnglePositionToleranceAngle = 5;
     public static final double kTurnToAngleVelocityToleranceAnglesPerSec = 2;
+    public static final double kTurnToAngleFeedForwardDegreesPerSecond = 6;
 
     // public static final double kPXController = new PrefDouble("kPXSpeed", 0.5).get();
     // public static final double kIXController = new PrefDouble("kIXSpeed", 0).get();
@@ -209,6 +213,7 @@ public final class Constants {
   }
 
   public static final class VisionConstants {
+    public static final Pose2d kBlueAmpPose = new Pose2d(new Translation2d(1.85, 7), Rotation2d.fromDegrees(270));
     public static final double kFrontCameraHeightMeters = 0;
     public static final double kNoteHeightMeters = 0;
     public static final double kCameraPitchRadians = 0;
@@ -228,6 +233,7 @@ public final class Constants {
     public static final double fieldXOffset = 8.27; // Certified (Half field dimensions)
     public static final double fieldYOffset = 4.01; // Certified (Half as well)
     public static final double kMinimumTA = 0.7;
+    public static final int kNotePipeline = 0;
     public static final Transform3d fieldPoseOffset = new Transform3d(
       new Translation3d(-VisionConstants.fieldXOffset, -VisionConstants.fieldYOffset, 0), 
       new Rotation3d()
@@ -238,6 +244,16 @@ public final class Constants {
         new Translation3d(),
         new Rotation3d()
         ); // distance from camera to center of robot
+
+      public static final PrefDouble kPNoteForward = new PrefDouble("P Note Forward", 0);
+      public static final PrefDouble kINoteForward = new PrefDouble("I Note Forward", 0);
+      public static final PrefDouble kDNoteForward = new PrefDouble("D Note Forward", 0);
+      public static final PrefDouble kPNoteSide = new PrefDouble("P Note Side", 0);
+      public static final PrefDouble kINoteSide = new PrefDouble("I Note Side", 0);
+      public static final PrefDouble kDNoteSide = new PrefDouble("D Note Side", 0);
+      public static final PrefDouble kPNoteAngle = new PrefDouble("P Note Angle", 0);
+      public static final PrefDouble kINoteAngle = new PrefDouble("I Note Angle", 0);
+      public static final PrefDouble kDNoteAngle = new PrefDouble("D Note Angle", 0);
   }
       
   public static final class SuperStructureConstants {
@@ -402,15 +418,19 @@ public final class Constants {
     public static final PrefDouble kDTrapMotor = new PrefDouble("kD Indexer Trap Motor", 0);
     public static final PrefDouble kVTrapMotor = new PrefDouble("kV Indexer Trap Motor", 0.12);
   }
-\
 
   public static final class TrapConstants {
     public static final int kElevatorID = 99;
     public static final int kElevatorAmpPosition = 200;
     public static final int kElevatorTrapPosition = 100;
     public static final int kElevatorDownPosition = 0;
-    public static final PrefDouble kElevatorDeadband = 0; // make this a real value as well
+    public static final PrefDouble kElevatorDeadband = new PrefDouble("Elevator Deadband", 0.0); // make this a real value as well
     public static final int kTrampSpeed = 900000000; // TODO make this a real value
+  }
+
+  public static final class BannerSensorConstants {
+    public static final int blackPort = 8;
+    public static final int whitePort = 9;
   }
   public static class ClimbConstants {
     public static final int kClimbMotorID = 0;

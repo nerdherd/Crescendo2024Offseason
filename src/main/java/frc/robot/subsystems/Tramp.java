@@ -1,13 +1,15 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IndexerConstants;
 import frc.robot.Constants.TrapConstants;
+import frc.robot.util.NerdyMath;
 
 public class Tramp extends SubsystemBase implements Reportable{
     private final TalonFX elevator;
@@ -64,14 +66,15 @@ public class Tramp extends SubsystemBase implements Reportable{
  
     public Command setEnabledCommand(boolean enabled) {
         return Commands.runOnce(() -> setEnabled(enabled));
+    }
 
     public boolean hasReachedPosition(double positionDegrees) {
         return NerdyMath.inRange(
-            elevator.getPosition(),
+            elevator.getPosition().getValueAsDouble(),
             positionDegrees - TrapConstants.kElevatorDeadband.get(),
             positionDegrees + TrapConstants.kElevatorDeadband.get()
         ) && NerdyMath.inRange(
-            elevator.getPosition(),
+            elevator.getPosition().getValueAsDouble(),
             positionDegrees - TrapConstants.kElevatorDeadband.get(),
             positionDegrees + TrapConstants.kElevatorDeadband.get()
         );
