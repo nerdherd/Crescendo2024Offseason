@@ -241,7 +241,7 @@ public class ShooterRoller extends SubsystemBase implements Reportable {
         return leftVelocityRequest.Velocity;
     }
  
-    public double getTargetVelocitRight() {
+    public double getTargetVelocityRight() {
         return rightVelocityRequest.Velocity;
     }
 
@@ -384,6 +384,10 @@ public class ShooterRoller extends SubsystemBase implements Reportable {
     public Command shootSpeakerAutoStart() {
         return setVelocityCommand(ShooterConstants.kTopOuttakeMidAutostart.get());
     }
+
+    public Command shootSpeakerRight() {
+        return setRightVelocityCommand(ShooterConstants.kTopOuttakeHigh.get());
+    }
  
     // no Auto Start 2 
 
@@ -393,7 +397,7 @@ public class ShooterRoller extends SubsystemBase implements Reportable {
     }
  
     public Command shootAmp() {
-        return setVelocityCommand(ShooterConstants.kTopOuttakeAmp.get());
+        return setRightVelocityCommand(ShooterConstants.kTopOuttakeAmp.get());
     }
  
     //****************************** LOGGING METHODS ******************************//

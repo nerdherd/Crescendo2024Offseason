@@ -215,8 +215,15 @@ public final class Constants {
     public static final double kSunflowerP = 0.2;
     public static final double kSunflowerI = 0;
     public static final double kSunflowerD = 0;
+    // todo: fix names and ip's
     public static final String kLimelightFrontName = "limelight-front";
     public static final String kLimelightFrontIP = "10.6.87.25:5802";
+    public static final String kLimelightLeftName = "limelight-left";
+    public static final String kLimelightLeftIP = "10.6.87.25:5802";
+    public static final String kLimelightRightName = "limelight-right";
+    public static final String kLimelightRightIP = "10.6.87.25:5802";
+    public static final String kLimelightBackName = "limelight-back";
+    public static final String kLimelightBackIP = "10.6.87.25:5802";
     public static final int kAprilTagPipeline = 4;
     public static final double fieldXOffset = 8.27; // Certified (Half field dimensions)
     public static final double fieldYOffset = 4.01; // Certified (Half as well)
@@ -345,6 +352,66 @@ public final class Constants {
     public static final PrefDouble kPivotOffset = new PrefDouble("Shooter Pivot Offset", 248.4);
   }
 
+  public static final class IntakeConstants {
+    public static final int kRightIntakeMotorID = 56;
+    public static final int kLeftIntakeMotorID = 57; //change later
+
+    public static final double kIntakeNeutralDeadband = 0.01;
+
+    // ************************************** INTAKE CONSTANTS *************************************** //
+
+    public static final PrefDouble kIntakeVelocity = new PrefDouble("Intake Velocity", 100);
+    public static final PrefDouble kAutoIntakeVelocity = new PrefDouble("Intake Velocity Auto", 90);
+    public static final double kIntakeMaxVelocity =  100;
+    public static final double kIntakeMinVelocity = -100;
+
+    public static final PrefDouble kPRightIntakeMotor = new PrefDouble("kP Right Intake Roller", 1);
+    public static final PrefDouble kIRightIntakeMotor = new PrefDouble("kI Right Intake Roller", 0);
+    public static final PrefDouble kDRightIntakeMotor = new PrefDouble("kD Right Intake Roller", 0.003);
+    public static final PrefDouble kVRightIntakeMotor = new PrefDouble("kV Right Intake Roller", 0.19);
+
+    public static final PrefDouble kPLeftIntakeMotor = new PrefDouble("kP Left Intake Roller", 1); //tune
+    public static final PrefDouble kILeftIntakeMotor = new PrefDouble("kI Left Intake Roller", 0); //tune
+    public static final PrefDouble kDLeftIntakeMotor = new PrefDouble("kD Left Intake Roller", 0.003); //tune
+    public static final PrefDouble kVLeftIntakeMotor = new PrefDouble("kV Left Intake Roller", 0.19); //tune
+    
+  }
+  
+  public static final class IndexerConstants {
+    public static final int kIndexerMotorID = 55;
+    public static final int kTrapMotorID = 59;
+
+    public static final double kIndexerNeutralDeadband = 0.05;
+
+    public static final PrefDouble kIndexerVelocityRPS = new PrefDouble("Indexer Velocity", 90);
+    public static final PrefDouble kTrapVelocityRPS = new PrefDouble("Trap Velocity", 81);
+
+    public static final PrefDouble kIndexerReverseRPS = new PrefDouble("Indexer Reverse Velocity", -10);
+    public static final double kIndexerMinVelocityRPS = -100;
+    public static final double kIndexerMaxVelocityRPS = 100;
+
+    public static final PrefDouble kIndexerVelocityIncrement = new PrefDouble("Indexer Velocity Increment", 10);
+
+    public static final PrefDouble kPIndexerMotor = new PrefDouble("kP Indexer Pivot Motor", 0.9);
+    public static final PrefDouble kIIndexerMotor = new PrefDouble("kI Indexer Pivot Motor", 0);
+    public static final PrefDouble kDIndexerMotor = new PrefDouble("kD Indexer Pivot Motor", 0);
+    public static final PrefDouble kVIndexerMotor = new PrefDouble("kV Indexer Pivot Motor", 0.12);
+
+    public static final PrefDouble kPTrapMotor = new PrefDouble("kP Indexer Trap Motor", 0.9);
+    public static final PrefDouble kITrapMotor = new PrefDouble("kI Indexer Trap Motor", 0);
+    public static final PrefDouble kDTrapMotor = new PrefDouble("kD Indexer Trap Motor", 0);
+    public static final PrefDouble kVTrapMotor = new PrefDouble("kV Indexer Trap Motor", 0.12);
+  }
+\
+
+  public static final class TrapConstants {
+    public static final int kElevatorID = 99;
+    public static final int kElevatorAmpPosition = 200;
+    public static final int kElevatorTrapPosition = 100;
+    public static final int kElevatorDownPosition = 0;
+    public static final PrefDouble kElevatorDeadband = 0; // make this a real value as well
+    public static final int kTrampSpeed = 900000000; // TODO make this a real value
+  }
   public static class ClimbConstants {
     public static final int kClimbMotorID = 0;
     public static final PrefDouble kClimbMinPosition = new PrefDouble("Climb Min Position", 0.0);

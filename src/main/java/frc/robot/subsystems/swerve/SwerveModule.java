@@ -89,13 +89,6 @@ public class SwerveModule implements Reportable {
 
         this.brakeRequest = new NeutralOut();
 
-        MotorOutputConfigs turnConfigs = new MotorOutputConfigs();
-        this.turnConfigurator.refresh(turnConfigs);
-        turnConfigs.NeutralMode = NeutralModeValue.Coast;
-        turnConfigs.DutyCycleNeutralDeadband =  ModuleConstants.kTurnMotorDeadband;
-        this.turnConfigurator.apply(turnConfigs);
-
-
         this.driveMotorID = driveMotorId;
         this.turnMotorID = turningMotorId;
         this.CANCoderID = CANCoderId;
@@ -120,6 +113,13 @@ public class SwerveModule implements Reportable {
         driveMotorConfigs.Voltage.PeakReverseVoltage = -11.5;
         driveMotorConfigs.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         driveMotorConfigs.MotorOutput.DutyCycleNeutralDeadband = ModuleConstants.kDriveMotorDeadband;
+        driveMotorConfigs.CurrentLimits.SupplyCurrentLimit = 40;
+        driveMotorConfigs.CurrentLimits.SupplyCurrentLimitEnable = false;
+        driveMotorConfigs.CurrentLimits.SupplyCurrentThreshold = 30;
+        driveMotorConfigs.CurrentLimits.SupplyTimeThreshold = 0.25;
+        driveMotorConfigs.CurrentLimits.StatorCurrentLimit = 70;
+        driveMotorConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
+        driveMotorConfigs.Audio.AllowMusicDurDisable = true;
         driveConfigurator.apply(driveMotorConfigs);
 
         TalonFXConfiguration turnMotorConfigs = new TalonFXConfiguration();
@@ -128,10 +128,17 @@ public class SwerveModule implements Reportable {
         turnMotorConfigs.Feedback.FeedbackRemoteSensorID = CANCoderId;
         turnMotorConfigs.Feedback.RotorToSensorRatio = 150.0/7.0;
         turnMotorConfigs.Feedback.SensorToMechanismRatio = 1;
+        turnMotorConfigs.ClosedLoopGeneral.ContinuousWrap = true;
         turnMotorConfigs.Voltage.PeakForwardVoltage = 11.5;
         turnMotorConfigs.Voltage.PeakReverseVoltage = -11.5;
         turnMotorConfigs.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         turnMotorConfigs.MotorOutput.DutyCycleNeutralDeadband = ModuleConstants.kDriveMotorDeadband;
+        turnMotorConfigs.CurrentLimits.SupplyCurrentLimit = 30;
+        turnMotorConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
+        turnMotorConfigs.CurrentLimits.SupplyCurrentThreshold = 20;
+        turnMotorConfigs.CurrentLimits.SupplyTimeThreshold = 0.25;
+        turnMotorConfigs.Audio.AllowMusicDurDisable = true;
+        turnConfigurator.apply(turnMotorConfigs);
 
         refreshPID();
     }
@@ -174,7 +181,7 @@ public class SwerveModule implements Reportable {
         // double velocity = desiredState.speedMetersPerSecond / ModuleConstants.kDriveTicksPer100MsToMetersPerSec / ModuleConstants.kDriveMotorGearRatio;
         this.desiredVelocity = velocity;
         
-        if (Math.abs(velocity) < 0.001) {
+    if (Math.abs(velocity) < 0.0001) {
             driveMotor.setControl(brakeRequest);
         }
         else if (this.velocityControl) {
@@ -228,7 +235,7 @@ public class SwerveModule implements Reportable {
      * @return Angle in degrees
      */
     public double getTurningPositionDegrees() {
-        double turningPosition = 360 * canCoder.getAbsolutePosition().getValue();
+        double turningPosition = ((360 * canCoder.getAbsolutePosition().getValue()) % 360 + 360) % 360;
         return turningPosition;
     }
 
@@ -335,17 +342,18 @@ public class SwerveModule implements Reportable {
                 tab.addNumber("Drive percent (current)", () -> this.currentPercent);
                 
                 tab.addNumber("Drive ticks", this::getDrivePositionTicks);
-                tab.addNumber("Turn angle", this::getTurningPositionDegrees);
                 tab.addNumber("Turn angle percent", () -> turnMotor.getDutyCycle().getValue());
-                tab.addNumber("Desired Angle", () -> desiredAngle);
                 tab.addNumber("Angle Difference", () -> desiredAngle - currentAngle);
             case MINIMAL:
-                tab.addNumber("Drive Motor Current", () -> driveMotor.getSupplyCurrent().getValue());
-                tab.addNumber("Module Velocity", this::getDriveVelocity);
+                // tab.addNumber("Turn angle", this::getTurningPositionDegrees);
+                // tab.addNumber("Desired Angle", () -> desiredAngle);
+                tab.addNumber("Drive Supply Current", () -> driveMotor.getSupplyCurrent().getValue());
+                // tab.addNumber("Module Velocity", this::getDriveVelocity);
                 tab.addNumber("Module Velocity RPS", this::getDriveVelocityRPS);
                 tab.addNumber("Desired Velocity", () -> this.desiredVelocity);
                 tab.addBoolean("Velocity Control", () -> this.velocityControl);
-                tab.addString("Error Status", () -> driveMotor.getFaultField().getName());
+                // tab.addString("Error Status", () -> driveMotor.getFaultField().getName());
+                tab.addNumber("Drive Stator Current", () -> driveMotor.getStatorCurrent().getValue());
                 break;
             }
             

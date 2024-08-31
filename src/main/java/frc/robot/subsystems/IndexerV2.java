@@ -254,3 +254,11 @@ public class IndexerV2 extends SubsystemBase implements Reportable {
     public Command reverseIndexCommand() {
         return setVelocityCommand(IndexerConstants.kIndexerReverseRPS.get());
     }
+
+    public Command indexToShooterCommand() {
+        return setVelocityCommand(IndexerConstants.kIndexerVelocityRPS.get());
+    }
+
+    public Command indexToElevatorCommand() {
+        return setVelocityCommand(IndexerConstants.kIndexerReverseRPS.get());
+    }
