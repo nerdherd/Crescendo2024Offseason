@@ -395,9 +395,11 @@ public class ShooterRoller extends SubsystemBase implements Reportable {
         return setVelocityCommand(ShooterConstants.kTopOuttakeAuto1.get(), ShooterConstants.kBottomOuttakeAuto1.get());
     }
  
-    public Command shootAmp() {
+    public Command shootAmpRightCommand() {
         return setRightVelocityCommand(ShooterConstants.kTopOuttakeAmp.get());
     }
+
+    
  
     //****************************** LOGGING METHODS ******************************//
  
