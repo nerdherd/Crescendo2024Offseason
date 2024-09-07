@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.TrapConstants;
+import frc.robot.Constants.BannerSensorConstants.BannerSensorPorts;
 //import frc.robot.subsystems.vision.DriverAssist;
 //import frc.robot.subsystems.vision.ShooterVisionAdjustment;
 import frc.robot.util.NerdyLine;
@@ -21,7 +22,7 @@ public class SuperSystem {
     public ShooterPivot shooterPivot;
     public ShooterRoller shooterRoller;
     public Tramp tramp;
-    public BannerSensor bannerSensor;
+    public BannerSensor topBannerSensor, bottomBannerSensor;
 
     private double[] distances = {1.2,   2.483,   3.015,    3.573,   4.267,   4.697}; // distances from 4/6
     private double[] angles = {-52.470, -32.861, -29.114, -25.663, -21.413, -20.8}; // angles from 4/6
@@ -35,12 +36,13 @@ public class SuperSystem {
         this.shooterPivot = shooterPivot;
         this.shooterRoller = shooterRoller;
         this.tramp = tramp;
-        this.bannerSensor = new BannerSensor();
+        this.topBannerSensor = new BannerSensor(BannerSensorPorts.TOP);
+        this.bottomBannerSensor = new BannerSensor(BannerSensorPorts.BOTTOM);
     }
 
     public boolean noteIntook() {
         // return colorSensor.noteIntook() || bannerSensor.noteIntook();
-        return bannerSensor.noteIntook();
+        return topBannerSensor.noteIntook() && !bottomBannerSensor.noteIntook(); // TODO top yes bot
     }
 
     public double getShooterAngle(SwerveDrivetrain swerve)

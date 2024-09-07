@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants.BannerSensorConstants;
+import frc.robot.Constants.BannerSensorConstants.BannerSensorPorts;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -17,12 +18,11 @@ public class BannerSensor implements Reportable {
     private boolean lastWhiteValue;
     private boolean illegalInput = false;
 
-    public BannerSensor() {
-        blackPort = BannerSensorConstants.blackPort;
-        whitePort = BannerSensorConstants.whitePort;
+    public BannerSensor(BannerSensorPorts ports) {
+        blackPort = ports.blackPort;
+        whitePort = ports.whitePort;
         bannerSensorBlack = new DigitalInput(blackPort);
         bannerSensorWhite = new DigitalInput(whitePort);
-
     }
 
     public boolean noteIntook() {

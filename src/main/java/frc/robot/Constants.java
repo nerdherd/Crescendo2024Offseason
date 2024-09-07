@@ -425,12 +425,20 @@ public final class Constants {
     public static final int kElevatorTrapPosition = 100;
     public static final int kElevatorDownPosition = 0;
     public static final PrefDouble kElevatorDeadband = new PrefDouble("Elevator Deadband", 0.0); // make this a real value as well
-    public static final int kTrampSpeed = 900000000; // TODO make this a real value
+    public static final int kTrampSpeed = 10; // TODO make this a real value
   }
 
   public static final class BannerSensorConstants {
-    public static final int blackPort = 8;
-    public static final int whitePort = 9;
+    public enum BannerSensorPorts {
+      TOP(8, 9),
+      BOTTOM(10, 11);
+
+      public int blackPort, whitePort;
+      BannerSensorPorts(int _black, int _white) {
+        blackPort = _black;
+        whitePort = _white;
+      }
+    }
   }
   public static class ClimbConstants {
     public static final int kClimbMotorID = 0;
