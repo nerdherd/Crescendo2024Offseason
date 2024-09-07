@@ -162,44 +162,7 @@ public class SuperSystem {
         return command.withInterruptBehavior(InterruptionBehavior.kCancelSelf);
     }
 
-    public Command intakeUntilSensed() {
-        Command command = Commands.sequence(
-            // Commands.deadline(
-            //     /*Commands.waitUntil(() -> 
-            //         shooterPivot.hasReachedPosition(ShooterConstants.kHandoffPosition.get())),
-            //     handoff(),
-            //     Commands.waitSeconds(1)
-            //     */
-            // ),
-           // shooterRoller.setVelocityCommand(0, 0),
-           // shooterRoller.setEnabledCommand(true),
-            intakeRoller.setEnabledCommand(true),
-            indexer.setEnabledCommand(true),
-            indexer.indexCommand(),
-            intakeRoller.intakeCommand(),
-
-            // Commands.deadline(
-                // Commands.waitSeconds(1), // testing - check wait time             
-            Commands.waitUntil(this::noteIntook),
-            // ),
-            
-            // Move note back
-            intakeRoller.stopCommand(),
-            indexer.reverseIndexCommand(),
-           // shooterRoller.setVelocityCommand(0, 0),
-            Commands.waitSeconds(0.2), // Was 0.6   3/3/24   Code Orange
-
-            indexer.stopCommand()
-            //shooterRoller.stopCommand()
-        ).finallyDo(() -> {
-            intakeRoller.stop();
-            indexer.stop();
-           // shooterRoller.stop();
-        });
-
-        command.addRequirements( indexer, intakeRoller); // Removed Shooterintake and ShooterRoller
-        return command;
-    }
+   
 
     public Command intakeUntilSensedNoBackup() {
         Command command = Commands.sequence(
@@ -258,6 +221,24 @@ public class SuperSystem {
         command.addRequirements(indexer, intakeRoller); // Removed ShooterPivot and ShooterRoller
         return command;
     }
+    public Command intakeUntilSensedNew(){
+        Command command = Commands.sequence(
+            intakeRoller.setEnabledCommand(true),
+            indexer.setEnabledCommand(true),
+            indexer.indexToShooterCommand(),
+            intakeRoller.intakeCommand(),
+            
+            Commands.waitUntil(this::noteIntook),
+            indexer.setEnabledCommand(false),
+            intakeRoller.stopCommand()
+
+        ).finallyDo(() -> {
+            intakeRoller.stop();
+            indexer.stop();
+           // shooterRoller.stop();
+        });
+        return command;
+    }
 
     public Command intakeNew() {
         Command command = Commands.sequence(
@@ -308,6 +289,7 @@ public class SuperSystem {
         return command;
     }
 
+
     public Command shootSpeaker() {
         Command command = Commands.sequence(
             shooterRoller.shootSpeakerRight(),
@@ -331,7 +313,21 @@ public class SuperSystem {
         return command;
     }
 
-        public Command shootSpeakerAutoAim() {
+    public Command shootAmp() {
+        Command command = Commands.sequence(
+            tramp.setEnabledCommand(true),
+            tramp.setElevatorAmpCommand(),
+            tramp.settrampShootCommand()
+
+
+        ).finallyDo(() -> {
+            tramp.stop();
+            tramp.setElevatorDownCommand();
+        });
+        return command;
+    }
+
+    public Command shootSpeakerAutoAim() {
         Command command = Commands.sequence(
             shooterRoller.shootSpeaker(),
             shooterRoller.setEnabledCommand(true),
@@ -407,7 +403,7 @@ public class SuperSystem {
 
     public Command stopIntaking() {
         Command command = Commands.sequence(
-            indexer.reverseIndexCommand(),
+        indexer.reverseIndexCommand(),
             Commands.waitSeconds(0.5),
             Commands.runOnce(() -> {
                 SmartDashboard.putBoolean("Intaking", false);

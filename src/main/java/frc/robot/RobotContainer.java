@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.SwerveJoystickCommand;
+import frc.robot.subsystems.Climb;
 // import frc.robot.commands.autos.DriveToNoteTest;
 // import frc.robot.commands.autos.Mid4Piece;
 // import frc.robot.commands.autos.Mid4PieceSide;
@@ -229,6 +230,7 @@ public class RobotContainer {
           // }
           return 0.0; 
         }
+
       );
 
       swerveDrive.setDefaultCommand(swerveJoystickCommand);
@@ -279,6 +281,10 @@ public class RobotContainer {
 
   public void configureBindings_teleop() {
     // TODO configure bindings pwease
+    commandOperatorController.triangle().whileTrue(superSystem.intakeUntilSensedNew());
+    commandOperatorController.R2().whileTrue(superSystem.shootSpeaker());
+    commandOperatorController.circle().whileTrue(superSystem.intakeToElevator());
+    commandOperatorController.R1().whileTrue(superSystem.shootAmp());
   }
 
   public void configureBindings_test() {}
