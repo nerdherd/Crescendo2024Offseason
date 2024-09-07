@@ -75,6 +75,34 @@ public class SuperSystem {
         return output + 1.5;
     }
 
+    public Command getReadyForAmp() {
+        Command command = Commands.sequence(
+            Commands.runOnce(() -> tramp.elevatorAmp()),
+            tramp.setEnabledCommand(true)
+            
+        ).finallyDo(
+            () -> {
+                tramp.stop();
+            }
+        );
+        return command;
+    }
+
+    public Command shootAmp() {
+        Command command = Commands.sequence(
+            tramp.settrampShootCommand(),
+            tramp.setRollerEnabledCommand(false)
+           
+        ).finallyDo(
+            () -> {
+               tramp.elevatorDown();
+            }
+
+        );
+        return command;
+        }
+
+
 
     public Command stow() {
         Command command = Commands.sequence(

@@ -18,31 +18,35 @@ public class Tramp extends SubsystemBase implements Reportable{
     private final VelocityVoltage trampVelocityRequest = new VelocityVoltage(0);
 
     private final PIDController elevatorController;
+    // private final PIDController rollerController;
 
-    private boolean enabled = true;
+    private boolean elevatorEnabled = true;
+    private boolean rollerEnabled = true;
+
 
     public Tramp(){
         elevator = new TalonFX(TrapConstants.kElevatorID);
         trampShot = new TalonFX(IndexerConstants.kTrapMotorID);
 
         elevatorController = new PIDController(0.1, 0, 0);
+        // rollerController = new PIDController(0.1, 0, 0);
     }
 
     @Override
     public void periodic() {
         // Math.abs(elevatorVelocityRequest.Velocity) < 0.5 || 
-        if (!enabled){
-            setElevatorVelocity(0);
-            return;
-        }
-
-        if (elevatorController.atSetpoint()) {
-            setElevatorVelocity(0);
+        if (elevatorEnabled){
+            if (elevatorController.atSetpoint()) {
+                setElevatorVelocity(0);
+            } else {
+                setElevatorVelocity(elevatorController.calculate(elevator.getPosition().getValue()));
+            }
         } else {
-            setElevatorVelocity(elevatorController.calculate(elevator.getPosition().getValue()));
+            setElevatorVelocity(0);
         }
-
-        trampShot.setControl(trampVelocityRequest);
+        if (!rollerEnabled){
+            setRollerVelocity(0);
+        }
     }
 
     
@@ -51,21 +55,60 @@ public class Tramp extends SubsystemBase implements Reportable{
         elevator.set(velocity);
     }
 
+    private void setRollerVelocity(double verbocity){
+        trampShot.set(verbocity);
+    }
+
     // state methods
     public void stop() {
-        this.enabled = false;
+        stopElevator();
+        stopRoller();
+    }
+    public void stopElevator() {
+        this.elevatorEnabled = false;
+    }
+    public void stopRoller() {
+        this.rollerEnabled = false;
     }
  
+    public Command stopElevatorCommand() {
+        return Commands.runOnce(() -> stopElevator());
+    }
+
+    public Command stopRollerCommand() {
+        return Commands.runOnce(() -> stopRoller());
+    }
+
     public Command stopCommand() {
         return Commands.runOnce(() -> stop());
     }
+
  
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
+    public void setEnabledElevator(boolean enabled) {
+        this.elevatorEnabled = enabled;
     }
+
+    public void setRollerEnabled(boolean enabled) {
+        this.rollerEnabled = enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.rollerEnabled = enabled;
+        this.elevatorEnabled = enabled;
+    }
+
+
  
     public Command setEnabledCommand(boolean enabled) {
         return Commands.runOnce(() -> setEnabled(enabled));
+    }
+
+    public Command setElevatorEnabledCommand(boolean enabled) {
+        return Commands.runOnce(() -> setEnabledElevator(enabled));
+    }
+
+    public Command setRollerEnabledCommand(boolean enabled) {
+        return Commands.runOnce(() -> setRollerEnabled(enabled));
     }
 
     public boolean hasReachedPosition(double positionDegrees) {
