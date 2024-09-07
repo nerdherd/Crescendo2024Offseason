@@ -51,7 +51,7 @@ public class IndexerV2 extends SubsystemBase implements Reportable {
         configurePID();
     }
 
-    //****************************** SETUP METHODS ******************************/
+    //****************************** SETUP METHODS ******************************//
 
     public void configureMotor() {
         TalonFXConfiguration indexerConfigs = new TalonFXConfiguration();

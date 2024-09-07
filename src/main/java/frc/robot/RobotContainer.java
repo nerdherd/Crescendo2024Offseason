@@ -4,10 +4,10 @@
 
 package frc.robot;
 
-import java.util.List;
+// import java.util.List;
 
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.path.PathPlannerPath;
+//import com.pathplanner.lib.auto.AutoBuilder;
+//import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PS4Controller;
@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.VisionConstants;
-import frc.robot.commands.SwerveJoystickCommand;
+// import frc.robot.commands.SwerveJoystickCommand;
 // import frc.robot.commands.autos.DriveToNoteTest;
 // import frc.robot.commands.autos.Mid4Piece;
 // import frc.robot.commands.autos.Mid4PieceSide;
@@ -39,53 +39,50 @@ import frc.robot.commands.SwerveJoystickCommand;
 // import frc.robot.commands.autos.PathVariants.PathE;
 // import frc.robot.commands.autos.PathVariants.PathF;
 // import frc.robot.subsystems.CANdleSubSystem;
-//import frc.robot.subsystems.Climber;
+// import frc.robot.subsystems.Climber;
 // import frc.robot.subsystems.CANdleSubSystem.Status;
 import frc.robot.subsystems.IndexerV2;
 import frc.robot.subsystems.IntakeRoller;
-import frc.robot.subsystems.Reportable.LOG_LEVEL;
-import frc.robot.subsystems.ShooterPivot;
+// import frc.robot.subsystems.Reportable.LOG_LEVEL;
+// import frc.robot.subsystems.ShooterPivot;
 import frc.robot.subsystems.ShooterRoller;
-import frc.robot.subsystems.SuperSystem;
-import frc.robot.subsystems.Tramp;
+// import frc.robot.subsystems.SuperSystem;
+// import frc.robot.subsystems.Tramp;
 import frc.robot.subsystems.imu.Gyro;
 import frc.robot.subsystems.imu.PigeonV2;
-import frc.robot.subsystems.swerve.SwerveDrivetrain;
-import frc.robot.subsystems.swerve.SwerveDrivetrain.DRIVE_MODE;
-import frc.robot.subsystems.vision.NoteAssistance;
+// import frc.robot.subsystems.swerve.SwerveDrivetrain;
+// import frc.robot.subsystems.swerve.SwerveDrivetrain.DRIVE_MODE;
+// import frc.robot.subsystems.vision.NoteAssistance;
 import frc.robot.subsystems.vision.jurrasicMarsh.LimelightHelpers;
 import frc.robot.util.NerdyMath;
 
 public class RobotContainer {
   public ShooterRoller shooterRoller = new ShooterRoller();
-  public ShooterPivot shooterPivot = new ShooterPivot();
   public IntakeRoller intakeRoller = new IntakeRoller();
   public IndexerV2 indexer = new IndexerV2();
-  public Tramp tramp = new Tramp();
-  // public Climber climb = new Climber();
 
-  public SuperSystem superSystem = new SuperSystem(intakeRoller, indexer, shooterPivot, shooterRoller, tramp);
+  // public SuperSystem superSystem = new SuperSystem(intakeRoller, shooterRoller);
   
   public Gyro imu = new PigeonV2(2);
   
-  public SwerveDrivetrain swerveDrive;
+  // public SwerveDrivetrain swerveDrive;
   public PowerDistribution pdp = new PowerDistribution(1, ModuleType.kRev);
   
   private final CommandPS4Controller commandDriverController = new CommandPS4Controller(
     ControllerConstants.kDriverControllerPort);
-  private final PS4Controller driverController = commandDriverController.getHID();
+  // private final PS4Controller driverController = commandDriverController.getHID();
   private final CommandPS4Controller commandOperatorController = new CommandPS4Controller(
       ControllerConstants.kOperatorControllerPort);
   private final PS4Controller operatorController = commandOperatorController.getHID();
 
-  private final LOG_LEVEL loggingLevel = LOG_LEVEL.ALL;
+  // private final LOG_LEVEL loggingLevel = LOG_LEVEL.ALL;
 
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
 
-  private NoteAssistance noteCamera; 
+  // private NoteAssistance noteCamera; 
   
   // public CANdleSubSystem CANdle = new CANdleSubSystem();
-  private SwerveJoystickCommand swerveJoystickCommand;
+  // private SwerveJoystickCommand swerveJoystickCommand;
 
   
   /**
@@ -94,8 +91,8 @@ public class RobotContainer {
    */
   public RobotContainer() {
     try {
-      noteCamera = new NoteAssistance(VisionConstants.kLimelightFrontName);
-      swerveDrive = new SwerveDrivetrain(imu);
+      // noteCamera = new NoteAssistance(VisionConstants.kLimelightFrontName);
+      // swerveDrive = new SwerveDrivetrain(imu);
 
     } catch (IllegalArgumentException e) {
       DriverStation.reportError("Illegal Swerve Drive Module Type", e.getStackTrace());
@@ -111,7 +108,7 @@ public class RobotContainer {
 
     // Configure the trigger bindings
     // Moved to teleop init
-    
+    configureBindings_teleop();
 
     DriverStation.reportWarning("Initalization complete", false);
       // NamedCommands.registerCommand("intakeBasic1", superSystem.intakeBasicHold());
@@ -140,7 +137,7 @@ public class RobotContainer {
   }
 
   public void initDefaultCommands_teleop() {
-    shooterPivot.setDefaultCommand(
+    // shooterPivot.setDefaultCommand(
       new RunCommand(
         () -> {
           double increment = Math.signum(
@@ -150,138 +147,166 @@ public class RobotContainer {
                 ControllerConstants.kDeadband)
             ) * 0.1;
           SmartDashboard.putNumber("Increment", increment);
-          shooterPivot.incrementPosition(increment);
+          // shooterPivot.incrementPosition(increment);
              // (20 * x) degrees per second
             // If x = 0.1, then v = 2 degrees per second
             
-        },
-        shooterPivot
-      ));
-      
-      swerveJoystickCommand = 
-      new SwerveJoystickCommand(
-        swerveDrive,
-        () -> -commandDriverController.getLeftY(), // Horizontal translation
-        commandDriverController::getLeftX, // Vertical Translation
-        // () -> 0.0, // debug
-        () -> {
-          // if (driverController.getL2Button()) {
-          //   SmartDashboard.putBoolean("Turn to angle 2", true);
-          //   double turnPower = apriltagCamera.getTurnToTagPower(swerveDrive, angleError, IsRedSide() ? 4 : 7, adjustmentCamera); 
-          //   SmartDashboard.putNumber("Turn Power", turnPower);
-          //   return turnPower;
-          // }
-          // SmartDashboard.putBoolean("Turn to angle 2", false);
-          return commandDriverController.getRightX(); // Rotation
-        },
-
-        // driverController::getSquareButton, // Field oriented
-        () -> false, // should be robot oriented now on true
-        () -> false,
-        // driverController::getCrossButton, // Towing
-        // driverController::getR2Button, // Precision/"Sniper Button"
-        () -> driverController.getR2Button(), // Precision mode (disabled)
-        () -> {
-          return (
-            driverController.getR1Button() 
-            || driverController.getL1Button() 
-            || driverController.getL2Button() 
-            || driverController.getCircleButton()
-            || driverController.getTriangleButton()
-            // || (
-            //   driverController.getTouchpad() && superSystem.getIsPassing()
-            // )
-            // || driverController.getPSButton()
-          ); // Turn to angle
-        }, 
-        // () -> false, // Turn to angle (disabled)
-        () -> { // Turn To angle Direction
-          if (
-          //   (driverController.getTouchpad() && superSystem.getIsPassing())
-          //  || 
-           driverController.getTriangleButton()) 
-           {
-            if (!IsRedSide()) {
-              return 315.0;
-            } else {
-              return 45.0;
-            }
-          }
-          if (driverController.getL2Button()) {
-            return swerveDrive.getTurnToSpecificTagAngle(IsRedSide() ? 4 : 7); // TODO, update?
-            // 4 if red side, 7 if blue
-          }
-          if (driverController.getCircleButton()) { //turn to amp
-            if (!IsRedSide()){
-              return 270.0;
-            }
-            return 90.0;
-          }
-          else 
-          if (driverController.getL1Button()) { //turn to speaker
-            return 0.0;
-          }
-          else if (driverController.getR1Button()) {
-            return 180.0;
-          }
-          // if (driverController.getPSButton()) { // Turn to shuffleboard angle
-          //   return SmartDashboard.getNumber("Test Desired Angle", 0);
-          // }
-          return 0.0; 
         }
-      );
+        
+      );};
+      
+  //     Command swerveJoystickCommanded = 
+  //     new SwerveJoystickCommand(
+  //       swerveDrive,
+  //       () -> -commandDriverController.getLeftY(), // Horizontal translation
+  //       commandDriverController::getLeftX, // Vertical Translation
+  //       // () -> 0.0, // debug
+  //       () -> {
+  //         // if (driverController.getL2Button()) {
+  //         //   SmartDashboard.putBoolean("Turn to angle 2", true);
+  //         //   double turnPower = apriltagCamera.getTurnToTagPower(swerveDrive, angleError, IsRedSide() ? 4 : 7, adjustmentCamera); 
+  //         //   SmartDashboard.putNumber("Turn Power", turnPower);
+  //         //   return turnPower;
+  //         // }
+  //         // SmartDashboard.putBoolean("Turn to angle 2", false);
+  //         return commandDriverController.getRightX(); // Rotation
+  //       },
 
-      swerveDrive.setDefaultCommand(swerveJoystickCommand);
+  //       // driverController::getSquareButton, // Field oriented
+  //       () -> false, // should be robot oriented now on true
+  //       () -> false,
+  //       // driverController::getCrossButton, // Towing
+  //       // driverController::getR2Button, // Precision/"Sniper Button"
+  //       () -> {driverController.getR2Button()}, // Precision mode (disabled)
+  //       () -> {
+  //         return (
+  //           driverController.getR1Button() 
+  //           || driverController.getL1Button() 
+  //           || driverController.getL2Button() 
+  //           || driverController.getCircleButton()
+  //           || driverController.getTriangleButton()
+  //           // || (
+  //           //   driverController.getTouchpad() && superSystem.getIsPassing()
+  //           // )
+  //           // || driverController.getPSButton()
+  //         ); // Turn to angle
+  //       }, 
+  //       // () -> false, // Turn to angle (disabled)
+  //       () -> { // Turn To angle Direction
+  //         if (
+  //         //   (driverController.getTouchpad() && superSystem.getIsPassing())
+  //         //  || 
+  //          driverController.getTriangleButton()) 
+  //          {
+  //           if (!IsRedSide()) {
+  //             return 315.0;
+  //           } else {
+  //             return 45.0;
+  //           }
+  //         }
+  //         if (driverController.getL2Button()) {
+  //           return swerveDrive.getTurnToSpecificTagAngle(IsRedSide() ? 4 : 7); // TODO, update?
+  //           // 4 if red side, 7 if blue
+  //         }
+  //         if (driverController.getCircleButton()) { //turn to amp
+  //           if (!IsRedSide()){
+  //             return 270.0;
+  //           }
+  //           return 90.0;
+  //         }
+  //         else 
+  //         if (driverController.getL1Button()) { //turn to speaker
+  //           return 0.0;
+  //         }
+  //         else if (driverController.getR1Button()) {
+  //           return 180.0;
+  //         }
+  //         // if (driverController.getPSButton()) { // Turn to shuffleboard angle
+  //         //   return SmartDashboard.getNumber("Test Desired Angle", 0);
+  //         // }
+  //         return 0.0; 
+  //       }
+  //     );
 
-      // Point to angle
-      // swerveDrive.setDefaultCommand(
-      //   new SwerveJoystickCommand(
-      //     swerveDrive,
-      //     () -> -commandDriverController.getLeftY(), // Horizontal translation
-      //     commandDriverController::getLeftX, // Vertical Translation
+  //     // swerveDrive.setDefaultCommand(swerveJoystickCommanded);
+
+  //     // Point to angle
+  //     // swerveDrive.setDefaultCommand(
+  //     //   new SwerveJoystickCommand(
+  //     //     swerveDrive,
+  //     //     () -> -commandDriverController.getLeftY(), // Horizontal translation
+  //     //     commandDriverController::getLeftX, // Vertical Translation
           
-      //     () -> {
-      //       if (driverController.getCircleButton()) {
-      //         noteCamera.calculateRotationSpeed(0, 0); // Values from SwerveDrive2024/isMeToKitBot
-      //         return (noteCamera.getRotationSpeed() * 180 / Math.PI) / 20; // Convert radians to degrees and divide by 20 for how often it's run
-      //       }
-      //       if(driverController.getR1Button() && driverController.getL2Button()){
-      //         return 0.0;
-      //       }
-      //       if(driverController.getR1Button()){
-      //         return -4.5;
-      //       }
-      //       if(driverController.getL2Button()){
-      //         return 4.5;
-      //       }
-      //       return 0.0;
-      //     },
-      //     () -> false, // Field oriented
-      //     driverController::getCrossButton, // Towing
-      //     () -> driverController.getR2Button(), // Precision mode (disabled)
-      //     () -> true, // Turn to angle
-      //     () -> { // Turn To angle Direction
-      //       double xValue = commandDriverController.getRightX();
-      //       double yValue = commandDriverController.getRightY();
-      //       double magnitude = (xValue*xValue) + (yValue*yValue);
-      //       if (magnitude > 0.49) {
-      //         double angle = (90 + NerdyMath.radiansToDegrees(Math.atan2(commandDriverController.getRightY(), commandDriverController.getRightX())));
-      //         angle = (((-1 * angle) % 360) + 360) % 360;
-      //         SmartDashboard.putNumber("desired angle", angle);
-      //         return angle;
-      //       }
-      //       return 1000.0;
-      //     }
-      //   ));
-  }
+  //     //     () -> {
+  //     //       if (driverController.getCircleButton()) {
+  //     //         noteCamera.calculateRotationSpeed(0, 0); // Values from SwerveDrive2024/isMeToKitBot
+  //     //         return (noteCamera.getRotationSpeed() * 180 / Math.PI) / 20; // Convert radians to degrees and divide by 20 for how often it's run
+  //     //       }
+  //     //       if(driverController.getR1Button() && driverController.getL2Button()){
+  //     //         return 0.0;
+  //     //       }
+  //     //       if(driverController.getR1Button()){
+  //     //         return -4.5;
+  //     //       }
+  //     //       if(driverController.getL2Button()){
+  //     //         return 4.5;
+  //     //       }
+  //     //       return 0.0;
+  //     //     },
+  //     //     () -> false, // Field oriented
+  //     //     driverController::getCrossButton, // Towing
+  //     //     () -> driverController.getR2Button(), // Precision mode (disabled)
+  //     //     () -> true, // Turn to angle
+  //     //     () -> { // Turn To angle Direction
+  //     //       double xValue = commandDriverController.getRightX();
+  //     //       double yValue = commandDriverController.getRightY();
+  //     //       double magnitude = (xValue*xValue) + (yValue*yValue);
+  //     //       if (magnitude > 0.49) {
+  //     //         double angle = (90 + NerdyMath.radiansToDegrees(Math.atan2(commandDriverController.getRightY(), commandDriverController.getRightX())));
+  //     //         angle = (((-1 * angle) % 360) + 360) % 360;
+  //     //         SmartDashboard.putNumber("desired angle", angle);
+  //     //         return angle;
+  //     //       }
+  //     //       return 1000.0;
+  //     //     }
+  //     //   ));
+  // }
 
   public void initDefaultCommands_test() {}
 
   public void configureBindings_teleop() {
-    // TODO configure bindings pwease
+    commandDriverController.square()
+    .whileTrue(
+      Commands.sequence(
+        intakeRoller.intakeCommand(),
+        intakeRoller.setEnabledCommand(true)
+      )
+    ).onFalse(
+      intakeRoller.stopCommand()
+    );
+
+    commandDriverController.triangle()
+    .whileTrue(
+      Commands.sequence(
+        indexer.indexToShooterCommand(),
+        indexer.setEnabledCommand(true)
+      )
+    ).onFalse(
+      indexer.stopCommand()
+    );
+
+    commandDriverController.cross()
+    .whileTrue(
+      Commands.sequence(
+        indexer.indexToElevatorCommand(),
+        indexer.setEnabledCommand(true)
+      )
+    ).onFalse(
+      indexer.stopCommand()
+    );
   }
 
-  public void configureBindings_test() {}
+  /*public void configureBindings_test() {}
   // AprilTag Trigger
   Trigger aimTrigger = new Trigger(() -> {
     double desiredAngle = swerveDrive.getTurnToSpecificTagAngle(IsRedSide() ? 4 : 7);// TODO, update?
@@ -300,9 +325,7 @@ public class RobotContainer {
     }
     return false;
     // return apriltagCamera.apriltagInRange(IsRedSide() ? 4 : 7, 0, 0);
-  });
-  
-
+  });*/
 
   /*public void configureLEDTriggers() {
     // Note Trigger
@@ -416,17 +439,17 @@ public class RobotContainer {
   }*/
 
   //PathPlannerPath a01 = PathPlannerPath.fromPathFile("a01Path");
-  PathPlannerPath a02 = PathPlannerPath.fromPathFile("a02Path");
+  // PathPlannerPath a02 = PathPlannerPath.fromPathFile("a02Path");
   //PathPlannerPath a03 = PathPlannerPath.fromPathFile("a03Path");
-  PathPlannerPath aY3 = PathPlannerPath.fromPathFile("aY3Path");  
+  // PathPlannerPath aY3 = PathPlannerPath.fromPathFile("aY3Path");  
   
   //PathPlannerPath b12 = PathPlannerPath.fromPathFile("b12Path");
   // PathPlannerPath b23 = PathPlannerPath.fromPathFile("b23Path");
   // PathPlannerPath b32 = PathPlannerPath.fromPathFile("b32Path");
   // PathPlannerPath b21 = PathPlannerPath.fromPathFile("b21Path");
   // PathPlannerPath b31 = PathPlannerPath.fromPathFile("b31Path");
-  PathPlannerPath b31 = PathPlannerPath.fromPathFile("b31Path");
-  PathPlannerPath b2p6 = PathPlannerPath.fromPathFile("b2p6Path");
+  // PathPlannerPath b31 = PathPlannerPath.fromPathFile("b31Path");
+  // PathPlannerPath b2p6 = PathPlannerPath.fromPathFile("b2p6Path");
 
   // PathPlannerPath c14 = PathPlannerPath.fromPathFile("c14Path");
   // PathPlannerPath c24 = PathPlannerPath.fromPathFile("c24Path");
@@ -441,16 +464,16 @@ public class RobotContainer {
   // PathPlannerPath c15 = PathPlannerPath.fromPathFile("c15Path");
   // PathPlannerPath c28 = PathPlannerPath.fromPathFile("c28Path");
   // PathPlannerPath c27 = PathPlannerPath.fromPathFile("c27Path");
-  PathPlannerPath c26 = PathPlannerPath.fromPathFile("c26Path");
-  PathPlannerPath c26Fast = PathPlannerPath.fromPathFile("c26PathFast");
+  // PathPlannerPath c26 = PathPlannerPath.fromPathFile("c26Path");
+  // PathPlannerPath c26Fast = PathPlannerPath.fromPathFile("c26PathFast");
   //PathPlannerPath c25 = PathPlannerPath.fromPathFile("c25Path");
   //PathPlannerPath c25Stage = PathPlannerPath.fromPathFile("c25PathStage");
   //PathPlannerPath c26Short = PathPlannerPath.fromPathFile("c26PathShort");
   
   //PathPlannerPath d26ShortC = PathPlannerPath.fromPathFile("d26PathShortC");
-  PathPlannerPath d26 = PathPlannerPath.fromPathFile("d26Path");
-  PathPlannerPath d25 = PathPlannerPath.fromPathFile("d25Path");
-  PathPlannerPath d27 = PathPlannerPath.fromPathFile("d27Path");
+  // PathPlannerPath d26 = PathPlannerPath.fromPathFile("d26Path");
+  // PathPlannerPath d25 = PathPlannerPath.fromPathFile("d25Path");
+  // PathPlannerPath d27 = PathPlannerPath.fromPathFile("d27Path");
   // PathPlannerPath d45 = PathPlannerPath.fromPathFile("d45Path");
   // PathPlannerPath d56 = PathPlannerPath.fromPathFile("d56Path");
   // PathPlannerPath d87 = PathPlannerPath.fromPathFile("d87Path");
@@ -465,9 +488,9 @@ public class RobotContainer {
   // PathPlannerPath e7Y = PathPlannerPath.fromPathFile("e7YPath");
   // PathPlannerPath e7Z = PathPlannerPath.fromPathFile("e7ZPath");
   // PathPlannerPath e8Z = PathPlannerPath.fromPathFile("e8ZPath");
-  PathPlannerPath e5Y = PathPlannerPath.fromPathFile("e5YPath");
-  PathPlannerPath e6Y = PathPlannerPath.fromPathFile("e6YPath");
-  PathPlannerPath e7Y = PathPlannerPath.fromPathFile("e7YPath");
+  // PathPlannerPath e5Y = PathPlannerPath.fromPathFile("e5YPath");
+  // PathPlannerPath e6Y = PathPlannerPath.fromPathFile("e6YPath");
+  // PathPlannerPath e7Y = PathPlannerPath.fromPathFile("e7YPath");
 
   // PathPlannerPath e6YShort = PathPlannerPath.fromPathFile("e6YPathShort");
 
@@ -513,7 +536,7 @@ public class RobotContainer {
   // );
 
   private void initAutoChoosers() {
-  	List<String> paths = AutoBuilder.getAllAutoNames();
+  	// List<String> paths = AutoBuilder.getAllAutoNames();
     autoChooser.addOption("Do Nothing", Commands.none());
 
     // if (paths.contains("PreloadTaxiSourceSide")) {
@@ -577,7 +600,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     Command currentAuto = autoChooser.getSelected();
 
-    swerveDrive.setDriveMode(DRIVE_MODE.AUTONOMOUS);
+    // swerveDrive.setDriveMode(DRIVE_MODE.AUTONOMOUS);
     return currentAuto;
   }
 }

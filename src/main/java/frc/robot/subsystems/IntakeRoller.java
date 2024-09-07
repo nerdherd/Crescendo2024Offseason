@@ -27,7 +27,7 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
     private final TalonFX rightIntake;
     private final TalonFXConfigurator rightIntakeConfigurator;
     private final VelocityVoltage rightVelocityRequest = new VelocityVoltage(0, 0, true, 0, 0, false, false, false);
-    private final VoltageOut rightVoltageRequest = new VoltageOut(0, true, false, false, false);
+    // private final VoltageOut rightVoltageRequest = new VoltageOut(0, true, false, false, false);
     
     private final TalonFX leftIntake;
     private final TalonFXConfigurator leftIntakeConfigurator;

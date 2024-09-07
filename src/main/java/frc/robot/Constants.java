@@ -4,8 +4,8 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.util.PIDConstants;
+// import com.pathplanner.lib.path.PathConstraints;
+// import com.pathplanner.lib.util.PIDConstants;
 
 import edu.wpi.first.math.MatBuilder;
 import edu.wpi.first.math.Matrix;
@@ -197,7 +197,7 @@ public final class Constants {
     
   }
 
-  public static final class PathPlannerConstants {
+  /*public static final class PathPlannerConstants {
     public static final double kPPMaxVelocity = 3;
     public static final double kPPMaxAcceleration = 3;
     public static final double kPPMaxAngularVelocity = Math.PI * 2;
@@ -216,7 +216,7 @@ public final class Constants {
     public static final PIDConstants kPPRotationPIDConstants = new PIDConstants(kPP_ThetaP, kPP_ThetaI, kPP_ThetaD);
 
     public static final boolean kUseAllianceColor = true;
-  }
+  } */
 
   public static final class VisionConstants {
     public static final Pose2d kBlueAmpPose = new Pose2d(new Translation2d(1.85, 7), Rotation2d.fromDegrees(270));
@@ -261,7 +261,7 @@ public final class Constants {
       public static final PrefDouble kINoteAngle = new PrefDouble("I Note Angle", 0);
       public static final PrefDouble kDNoteAngle = new PrefDouble("D Note Angle", 0);
   }
-      
+
   public static final class SuperStructureConstants {
     public static final String kCANivoreBusName = "rio";
   }
@@ -375,14 +375,14 @@ public final class Constants {
   }
 
   public static final class IntakeConstants {
-    public static final int kRightIntakeMotorID = 56;
-    public static final int kLeftIntakeMotorID = 57; //change later
+    public static final int kRightIntakeMotorID = 50;
+    public static final int kLeftIntakeMotorID = 51;
 
     public static final double kIntakeNeutralDeadband = 0.01;
 
     // ************************************** INTAKE CONSTANTS *************************************** //
 
-    public static final PrefDouble kIntakeVelocity = new PrefDouble("Intake Velocity", 100);
+    public static final PrefDouble kIntakeVelocity = new PrefDouble("Intake Velocity", 50);
     public static final PrefDouble kAutoIntakeVelocity = new PrefDouble("Intake Velocity Auto", 90);
     public static final double kIntakeMaxVelocity =  100;
     public static final double kIntakeMinVelocity = -100;
@@ -400,8 +400,8 @@ public final class Constants {
   }
   
   public static final class IndexerConstants {
-    public static final int kIndexerMotorID = 55;
-    public static final int kTrapMotorID = 59;
+    public static final int kIndexerMotorID = 0;
+    public static final int kTrapMotorID = 1;
 
     public static final double kIndexerNeutralDeadband = 0.05;
 
