@@ -176,12 +176,18 @@ public class Climb extends SubsystemBase implements Reportable {
     public Command setPositionStateTopCommand() {
         return Commands.runOnce(() -> setPositionStateTop());
     }
+    public Command setEnabledCommand(boolean enabled) {
+        return Commands.runOnce(() -> setEnabledCommand(enabled));
+    }
     /**
      * sets current state to bottom command
      * @return command
      */
     public Command setPositionStateBottomCommand() {
         return Commands.runOnce(() -> setPositionStateBottom());
+    }
+    public Command setVelocityCommand(double velocity) {
+        return Commands.runOnce(() -> setClimbVelocity(velocity));
     }
 
     @Override

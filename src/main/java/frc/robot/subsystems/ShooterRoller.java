@@ -188,6 +188,7 @@ public class ShooterRoller extends SubsystemBase implements Reportable {
     public Command setEnabledCommand(boolean enabled) {
         return Commands.runOnce(() -> setEnabled(enabled));
     }
+    
  
     //****************************** VELOCITY METHODS ******************************//
  

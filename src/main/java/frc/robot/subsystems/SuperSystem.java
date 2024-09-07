@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import frc.robot.RobotContainer;
+import frc.robot.Constants.ClimbConstants.ClimbPostions;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.TrapConstants;
 //import frc.robot.subsystems.vision.DriverAssist;
@@ -21,6 +22,7 @@ public class SuperSystem {
     public ShooterPivot shooterPivot;
     public ShooterRoller shooterRoller;
     public Tramp tramp;
+    public Climb climb;
     public BannerSensor bannerSensor;
 
     private double[] distances = {1.2,   2.483,   3.015,    3.573,   4.267,   4.697}; // distances from 4/6
@@ -29,13 +31,14 @@ public class SuperSystem {
     private double angleOffset = 0.0;
     private NerdyLine angleLine;
 
-    public SuperSystem(IntakeRoller intakeRoller, IndexerV2 indexer, ShooterPivot shooterPivot, ShooterRoller shooterRoller, Tramp tramp) {
+    public SuperSystem(IntakeRoller intakeRoller, IndexerV2 indexer, ShooterPivot shooterPivot, ShooterRoller shooterRoller, Tramp tramp, Climb climb) {
         this.intakeRoller = intakeRoller;
         this.indexer = indexer;
         this.shooterPivot = shooterPivot;
         this.shooterRoller = shooterRoller;
         this.tramp = tramp;
         this.bannerSensor = new BannerSensor();
+        this.climb = climb;
     }
 
     public boolean noteIntook() {
@@ -482,6 +485,29 @@ public class SuperSystem {
 
         command.addRequirements(intakeRoller);
         return command;
+    }
+
+    public Command climbSequenceHoldCommand(){
+        Command command = Commands.sequence(
+            climb.setEnabledCommand(true)
+        ).finallyDo(
+            () -> {
+                climb.setPositionState(ClimbPostions.TOP);
+            }
+        );
+        return command;
+        
+    }
+    
+    public Command climbSequenceRealeaseCommand(){
+        Command command = Commands.sequence(
+            climb.setEnabledCommand(true)
+        ).finallyDo(
+            () -> {
+                climb.setPositionState(ClimbPostions.BOTTOM);
+            }
+        );
+        return command; 
     }
 
     private boolean isPassing = false;
