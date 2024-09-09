@@ -6,6 +6,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import frc.robot.Constants;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.SwerveDriveConstants;
 import frc.robot.subsystems.Reportable;
@@ -20,6 +21,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.hardware.CANcoder;
+
 
 /**
  * Swerve module that uses CANCoder for the absolute position
@@ -113,9 +115,9 @@ public class SwerveModule implements Reportable {
         driveMotorConfigs.Voltage.PeakReverseVoltage = -11.5;
         driveMotorConfigs.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         driveMotorConfigs.MotorOutput.DutyCycleNeutralDeadband = ModuleConstants.kDriveMotorDeadband;
-        driveMotorConfigs.CurrentLimits.SupplyCurrentLimit = 40;
+        driveMotorConfigs.CurrentLimits.SupplyCurrentLimit = ModuleConstants.driverMotorCurrentLimit;
         driveMotorConfigs.CurrentLimits.SupplyCurrentLimitEnable = false;
-        driveMotorConfigs.CurrentLimits.SupplyCurrentThreshold = 30;
+        driveMotorConfigs.CurrentLimits.SupplyCurrentThreshold = ModuleConstants.driverMotorCurrentThreshold;
         driveMotorConfigs.CurrentLimits.SupplyTimeThreshold = 0.25;
         driveMotorConfigs.CurrentLimits.StatorCurrentLimit = 70;
         driveMotorConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
@@ -133,9 +135,9 @@ public class SwerveModule implements Reportable {
         turnMotorConfigs.Voltage.PeakReverseVoltage = -11.5;
         turnMotorConfigs.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         turnMotorConfigs.MotorOutput.DutyCycleNeutralDeadband = ModuleConstants.kDriveMotorDeadband;
-        turnMotorConfigs.CurrentLimits.SupplyCurrentLimit = 30;
+        turnMotorConfigs.CurrentLimits.SupplyCurrentLimit = ModuleConstants.turnMotorCurrentLimit;
         turnMotorConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
-        turnMotorConfigs.CurrentLimits.SupplyCurrentThreshold = 20;
+        turnMotorConfigs.CurrentLimits.SupplyCurrentThreshold = ModuleConstants.turnMotorCurrentThreshold;
         turnMotorConfigs.CurrentLimits.SupplyTimeThreshold = 0.25;
         turnMotorConfigs.Audio.AllowMusicDurDisable = true;
         turnConfigurator.apply(turnMotorConfigs);

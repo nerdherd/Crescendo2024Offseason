@@ -78,6 +78,12 @@ public final class Constants {
     public static final PrefDouble kVDrive = new PrefDouble("kVDrive",0.0469); 
 
     public static final String kCANivoreName = "rio";
+
+    public static final double driverMotorCurrentLimit = 40.0;
+    public static final double driverMotorCurrentThreshold = 30.0;
+    public static final double turnMotorCurrentLimit = 30.0;
+    public static final double turnMotorCurrentThreshold = 20.0;
+
   } 
 
   public static final class SwerveDriveConstants {
@@ -451,7 +457,6 @@ public final class Constants {
     public static final PrefDouble kClimbkD = new PrefDouble("Climb Motor kD", 0.0);
     public static final PrefDouble kClimbPIDErrorTolerance = new PrefDouble("Climb Motor PID Error Tolerance", 5.0);
     public static final PrefDouble kClimbPIDErrorDerivativeTolerance = new PrefDouble("Climb Motor PID Error Derivative Tolerance", 10.0);
-
     public enum ClimbPostions {
       NEUTRAL,
       TOP,

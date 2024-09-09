@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import frc.robot.RobotContainer;
+import frc.robot.Constants.ClimbConstants.ClimbPostions;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.TrapConstants;
 import frc.robot.Constants.BannerSensorConstants.BannerSensorPorts;
@@ -23,6 +24,7 @@ public class SuperSystem {
     public ShooterRoller shooterRoller;
     public Tramp tramp;
     public BannerSensor topBannerSensor, bottomBannerSensor;
+    public Climb climb;
 
     private double[] distances = {1.2,   2.483,   3.015,    3.573,   4.267,   4.697}; // distances from 4/6
     private double[] angles = {-52.470, -32.861, -29.114, -25.663, -21.413, -20.8}; // angles from 4/6
@@ -30,7 +32,7 @@ public class SuperSystem {
     private double angleOffset = 0.0;
     private NerdyLine angleLine;
 
-    public SuperSystem(IntakeRoller intakeRoller, IndexerV2 indexer, ShooterPivot shooterPivot, ShooterRoller shooterRoller, Tramp tramp) {
+    public SuperSystem(IntakeRoller intakeRoller, IndexerV2 indexer, ShooterPivot shooterPivot, ShooterRoller shooterRoller, Tramp tramp, Climb climb) {
         this.intakeRoller = intakeRoller;
         this.indexer = indexer;
         this.shooterPivot = shooterPivot;
@@ -38,6 +40,7 @@ public class SuperSystem {
         this.tramp = tramp;
         this.topBannerSensor = new BannerSensor(BannerSensorPorts.TOP);
         this.bottomBannerSensor = new BannerSensor(BannerSensorPorts.BOTTOM);
+        this.climb = climb;
     }
 
     public boolean noteIntook() {
@@ -189,44 +192,7 @@ public class SuperSystem {
         return command.withInterruptBehavior(InterruptionBehavior.kCancelSelf);
     }
 
-    public Command intakeUntilSensed() {
-        Command command = Commands.sequence(
-            // Commands.deadline(
-            //     /*Commands.waitUntil(() -> 
-            //         shooterPivot.hasReachedPosition(ShooterConstants.kHandoffPosition.get())),
-            //     handoff(),
-            //     Commands.waitSeconds(1)
-            //     */
-            // ),
-           // shooterRoller.setVelocityCommand(0, 0),
-           // shooterRoller.setEnabledCommand(true),
-            intakeRoller.setEnabledCommand(true),
-            indexer.setEnabledCommand(true),
-            indexer.indexCommand(),
-            intakeRoller.intakeCommand(),
-
-            // Commands.deadline(
-                // Commands.waitSeconds(1), // testing - check wait time             
-            Commands.waitUntil(this::noteIntook),
-            // ),
-            
-            // Move note back
-            intakeRoller.stopCommand(),
-            indexer.reverseIndexCommand(),
-           // shooterRoller.setVelocityCommand(0, 0),
-            Commands.waitSeconds(0.2), // Was 0.6   3/3/24   Code Orange
-
-            indexer.stopCommand()
-            //shooterRoller.stopCommand()
-        ).finallyDo(() -> {
-            intakeRoller.stop();
-            indexer.stop();
-           // shooterRoller.stop();
-        });
-
-        command.addRequirements( indexer, intakeRoller); // Removed Shooterintake and ShooterRoller
-        return command;
-    }
+   
 
     public Command intakeUntilSensedNoBackup() {
         Command command = Commands.sequence(
@@ -285,6 +251,24 @@ public class SuperSystem {
         command.addRequirements(indexer, intakeRoller); // Removed ShooterPivot and ShooterRoller
         return command;
     }
+    public Command intakeUntilSensedNew(){
+        Command command = Commands.sequence(
+            intakeRoller.setEnabledCommand(true),
+            indexer.setEnabledCommand(true),
+            indexer.indexToShooterCommand(),
+            intakeRoller.intakeCommand(),
+            
+            Commands.waitUntil(this::noteIntook),
+            indexer.setEnabledCommand(false),
+            intakeRoller.stopCommand()
+
+        ).finallyDo(() -> {
+            intakeRoller.stop();
+            indexer.stop();
+           // shooterRoller.stop();
+        });
+        return command;
+    }
 
     public Command intakeNew() {
         Command command = Commands.sequence(
@@ -335,6 +319,7 @@ public class SuperSystem {
         return command;
     }
 
+
     public Command shootSpeaker() {
         Command command = Commands.sequence(
             shooterRoller.shootSpeakerRight(),
@@ -358,7 +343,21 @@ public class SuperSystem {
         return command;
     }
 
-        public Command shootSpeakerAutoAim() {
+    public Command shootAmp() {
+        Command command = Commands.sequence(
+            tramp.setEnabledCommand(true),
+            tramp.setElevatorAmpCommand(),
+            tramp.settrampShootCommand()
+
+
+        ).finallyDo(() -> {
+            tramp.stop();
+            tramp.setElevatorDownCommand();
+        });
+        return command;
+    }
+
+    public Command shootSpeakerAutoAim() {
         Command command = Commands.sequence(
             shooterRoller.shootSpeaker(),
             shooterRoller.setEnabledCommand(true),
@@ -434,7 +433,7 @@ public class SuperSystem {
 
     public Command stopIntaking() {
         Command command = Commands.sequence(
-            indexer.reverseIndexCommand(),
+        indexer.reverseIndexCommand(),
             Commands.waitSeconds(0.5),
             Commands.runOnce(() -> {
                 SmartDashboard.putBoolean("Intaking", false);
@@ -512,6 +511,29 @@ public class SuperSystem {
 
         command.addRequirements(intakeRoller);
         return command;
+    }
+
+    public Command climbSequenceHoldCommand(){
+        Command command = Commands.sequence(
+            climb.setEnabledCommand(true)
+        ).finallyDo(
+            () -> {
+                climb.setPositionState(ClimbPostions.TOP);
+            }
+        );
+        return command;
+        
+    }
+    
+    public Command climbSequenceRealeaseCommand(){
+        Command command = Commands.sequence(
+            climb.setEnabledCommand(true)
+        ).finallyDo(
+            () -> {
+                climb.setPositionState(ClimbPostions.BOTTOM);
+            }
+        );
+        return command; 
     }
 
     private boolean isPassing = false;
