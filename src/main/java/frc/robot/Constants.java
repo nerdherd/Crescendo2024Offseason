@@ -459,7 +459,14 @@ public final class Constants {
   }
 
   public static class BeambreakConstants {
-    public static final int kSensorAId = 0;
-    public static final int kSensorBId = 1;
-  }
+    public enum BeambreakIds {
+      SENSORA(0),
+      SENSORB(0);
+
+      public int id;
+      BeambreakIds(int _id){
+        id=_id;
+      }
+    }
+  } 
 }
