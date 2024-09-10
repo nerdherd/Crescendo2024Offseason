@@ -6,7 +6,7 @@ import frc.robot.RobotContainer;
 import frc.robot.Constants.ClimbConstants.ClimbPostions;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.TrapConstants;
-import frc.robot.Constants.BannerSensorConstants.BannerSensorPorts;
+//import frc.robot.Constants.BannerSensorConstants.BannerSensorPorts;
 //import frc.robot.subsystems.vision.DriverAssist;
 //import frc.robot.subsystems.vision.ShooterVisionAdjustment;
 import frc.robot.util.NerdyLine;
@@ -23,7 +23,7 @@ public class SuperSystem {
     public ShooterPivot shooterPivot;
     public ShooterRoller shooterRoller;
     public Tramp tramp;
-    public BannerSensor topBannerSensor, bottomBannerSensor;
+    // public BannerSensor topBannerSensor, bottomBannerSensor;
     public Climb climb;
 
     private double[] distances = {1.2,   2.483,   3.015,    3.573,   4.267,   4.697}; // distances from 4/6
@@ -38,15 +38,15 @@ public class SuperSystem {
         this.shooterPivot = shooterPivot;
         this.shooterRoller = shooterRoller;
         this.tramp = tramp;
-        this.topBannerSensor = new BannerSensor(BannerSensorPorts.TOP);
-        this.bottomBannerSensor = new BannerSensor(BannerSensorPorts.BOTTOM);
+        // this.topBannerSensor = new BannerSensor(BannerSensorPorts.TOP);
+        // this.bottomBannerSensor = new BannerSensor(BannerSensorPorts.BOTTOM);
         this.climb = climb;
     }
 
-    public boolean noteIntook() {
-        // return colorSensor.noteIntook() || bannerSensor.noteIntook();
-        return topBannerSensor.noteIntook() && !bottomBannerSensor.noteIntook(); // TODO top yes bot
-    }
+    // public boolean noteIntook() {
+    //     // return colorSensor.noteIntook() || bannerSensor.noteIntook();
+    //     // return topBannerSensor.noteIntook() && !bottomBannerSensor.noteIntook(); // TODO top yes bot
+    // }
 
     public double getShooterAngle(SwerveDrivetrain swerve)
     {
@@ -93,19 +93,19 @@ public class SuperSystem {
         return command;
     }
 
-    public Command shootAmp() {
-        Command command = Commands.sequence(
-            tramp.settrampShootCommand(),
-            tramp.setRollerEnabledCommand(false)
+    // public Command shootAmp() {
+    //     Command command = Commands.sequence(
+    //         tramp.settrampShootCommand(),
+    //         tramp.setRollerEnabledCommand(false)
            
-        ).finallyDo(
-            () -> {
-               tramp.elevatorDown();
-            }
+    //     ).finallyDo(
+    //         () -> {
+    //            tramp.elevatorDown();
+    //         }
 
-        );
-        return command;
-        }
+    //     );
+    //     return command;
+    //     }
 
 
 
@@ -209,7 +209,7 @@ public class SuperSystem {
             indexer.indexCommand(),
             intakeRoller.intakeCommand(),
 
-            Commands.waitUntil(this::noteIntook),
+            // Commands.waitUntil(this::noteIntook),
             intakeRoller.stopCommand(),
             indexer.stopCommand(),
             shooterRoller.stopCommand()
@@ -236,12 +236,12 @@ public class SuperSystem {
             intakeRoller.setEnabledCommand(true),
             indexer.setEnabledCommand(true),
             indexer.indexCommand(),
-            intakeRoller.intakeCommand(),
+            intakeRoller.intakeCommand()//,
 
-            Commands.deadline(
-                Commands.waitSeconds(timeout), // testing - check wait time             
-                Commands.waitUntil(this::noteIntook)
-            )
+            // Commands.deadline(
+            //     Commands.waitSeconds(timeout), // testing - check wait time             
+            //     Commands.waitUntil(this::noteIntook)
+            // )
         ).finallyDo(() -> {
             intakeRoller.stop();
             indexer.stop();
@@ -258,7 +258,7 @@ public class SuperSystem {
             indexer.indexToShooterCommand(),
             intakeRoller.intakeCommand(),
             
-            Commands.waitUntil(this::noteIntook),
+            // Commands.waitUntil(this::noteIntook),
             indexer.setEnabledCommand(false),
             intakeRoller.stopCommand()
 

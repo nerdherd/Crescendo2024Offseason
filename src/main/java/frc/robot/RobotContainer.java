@@ -63,9 +63,9 @@ public class RobotContainer {
   public IntakeRoller intakeRoller = new IntakeRoller();
   public IndexerV2 indexer = new IndexerV2();
   public Tramp tramp = new Tramp();
-  // public Climber climb = new Climber();
+  public Climb climb = new Climb();
 
-  public SuperSystem superSystem = new SuperSystem(intakeRoller, indexer, shooterPivot, shooterRoller, tramp);
+  public SuperSystem superSystem = new SuperSystem(intakeRoller, indexer, shooterPivot, shooterRoller, tramp, climb);
   
   public Gyro imu = new PigeonV2(2);
   

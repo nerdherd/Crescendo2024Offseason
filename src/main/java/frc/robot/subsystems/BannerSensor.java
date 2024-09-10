@@ -1,65 +1,65 @@
-package frc.robot.subsystems;
+// frc.robot.subsystems;
 
-import frc.robot.Constants.BannerSensorConstants;
-import frc.robot.Constants.BannerSensorConstants.BannerSensorPorts;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+// import frc.robot.Constants.BannerSensorConstants;
+// import frc.robot.Constants.BannerSensorConstants.BannerSensorPorts;
+// import edu.wpi.first.wpilibj.DigitalInput;
+// import edu.wpi.first.wpilibj.DriverStation;
+// import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+// import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
-public class BannerSensor implements Reportable {
-    private final int blackPort;
-    private final int whitePort;
-    private final DigitalInput bannerSensorBlack;
-    private final DigitalInput bannerSensorWhite;
+// public class BannerSensor implements Reportable {
+//     private final int blackPort;
+//     private final int whitePort;
+//     private final DigitalInput bannerSensorBlack;
+//     private final DigitalInput bannerSensorWhite;
 
-    private boolean noteDetected;
-    private boolean lastBlackValue;
-    private boolean lastWhiteValue;
-    private boolean illegalInput = false;
+//     private boolean noteDetected;
+//     private boolean lastBlackValue;
+//     private boolean lastWhiteValue;
+//     private boolean illegalInput = false;
 
-    public BannerSensor(BannerSensorPorts ports) {
-        blackPort = ports.blackPort;
-        whitePort = ports.whitePort;
-        bannerSensorBlack = new DigitalInput(blackPort);
-        bannerSensorWhite = new DigitalInput(whitePort);
-    }
+//     public BannerSensor(BannerSensorPorts ports) {
+//         blackPort = ports.blackPort;
+//         whitePort = ports.whitePort;
+//         bannerSensorBlack = new DigitalInput(blackPort);
+//         bannerSensorWhite = new DigitalInput(whitePort);
+//     }
 
-    public boolean noteIntook() {
-        lastBlackValue = bannerSensorBlack.get();
-        lastWhiteValue = bannerSensorWhite.get();
-        if ((lastBlackValue && lastWhiteValue) || (!lastBlackValue && !lastWhiteValue)) {
-            illegalInput = true;
-            noteDetected = false;
-        }
+//     public boolean noteIntook() {
+//         lastBlackValue = bannerSensorBlack.get();
+//         lastWhiteValue = bannerSensorWhite.get();
+//         if ((lastBlackValue && lastWhiteValue) || (!lastBlackValue && !lastWhiteValue)) {
+//             illegalInput = true;
+//             noteDetected = false;
+//         }
 
-        if(!lastBlackValue && lastWhiteValue){
-            noteDetected = true;
-        }
-        else if(lastBlackValue && !lastWhiteValue){
-            noteDetected = false;
-        }
-        else{
-            DriverStation.reportError("Fault in banner sensor, error code: ", true);
-            noteDetected = false;
-        }
-        return noteDetected;
-    }
+//         if(!lastBlackValue && lastWhiteValue){
+//             noteDetected = true;
+//         }
+//         else if(lastBlackValue && !lastWhiteValue){
+//             noteDetected = false;
+//         }
+//         else{
+//             DriverStation.reportError("Fault in banner sensor, error code: ", true);
+//             noteDetected = false;
+//         }
+//         return noteDetected;
+//     }
 
-    public boolean noteIntookWithoutPolling() {
-        return noteDetected;
-    }
+//     public boolean noteIntookWithoutPolling() {
+//         return noteDetected;
+//     }
 
-    @Override
-    public void reportToSmartDashboard(LOG_LEVEL priority) {}
+//     @Override
+//     public void reportToSmartDashboard(LOG_LEVEL priority) {}
 
-    @Override
-    public void initShuffleboard(LOG_LEVEL priority) {
-        ShuffleboardTab tab = Shuffleboard.getTab("Indexer");
-        tab.addBoolean("Note Detected", this::noteIntook);
-        tab.addBoolean("Banner Sensor Connected", () -> !illegalInput);
-        tab.addBoolean("Last Black Value", () -> lastBlackValue);
-        tab.addBoolean("Last White Value", () -> lastWhiteValue);
-    }
+//     @Override
+//     public void initShuffleboard(LOG_LEVEL priority) {
+//         ShuffleboardTab tab = Shuffleboard.getTab("Indexer");
+//         tab.addBoolean("Note Detected", this::noteIntook);
+//         tab.addBoolean("Banner Sensor Connected", () -> !illegalInput);
+//         tab.addBoolean("Last Black Value", () -> lastBlackValue);
+//         tab.addBoolean("Last White Value", () -> lastWhiteValue);
+//     }
     
-}
+// }
