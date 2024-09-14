@@ -35,37 +35,37 @@ public class FourPiece extends SequentialCommandGroup {
                 // Preload
                 Commands.deadline(
                     Commands.waitSeconds(1.5),
-                    superSystem.shoot() // change later
+                    superSystem.shootSpeaker() // change later
                 ),
                 // Second piece
                 Commands.deadline(
                     AutoBuilder.followPath(pathGroup.get(0)),
-                    superSystem.intake()
+                    superSystem.intakeNew()
                 ),
                 // Shoot it
                 Commands.deadline(
                     Commands.waitSeconds(1),
-                    superSystem.shoot()
+                    superSystem.shootSpeaker()
                 ),
                 // Go to Third piece
                 Commands.deadline(
                     AutoBuilder.followPath(pathGroup.get(1)),
-                    superSystem.intake()
+                    superSystem.intakeNew()
                 ),
                 // Shoot it
                 Commands.deadline(
                     Commands.waitSeconds(1),
-                    superSystem.shoot()
+                    superSystem.shootSpeaker()
                 ),
                 // Go to Fourth piece
                 Commands.deadline(
                     AutoBuilder.followPath(pathGroup.get(2)),
-                    superSystem.intake()
+                    superSystem.intakeNew()
                 ),
                 // Shoot
                 Commands.deadline(
                     Commands.waitSeconds(1),
-                    superSystem.shoot()
+                    superSystem.shootSpeaker()
                 )
             )
         );

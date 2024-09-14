@@ -29,58 +29,58 @@ public class FivePieceMidSecond extends SequentialCommandGroup{
             Commands.sequence(
                 // Preload
                 Commands.deadline(
-                    Commands.waitSeconds(seconds:1.5),
-                    supersystem.shoot()
+                    Commands.waitSeconds(1.5),
+                    supersystem.shootSpeaker()
                     // get Piece out robot
-                )
+                ),
                 Commands.deadline(
                     AutoBuilder.followPath(pathGroup.get(0)),
-                    supersystem.intake()
+                    supersystem.intakeNew()
                     // Piece 1
-                )
+                ),
                 Commands.deadline(
-                    Commands.waitSeconds(seconds:1.5),
-                    supersystem.shoot()
+                    Commands.waitSeconds(1.5),
+                    supersystem.shootSpeaker()
                     // get Piece out robot
-                )
+                ),
                 Commands.deadline(
                     AutoBuilder.followPath(pathGroup.get(1)),
-                    supersystem.intake()
+                    supersystem.intakeNew()
                     // Piece 2
-                )
+                ),
                 Commands.deadline(
-                    Commands.waitSeconds(seconds:1.5),
-                    supersystem.shoot()
+                    Commands.waitSeconds(1.5),
+                    supersystem.shootSpeaker()
                     // get Piece out robot
-                )
+                ),
                 Commands.deadline(
                     AutoBuilder.followPath(pathGroup.get(2)),
-                    supersystem.intake()
+                    supersystem.intakeNew()
                     // Piece 3
-                )
+                ),
                 Commands.deadline(
-                    Commands.waitSeconds(seconds:1.5),
-                    supersystem.shoot()
+                    Commands.waitSeconds(1.5),
+                    supersystem.shootSpeaker()
                     // get Piece out robot
-                )
+                ),
                 Commands.deadline(
                     AutoBuilder.followPath(pathGroup.get(3)),
-                    supersystem.intake()
+                    supersystem.intakeNew()
                     // Piece 4
-                )
+                ),
                 
                 Commands.deadline(
                     AutoBuilder.followPath(pathGroup.get(4)),
                     // Return to a position in which the robot can shoot
-                )
+                ),
                 Commands.deadline(
-                    Commands.waitSeconds(seconds:1.5),
-                    supersystem.shoot()
+                    Commands.waitSeconds(1.5),
+                    supersystem.shootSpeaker()
                     // get Piece out robot
                 )
                 
             )
             
-        )
+        );
     }
 }
