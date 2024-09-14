@@ -4,12 +4,12 @@
 
 package frc.robot;
 
-import java.util.List;
+// import java.util.List;
 
-import com.pathplanner.lib.auto.AutoBuilder;
+// import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
 
-import edu.wpi.first.math.proto.Controller;
+// import edu.wpi.first.math.proto.Controller;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
+// import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -45,7 +45,7 @@ import frc.robot.subsystems.Climb;
 // import frc.robot.subsystems.CANdleSubSystem.Status;
 import frc.robot.subsystems.IndexerV2;
 import frc.robot.subsystems.IntakeRoller;
-import frc.robot.subsystems.Reportable.LOG_LEVEL;
+// import frc.robot.subsystems.Reportable.LOG_LEVEL;
 import frc.robot.subsystems.ShooterPivot;
 import frc.robot.subsystems.ShooterRoller;
 import frc.robot.subsystems.SuperSystem;
@@ -54,7 +54,7 @@ import frc.robot.subsystems.imu.Gyro;
 import frc.robot.subsystems.imu.PigeonV2;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import frc.robot.subsystems.swerve.SwerveDrivetrain.DRIVE_MODE;
-import frc.robot.subsystems.vision.NoteAssistance;
+// import frc.robot.subsystems.vision.NoteAssistance;
 import frc.robot.subsystems.vision.jurrasicMarsh.LimelightHelpers;
 import frc.robot.util.MAJoystick;
 import frc.robot.util.NerdyMath;
@@ -66,14 +66,9 @@ public class RobotContainer {
   public IndexerV2 indexer = new IndexerV2();
   public Tramp tramp = new Tramp();
   public Climb climb = new Climb();
-<<<<<<< HEAD
-  // public Climber climb = new Climber();
 
   private boolean airplaneMode = true;
 
-=======
-
->>>>>>> f91a55ac8d96f207f705951c48be9add9a952021
   public SuperSystem superSystem = new SuperSystem(intakeRoller, indexer, shooterPivot, shooterRoller, tramp, climb);
   
   public Gyro imu = new PigeonV2(2);
@@ -81,24 +76,21 @@ public class RobotContainer {
   public SwerveDrivetrain swerveDrive;
   public PowerDistribution pdp = new PowerDistribution(1, ModuleType.kRev);
   
-  private final CommandPS4Controller commandDriverController;
-  private final PS4Controller driverController;
-  private final CommandPS4Controller commandOperatorController;
-  private final PS4Controller operatorController;
+  private CommandPS4Controller commandDriverController;
+  private PS4Controller driverController;
+  private CommandPS4Controller commandOperatorController;
+  private PS4Controller operatorController;
+  private MAJoystick airplaneOperator;
+  // private MAJoystick airplaneDriver;
 
-  private final LOG_LEVEL loggingLevel = LOG_LEVEL.ALL;
+  // private final LOG_LEVEL loggingLevel = LOG_LEVEL.ALL;
 
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
 
-  private NoteAssistance noteCamera; 
-
-  private final MAJoystick airplaneOperator; 
-
-  private final MAJoystick airplaneDriver;
+  // private NoteAssistance noteCamera; 
   
   // public CANdleSubSystem CANdle = new CANdleSubSystem();
   private SwerveJoystickCommand swerveJoystickCommand;
-
   
   /**
    * The container for the robot. Contain
@@ -106,12 +98,11 @@ public class RobotContainer {
    */
   public RobotContainer() {
     if (airplaneMode){
-      airplaneDriver = new MAJoystick(
-        ControllerConstants.kDriverControllerPort);
+      // airplaneDriver = new MAJoystick(
+      //   ControllerConstants.kDriverControllerPort);
       airplaneOperator = new MAJoystick(
         ControllerConstants.kOperatorControllerPort);
-    }
-    else{
+    } else {
       commandDriverController = new CommandPS4Controller(
         ControllerConstants.kDriverControllerPort);
       commandOperatorController = new CommandPS4Controller(
@@ -119,15 +110,15 @@ public class RobotContainer {
       operatorController = commandOperatorController.getHID();
       driverController = commandDriverController.getHID();
     }
+
     try {
-      noteCamera = new NoteAssistance(VisionConstants.kLimelightFrontName);
+      // noteCamera = new NoteAssistance(VisionConstants.kLimelightFrontName);
       swerveDrive = new SwerveDrivetrain(imu);
 
     } catch (IllegalArgumentException e) {
       DriverStation.reportError("Illegal Swerve Drive Module Type", e.getStackTrace());
     }
 
-    
     LimelightHelpers.setLEDMode_ForceBlink(VisionConstants.kLimelightBackName);
     LimelightHelpers.setLEDMode_ForceBlink(VisionConstants.kLimelightFrontName);
 
@@ -140,10 +131,10 @@ public class RobotContainer {
     
 
     DriverStation.reportWarning("Initalization complete", false);
-      // NamedCommands.registerCommand("intakeBasic1", superSystem.intakeBasicHold());
-      // NamedCommands.registerCommand("intakeBasic2", superSystem.stopIntaking());
-      // NamedCommands.registerCommand("shootSequence2Far", superSystem.shootSequence2Far());
-      // NamedCommands.registerCommand("shootSequence2", superSystem.shootSequence2());
+    // NamedCommands.registerCommand("intakeBasic1", superSystem.intakeBasicHold());
+    // NamedCommands.registerCommand("intakeBasic2", superSystem.stopIntaking());
+    // NamedCommands.registerCommand("shootSequence2Far", superSystem.shootSequence2Far());
+    // NamedCommands.registerCommand("shootSequence2", superSystem.shootSequence2());
 
   }
 
@@ -158,15 +149,15 @@ public class RobotContainer {
 
   public static boolean IsRedSide() {
     return isRedSide;
-      // var alliance = DriverStation.getAlliance();
-      // if (alliance.isPresent()) {
-      //     return alliance.get() == DriverStation.Alliance.Red;
-      // }
-      // return false;
+    // var alliance = DriverStation.getAlliance();
+    // if (alliance.isPresent()) {
+    //     return alliance.get() == DriverStation.Alliance.Red;
+    // }
+    // return false;
   }
 
   public void initDefaultCommands_teleop() {
-    if(airplaneMode) {
+    if (airplaneMode) {
       
     }
     else {

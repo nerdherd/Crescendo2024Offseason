@@ -13,6 +13,8 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -27,7 +29,7 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
     private final TalonFX rightIntake;
     private final TalonFXConfigurator rightIntakeConfigurator;
     private final VelocityVoltage rightVelocityRequest = new VelocityVoltage(0, 0, true, 0, 0, false, false, false);
-    private final VoltageOut rightVoltageRequest = new VoltageOut(0, true, false, false, false);
+    // private final VoltageOut rightVoltageRequest = new VoltageOut(0, true, false, false, false);
     
     private final TalonFX leftIntake;
     private final TalonFXConfigurator leftIntakeConfigurator;
@@ -276,8 +278,10 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
 
     @Override
     public void initShuffleboard(LOG_LEVEL priority) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'initShuffleboard'");
+        ShuffleboardTab tab = Shuffleboard.getTab("Climb");
+        tab.addBoolean("Intake Roller Enabled", () -> enabled);
+        tab.addDouble("Left Intake Velocity", () -> leftIntake.getVelocity().getValueAsDouble());
+        tab.addDouble("Right Intake Velocity", () -> rightIntake.getVelocity().getValueAsDouble());
     }
     
 }

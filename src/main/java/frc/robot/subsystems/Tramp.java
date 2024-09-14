@@ -4,6 +4,8 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -147,7 +149,11 @@ public class Tramp extends SubsystemBase implements Reportable{
     }
     @Override
     public void initShuffleboard(LOG_LEVEL priority) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'initShuffleboard'");
+        ShuffleboardTab tab = Shuffleboard.getTab("Climb");
+        tab.addBoolean("Tramp Subsystem Enabled", () -> enabled);
+        tab.addDouble("Elevator Position", () -> elevator.getPosition().getValueAsDouble());
+        tab.addDouble("Elevator Velocity", () -> elevator.getVelocity().getValueAsDouble());
+        tab.addDouble("Tramp Position", () -> trampShot.getPosition().getValueAsDouble());
+        tab.addDouble("Tramp Velocity", () -> trampShot.getVelocity().getValueAsDouble());
     }
 }

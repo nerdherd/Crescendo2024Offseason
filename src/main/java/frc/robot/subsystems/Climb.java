@@ -191,11 +191,17 @@ public class Climb extends SubsystemBase implements Reportable {
     }
 
     @Override
-    public void reportToSmartDashboard(LOG_LEVEL priority) {}
+    public void reportToSmartDashboard(LOG_LEVEL priority) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'reportToSmartDashboard'");
+    }
 
     @Override
     public void initShuffleboard(LOG_LEVEL priority) {
         ShuffleboardTab tab = Shuffleboard.getTab("Climb");
         tab.addBoolean("Climb Motor Enabled", () -> enabled);
+        tab.addDouble("Climb Motor Position", () -> climbMotor.getPosition().getValueAsDouble());
+        tab.addDouble("Climb Motor Velocity", () -> climbMotor.getVelocity().getValueAsDouble());
     }
+
 }

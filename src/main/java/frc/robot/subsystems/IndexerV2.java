@@ -11,6 +11,8 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -268,7 +270,11 @@ public class IndexerV2 extends SubsystemBase implements Reportable {
 
     @Override
     public void initShuffleboard(LOG_LEVEL priority) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'initShuffleboard'");
+        ShuffleboardTab tab = Shuffleboard.getTab("Climb");
+        tab.addBoolean("Indexer Subsystem Enabled", () -> enabled);
+        tab.addDouble("Indexer Position", () -> indexer.getPosition().getValueAsDouble());
+        tab.addDouble("Indexer Velocity", () -> indexer.getVelocity().getValueAsDouble());
+        tab.addDouble("Trap Position", () -> trap.getPosition().getValueAsDouble());
+        tab.addDouble("Trap Velocity", () -> trap.getVelocity().getValueAsDouble());
     }
 }

@@ -26,7 +26,7 @@ public class SuperSystem {
     public BannerSensor bannerSensor;
 
     private double[] distances = {1.2,   2.483,   3.015,    3.573,   4.267,   4.697}; // distances from 4/6
-    private double[] angles = {-52.470, -32.861, -29.114, -25.663, -21.413, -20.8}; // angles from 4/6
+    // private double[] angles = {-52.470, -32.861, -29.114, -25.663, -21.413, -20.8}; // angles from 4/6
     private double lastAngle = -0.2;
     private double angleOffset = 0.0;
     private NerdyLine angleLine;
