@@ -32,13 +32,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "c37Path"
+            "pathName": null
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "c73Path"
+            "pathName": null
           }
         }
       ]
