@@ -434,10 +434,12 @@ public final class Constants {
     public static final int kTrampSpeed = 900000000; // TODO make this a real value
   }
 
-  public static final class BannerSensorConstants {
-    public static final int blackPort = 8;
-    public static final int whitePort = 9;
-  }
+  // public static final class BannerSensorConstants {
+  //   public static final int blackPort = 8;
+  //   public static final int whitePort = 9;
+  // }
+
+  
   public static class ClimbConstants {
     public static final int kClimbMotorID = 0;
     public static final PrefDouble kClimbMinPosition = new PrefDouble("Climb Min Position", 0.0);
@@ -454,5 +456,17 @@ public final class Constants {
       TOP,
       BOTTOM
     }
-   }
+  }
+
+  public static class BeambreakConstants {
+    public enum BeambreakIds {
+      SENSORA(0),
+      SENSORB(0);
+
+      public int id;
+      BeambreakIds(int _id){
+        id=_id;
+      }
+    }
+  } 
 }

@@ -1,0 +1,49 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.33,
+      "y": 5.55
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "a03Path"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "b32Path"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "b21Path"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "c14path"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "c41path"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

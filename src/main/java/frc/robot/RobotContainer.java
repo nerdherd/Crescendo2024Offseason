@@ -9,6 +9,7 @@ import java.util.List;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
 
+import edu.wpi.first.math.proto.Controller;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -55,6 +56,7 @@ import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import frc.robot.subsystems.swerve.SwerveDrivetrain.DRIVE_MODE;
 import frc.robot.subsystems.vision.NoteAssistance;
 import frc.robot.subsystems.vision.jurrasicMarsh.LimelightHelpers;
+import frc.robot.util.MAJoystick;
 import frc.robot.util.NerdyMath;
 
 public class RobotContainer {
@@ -63,27 +65,36 @@ public class RobotContainer {
   public IntakeRoller intakeRoller = new IntakeRoller();
   public IndexerV2 indexer = new IndexerV2();
   public Tramp tramp = new Tramp();
+  public Climb climb = new Climb();
+<<<<<<< HEAD
   // public Climber climb = new Climber();
 
-  public SuperSystem superSystem = new SuperSystem(intakeRoller, indexer, shooterPivot, shooterRoller, tramp);
+  private boolean airplaneMode = true;
+
+=======
+
+>>>>>>> f91a55ac8d96f207f705951c48be9add9a952021
+  public SuperSystem superSystem = new SuperSystem(intakeRoller, indexer, shooterPivot, shooterRoller, tramp, climb);
   
   public Gyro imu = new PigeonV2(2);
   
   public SwerveDrivetrain swerveDrive;
   public PowerDistribution pdp = new PowerDistribution(1, ModuleType.kRev);
   
-  private final CommandPS4Controller commandDriverController = new CommandPS4Controller(
-    ControllerConstants.kDriverControllerPort);
-  private final PS4Controller driverController = commandDriverController.getHID();
-  private final CommandPS4Controller commandOperatorController = new CommandPS4Controller(
-      ControllerConstants.kOperatorControllerPort);
-  private final PS4Controller operatorController = commandOperatorController.getHID();
+  private final CommandPS4Controller commandDriverController;
+  private final PS4Controller driverController;
+  private final CommandPS4Controller commandOperatorController;
+  private final PS4Controller operatorController;
 
   private final LOG_LEVEL loggingLevel = LOG_LEVEL.ALL;
 
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
 
   private NoteAssistance noteCamera; 
+
+  private final MAJoystick airplaneOperator; 
+
+  private final MAJoystick airplaneDriver;
   
   // public CANdleSubSystem CANdle = new CANdleSubSystem();
   private SwerveJoystickCommand swerveJoystickCommand;
@@ -94,6 +105,20 @@ public class RobotContainer {
    * s subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    if (airplaneMode){
+      airplaneDriver = new MAJoystick(
+        ControllerConstants.kDriverControllerPort);
+      airplaneOperator = new MAJoystick(
+        ControllerConstants.kOperatorControllerPort);
+    }
+    else{
+      commandDriverController = new CommandPS4Controller(
+        ControllerConstants.kDriverControllerPort);
+      commandOperatorController = new CommandPS4Controller(
+        ControllerConstants.kOperatorControllerPort);
+      operatorController = commandOperatorController.getHID();
+      driverController = commandDriverController.getHID();
+    }
     try {
       noteCamera = new NoteAssistance(VisionConstants.kLimelightFrontName);
       swerveDrive = new SwerveDrivetrain(imu);
@@ -141,24 +166,10 @@ public class RobotContainer {
   }
 
   public void initDefaultCommands_teleop() {
-    shooterPivot.setDefaultCommand(
-      new RunCommand(
-        () -> {
-          double increment = Math.signum(
-              NerdyMath.deadband(
-                -operatorController.getLeftY(), //0.5 rev/second 
-                -ControllerConstants.kDeadband, 
-                ControllerConstants.kDeadband)
-            ) * 0.1;
-          SmartDashboard.putNumber("Increment", increment);
-          shooterPivot.incrementPosition(increment);
-             // (20 * x) degrees per second
-            // If x = 0.1, then v = 2 degrees per second
-            
-        },
-        shooterPivot
-      ));
+    if(airplaneMode) {
       
+    }
+    else {
       swerveJoystickCommand = 
       new SwerveJoystickCommand(
         swerveDrive,
@@ -232,59 +243,91 @@ public class RobotContainer {
         }
 
       );
+    }
 
-      swerveDrive.setDefaultCommand(swerveJoystickCommand);
+    shooterPivot.setDefaultCommand(
+      new RunCommand(
+        () -> {
+          double increment = Math.signum(
+            NerdyMath.deadband(
+              -operatorController.getLeftY(), //0.5 rev/second 
+              -ControllerConstants.kDeadband, 
+              ControllerConstants.kDeadband
+            )
+          ) * 0.1;
+          SmartDashboard.putNumber("Increment", increment);
+          shooterPivot.incrementPosition(increment);
+             // (20 * x) degrees per second
+            // If x = 0.1, then v = 2 degrees per second
+            
+        },
+        shooterPivot
+    ));
+    
+    swerveDrive.setDefaultCommand(swerveJoystickCommand);
 
-      // Point to angle
-      // swerveDrive.setDefaultCommand(
-      //   new SwerveJoystickCommand(
-      //     swerveDrive,
-      //     () -> -commandDriverController.getLeftY(), // Horizontal translation
-      //     commandDriverController::getLeftX, // Vertical Translation
-          
-      //     () -> {
-      //       if (driverController.getCircleButton()) {
-      //         noteCamera.calculateRotationSpeed(0, 0); // Values from SwerveDrive2024/isMeToKitBot
-      //         return (noteCamera.getRotationSpeed() * 180 / Math.PI) / 20; // Convert radians to degrees and divide by 20 for how often it's run
-      //       }
-      //       if(driverController.getR1Button() && driverController.getL2Button()){
-      //         return 0.0;
-      //       }
-      //       if(driverController.getR1Button()){
-      //         return -4.5;
-      //       }
-      //       if(driverController.getL2Button()){
-      //         return 4.5;
-      //       }
-      //       return 0.0;
-      //     },
-      //     () -> false, // Field oriented
-      //     driverController::getCrossButton, // Towing
-      //     () -> driverController.getR2Button(), // Precision mode (disabled)
-      //     () -> true, // Turn to angle
-      //     () -> { // Turn To angle Direction
-      //       double xValue = commandDriverController.getRightX();
-      //       double yValue = commandDriverController.getRightY();
-      //       double magnitude = (xValue*xValue) + (yValue*yValue);
-      //       if (magnitude > 0.49) {
-      //         double angle = (90 + NerdyMath.radiansToDegrees(Math.atan2(commandDriverController.getRightY(), commandDriverController.getRightX())));
-      //         angle = (((-1 * angle) % 360) + 360) % 360;
-      //         SmartDashboard.putNumber("desired angle", angle);
-      //         return angle;
-      //       }
-      //       return 1000.0;
-      //     }
-      //   ));
+    // Point to angle
+    // swerveDrive.setDefaultCommand(
+    //   new SwerveJoystickCommand(
+    //     swerveDrive,
+    //     () -> -commandDriverController.getLeftY(), // Horizontal translation
+    //     commandDriverController::getLeftX, // Vertical Translation
+        
+    //     () -> {
+    //       if (driverController.getCircleButton()) {
+    //         noteCamera.calculateRotationSpeed(0, 0); // Values from SwerveDrive2024/isMeToKitBot
+    //         return (noteCamera.getRotationSpeed() * 180 / Math.PI) / 20; // Convert radians to degrees and divide by 20 for how often it's run
+    //       }
+    //       if(driverController.getR1Button() && driverController.getL2Button()){
+    //         return 0.0;
+    //       }
+    //       if(driverController.getR1Button()){
+    //         return -4.5;
+    //       }
+    //       if(driverController.getL2Button()){
+    //         return 4.5;
+    //       }
+    //       return 0.0;
+    //     },
+    //     () -> false, // Field oriented
+    //     driverController::getCrossButton, // Towing
+    //     () -> driverController.getR2Button(), // Precision mode (disabled)
+    //     () -> true, // Turn to angle
+    //     () -> { // Turn To angle Direction
+    //       double xValue = commandDriverController.getRightX();
+    //       double yValue = commandDriverController.getRightY();
+    //       double magnitude = (xValue*xValue) + (yValue*yValue);
+    //       if (magnitude > 0.49) {
+    //         double angle = (90 + NerdyMath.radiansToDegrees(Math.atan2(commandDriverController.getRightY(), commandDriverController.getRightX())));
+    //         angle = (((-1 * angle) % 360) + 360) % 360;
+    //         SmartDashboard.putNumber("desired angle", angle);
+    //         return angle;
+    //       }
+    //       return 1000.0;
+    //     }
+    //   ));
+    
   }
 
   public void initDefaultCommands_test() {}
 
   public void configureBindings_teleop() {
     // TODO configure bindings pwease
-    commandOperatorController.triangle().whileTrue(superSystem.intakeUntilSensedNew());
-    commandOperatorController.R2().whileTrue(superSystem.shootSpeaker());
-    commandOperatorController.circle().whileTrue(superSystem.intakeToElevator());
-    commandOperatorController.R1().whileTrue(superSystem.shootAmp());
+    if (airplaneMode){
+      airplaneOperator.getButton10().whileTrue(superSystem.intakeUntilSensedNew());
+      airplaneOperator.getButton10().whileTrue(superSystem.shootSpeaker());
+      airplaneOperator.getButton10().whileTrue(superSystem.intakeToElevator());
+      airplaneOperator.getButton10().whileTrue(superSystem.shootAmp());
+
+    }
+    else {
+      commandOperatorController.triangle().whileTrue(superSystem.intakeUntilSensedNew());
+      commandOperatorController.R2().whileTrue(superSystem.shootSpeaker());
+      commandOperatorController.circle().whileTrue(superSystem.intakeToElevator());
+      commandOperatorController.R1().whileTrue(superSystem.shootAmp());
+    }
+    
+    
   }
 
   public void configureBindings_test() {}
@@ -519,8 +562,8 @@ public class RobotContainer {
   // );
 
   private void initAutoChoosers() {
-  	List<String> paths = AutoBuilder.getAllAutoNames();
-    autoChooser.addOption("Do Nothing", Commands.none());
+  	//List<String> paths = AutoBuilder.getAllAutoNames();
+    //autoChooser.addOption("Do Nothing", Commands.none());
 
     // if (paths.contains("PreloadTaxiSourceSide")) {
     //   autoChooser.addOption("Preload Taxi Source Side", new PreloadTaxi(swerveDrive, List.of(PathPlannerPath.fromPathFile("PreloadTaxiSourceSide")), superSystem));
