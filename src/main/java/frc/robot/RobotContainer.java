@@ -29,6 +29,7 @@ import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.commands.autos.FivePieceMidSecond;
+import frc.robot.commands.autos.FourPiece;
 import frc.robot.commands.autos.Mid5Piece;
 import frc.robot.subsystems.Climb;
 // import frc.robot.commands.autos.DriveToNoteTest;
@@ -459,20 +460,23 @@ public class RobotContainer {
     // ));
   }*/
 
-  //PathPlannerPath a01 = PathPlannerPath.fromPathFile("a01Path");
+  PathPlannerPath a01 = PathPlannerPath.fromPathFile("a01Path");
   PathPlannerPath a02 = PathPlannerPath.fromPathFile("a02Path");
-  //PathPlannerPath a03 = PathPlannerPath.fromPathFile("a03Path");
+  PathPlannerPath a03 = PathPlannerPath.fromPathFile("a03Path");
   PathPlannerPath aY3 = PathPlannerPath.fromPathFile("aY3Path");  
   
-  //PathPlannerPath b12 = PathPlannerPath.fromPathFile("b12Path");
-  // PathPlannerPath b23 = PathPlannerPath.fromPathFile("b23Path");
-  // PathPlannerPath b32 = PathPlannerPath.fromPathFile("b32Path");
-  // PathPlannerPath b21 = PathPlannerPath.fromPathFile("b21Path");
+  PathPlannerPath b12 = PathPlannerPath.fromPathFile("b12Path");
+  PathPlannerPath b23 = PathPlannerPath.fromPathFile("b23Path");
+  PathPlannerPath b32 = PathPlannerPath.fromPathFile("b32Path");
+  PathPlannerPath b21 = PathPlannerPath.fromPathFile("b21Path");
   // PathPlannerPath b31 = PathPlannerPath.fromPathFile("b31Path");
   PathPlannerPath b31 = PathPlannerPath.fromPathFile("b31Path");
   PathPlannerPath b2p6 = PathPlannerPath.fromPathFile("b2p6Path");
 
-  // PathPlannerPath c14 = PathPlannerPath.fromPathFile("c14Path");
+  PathPlannerPath c14 = PathPlannerPath.fromPathFile("c14Path");
+  PathPlannerPath c15 = PathPlannerPath.fromPathFile("c15Path");
+  PathPlannerPath c51 = PathPlannerPath.fromPathFile("c51Path");
+
   // PathPlannerPath c24 = PathPlannerPath.fromPathFile("c24Path");
   // PathPlannerPath c34 = PathPlannerPath.fromPathFile("c34Path");
   // PathPlannerPath c35 = PathPlannerPath.fromPathFile("c35Path");
@@ -490,6 +494,7 @@ public class RobotContainer {
   //PathPlannerPath c25 = PathPlannerPath.fromPathFile("c25Path");
   //PathPlannerPath c25Stage = PathPlannerPath.fromPathFile("c25PathStage");
   //PathPlannerPath c26Short = PathPlannerPath.fromPathFile("c26PathShort");
+  PathPlannerPath c41 = PathPlannerPath.fromPathFile("c41Path");
   
   //PathPlannerPath d26ShortC = PathPlannerPath.fromPathFile("d26PathShortC");
   PathPlannerPath d26 = PathPlannerPath.fromPathFile("d26Path");
@@ -581,9 +586,9 @@ public class RobotContainer {
     //   autoChooser.addOption("New 4 Piece", new Reliable4Piece(swerveDrive, "NEW4Piece", superSystem));
     // }
 
-    autoChooser.addOption("Mid5Piece",new Mid5Piece(swerveDrive, List.of(a02,b2p6,c26, d26,e6Y,aY3), superSystem));
-    autoChooser.addOption("5PieceMidSecond", new FivePieceMidSecond(swerveDrive, List.of(a02,b2p6,c26Fast,d26,e6Y,aY3,b31), superSystem));
-    // autoChooser.addOption("4PieceAmpSide",    new Mid4PieceSide(swerveDrive, superSystem, noteCamera, List.of(a02,b2p6,c26,    d25,e5Y,aY3)));
+    autoChooser.addOption("Mid5Piece",new Mid5Piece(swerveDrive, List.of(a03,b32,b21,c14,c41), superSystem));
+    autoChooser.addOption("5PieceMidSecond", new FivePieceMidSecond(swerveDrive, List.of(a03,b32,b21, c15, c51), superSystem));
+    autoChooser.addOption("FourPiece", new FourPiece(swerveDrive, List.of(a01,b12,b23), superSystem));
     // autoChooser.addOption("4PieceSourceSide", new Mid4PieceSide(swerveDrive, superSystem, noteCamera, List.of(a02,b2p6,c26,    d27,e7Y,aY3)));
 
     ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
