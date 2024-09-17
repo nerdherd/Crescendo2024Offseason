@@ -6,6 +6,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.SuperSystem;
@@ -15,12 +16,13 @@ import frc.robot.subsystems.swerve.SwerveDrivetrain;
 public class FourPiece extends SequentialCommandGroup {
     public FourPiece(SwerveDrivetrain swerve, String autoPath,SuperSystem superSystem){
         List<PathPlannerPath> pathGroup = PathPlannerAuto.getPathGroupFromAutoFile(autoPath);
-        Pose2d startingPose = PathPlannerAuto.getStaringPoseFromAutoFile(autoPath);
+        Pose2d startingPose = new Pose2d(1.33,5.55, new Rotation2d());
 
         addCommands(
             Commands.runOnce(swerve.getImu()::zeroAll),
             Commands.runOnce(() -> swerve.getImu().setOffset(startingPose.getRotation().getDegrees())),
-            Commands.runOnce(() -> swerve.resetOdometry(startingPose)),
+            Commands.runOnce(() -> swerve.resetOdometryWithAlliance(startingPose)),
+            Commands.runOnce(() -> swerve.resetGyroFromPoseWithAlliance(startingPose)),
             Commands.sequence(
                 // Preload
                 Commands.deadline(

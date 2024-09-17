@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.List;
+
 // import java.util.List;
 
 // import com.pathplanner.lib.auto.AutoBuilder;
@@ -26,6 +28,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.SwerveJoystickCommand;
+import frc.robot.commands.autos.FivePieceMidSecond;
+import frc.robot.commands.autos.Mid5Piece;
 import frc.robot.subsystems.Climb;
 // import frc.robot.commands.autos.DriveToNoteTest;
 // import frc.robot.commands.autos.Mid4Piece;
@@ -577,8 +581,8 @@ public class RobotContainer {
     //   autoChooser.addOption("New 4 Piece", new Reliable4Piece(swerveDrive, "NEW4Piece", superSystem));
     // }
 
-    // autoChooser.addOption("4PieceMiddle",         new Mid4Piece(swerveDrive, superSystem, noteCamera, List.of(a02,b2p6,c26,    d26,e6Y,aY3)));
-    // autoChooser.addOption("5PieceMiddle",   new Mid5PieceMiddle(swerveDrive, superSystem, noteCamera, List.of(a02,b2p6,c26Fast,d26,e6Y,aY3,b31)));
+    autoChooser.addOption("Mid5Piece",new Mid5Piece(swerveDrive, List.of(a02,b2p6,c26, d26,e6Y,aY3), superSystem));
+    autoChooser.addOption("5PieceMidSecond", new FivePieceMidSecond(swerveDrive, List.of(a02,b2p6,c26Fast,d26,e6Y,aY3,b31), superSystem));
     // autoChooser.addOption("4PieceAmpSide",    new Mid4PieceSide(swerveDrive, superSystem, noteCamera, List.of(a02,b2p6,c26,    d25,e5Y,aY3)));
     // autoChooser.addOption("4PieceSourceSide", new Mid4PieceSide(swerveDrive, superSystem, noteCamera, List.of(a02,b2p6,c26,    d27,e7Y,aY3)));
 
