@@ -67,8 +67,8 @@ public class RobotContainer {
   private PS4Controller driverController;
   private CommandPS4Controller commandOperatorController;
   // private PS4Controller operatorController;
-  // private MAJoystick airplaneOperator;
-  // private MAJoystick airplaneDriver;
+  private MAJoystick airplaneOperator;
+  private MAJoystick airplaneDriver;
   private boolean airplaneMode = true;
 
   private final LOG_LEVEL loggingLevel = LOG_LEVEL.ALL;
@@ -76,7 +76,8 @@ public class RobotContainer {
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
   
   // public CANdleSubSystem CANdle = new CANdleSubSystem();
-  // private SwerveJoystickCommand swerveJoystickCommand;
+  private SwerveJoystickCommand swerveJoystickCommand;
+  private SwerveJoystickCommand swerveJoystickCommand2;
   
   /**
    * The container for the robot. Contain
@@ -84,10 +85,10 @@ public class RobotContainer {
    */
   public RobotContainer() {
     if (airplaneMode){
-      // airplaneDriver = new MAJoystick(
-      //   ControllerConstants.kDriverControllerPort);
-      // airplaneOperator = new MAJoystick(
-        // ControllerConstants.kOperatorControllerPort);
+      airplaneDriver = new MAJoystick(
+        ControllerConstants.kDriverControllerPort);
+      airplaneOperator = new MAJoystick(
+        ControllerConstants.kOperatorControllerPort);
     } else {
       commandDriverController = new CommandPS4Controller(
         ControllerConstants.kDriverControllerPort);
@@ -142,10 +143,64 @@ public class RobotContainer {
 
   public void initDefaultCommands_teleop() {
     if (airplaneMode) {
-      
+      new SwerveJoystickCommand(
+        swerveDrive,
+        ()-> airplaneDriver.getLeftY(),
+        airplaneDriver::getLeftY,
+        () -> {
+          return airplaneDriver.getRightX();
+        },
+        () -> false, // should be robot oriented now on true
+        () -> false,
+
+        () -> airplaneDriver.getThumbButton(),
+        ()->{
+          return(
+            airplaneDriver.getButton3()
+            || airplaneDriver.getButton5()
+            || airplaneDriver.getButton4()
+            || airplaneDriver.getButton6()
+            || airplaneDriver.getButton7()
+          );
+          
+        },
+        () -> { // Turn To angle Direction
+          if (
+            airplaneDriver.getThumbButton())
+            {
+            if (!IsRedSide()) {
+              return 315.0;
+            } else {
+              return 45.0;
+            }
+            if  (airplaneDriver.getButton3()) {
+              return swerveDrive.getTurnToSpecificTagAngle(IsRedSide() ? 4 : 7);
+            }
+            if (airplaneDriver.getButton4()){ //turn to amp
+              if (!IsRedSide()){
+                return 270.0;
+              }
+            return 90.0;
+            }
+            else 
+            if (airplaneDriver.getButton5()) { //turn to speaker
+              return 0.0;
+            }
+            else if (airplaneDriver.getButton6()) {
+              return 180.0;
+            }
+          // if (driverController.getPSButton()) { // Turn to shuffleboard angle
+          //   return SmartDashboard.getNumber("Test Desired Angle", 0);
+          // }
+            return 0.0; 
+          }
+        }
+        
+      );
+        
     }
     else {
-      // swerveJoystickCommand = 
+       //swerveJoystickCommand = 
       new SwerveJoystickCommand(
         swerveDrive,
         () -> -commandDriverController.getLeftY(), // Horizontal translation
@@ -289,10 +344,10 @@ public class RobotContainer {
   public void configureBindings_teleop() {
 
     // if (airplaneMode){
-    //   // airplaneOperator.getButton10().whileTrue(superSystem.intakeUntilSensed());
-    //   // airplaneOperator.getButton10().whileTrue(superSystem.shootSpeaker());
-    //   // airplaneOperator.getButton10().whileTrue(superSystem.intakeToTramp());
-    //   // airplaneOperator.getButton10().whileTrue(superSystem.shootAmp());
+    //   airplaneOperator.getButton10().whileTrue(superSystem.intakeUntilSensed());
+    //   airplaneOperator.getButton10().whileTrue(superSystem.shootSpeaker());
+    //   airplaneOperator.getButton10().whileTrue(superSystem.intakeToTramp());
+    //   airplaneOperator.getButton10().whileTrue(superSystem.shootAmp());
     // }
     // else {
     //   commandOperatorController.triangle().whileTrue(superSystem.intakeUntilSensed());
