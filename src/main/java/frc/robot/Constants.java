@@ -434,7 +434,7 @@ public final class Constants {
     public static final int kTrampSpeed = 900000000; // TODO make this a real value
   }
 
-  public static final class BannerSensorConstants {
+  public static final class BeamBreakSensorConstants {
     public static final int blackPort = 8;
     public static final int whitePort = 9;
   }
