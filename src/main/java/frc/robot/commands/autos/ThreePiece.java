@@ -12,8 +12,8 @@ import frc.robot.subsystems.SuperSystem;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 
 
-public class FourPiece extends SequentialCommandGroup {
-    public FourPiece(SwerveDrivetrain swerve, List<PathPlannerPath> autoPath,SuperSystem superSystem){
+public class ThreePiece extends SequentialCommandGroup {
+    public ThreePiece(SwerveDrivetrain swerve, List<PathPlannerPath> autoPath,SuperSystem superSystem){
         Pose2d startingPose = new Pose2d(1.33,5.55, new Rotation2d());
 
         addCommands(
@@ -30,7 +30,7 @@ public class FourPiece extends SequentialCommandGroup {
                 // Second piece
                 Commands.deadline(
                     AutoBuilder.followPath(autoPath.get(0)),
-                    superSystem.intakeNote()
+                    superSystem.intakeNew()
                 ),
                 // Shoot it
                 Commands.deadline(
@@ -40,19 +40,9 @@ public class FourPiece extends SequentialCommandGroup {
                 // Go to Third piece
                 Commands.deadline(
                     AutoBuilder.followPath(autoPath.get(1)),
-                    superSystem.intakeNote()
+                    superSystem.intakeNew()
                 ),
                 // Shoot it
-                Commands.deadline(
-                    Commands.waitSeconds(1),
-                    superSystem.shootSpeaker()
-                ),
-                // Go to Fourth piece
-                Commands.deadline(
-                    AutoBuilder.followPath(autoPath.get(2)),
-                    superSystem.intakeNote()
-                ),
-                // Shoot
                 Commands.deadline(
                     Commands.waitSeconds(1),
                     superSystem.shootSpeaker()
