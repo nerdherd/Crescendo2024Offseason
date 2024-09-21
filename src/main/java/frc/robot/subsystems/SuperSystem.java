@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class SuperSystem {
     public IntakeRoller intakeRoller;
-    public IndexerV2 indexer;
+    public Indexer indexer;
     public ShooterPivot shooterPivot;
     public ShooterRoller shooterRoller;
     public Tramp tramp;
@@ -32,7 +32,7 @@ public class SuperSystem {
     private double angleOffset = 0.0;
     private NerdyLine angleLine;
 
-    public SuperSystem(IntakeRoller intakeRoller, IndexerV2 indexer, ShooterPivot shooterPivot, ShooterRoller shooterRoller, Tramp tramp, Climb climb) {
+    public SuperSystem(IntakeRoller intakeRoller, Indexer indexer, ShooterPivot shooterPivot, ShooterRoller shooterRoller, Tramp tramp, Climb climb) {
         this.intakeRoller = intakeRoller;
         this.indexer = indexer;
         this.shooterPivot = shooterPivot;
@@ -192,66 +192,7 @@ public class SuperSystem {
         return command.withInterruptBehavior(InterruptionBehavior.kCancelSelf);
     }
 
-   
-
-    public Command intakeUntilSensedNoBackup() {
-        Command command = Commands.sequence(
-            // Commands.deadline(
-            //     /*Commands.waitUntil(() -> 
-            //         shooterPivot.hasReachedPosition(ShooterConstants.kHandoffPosition.get())),
-            //     handoff(),
-            //     Commands.waitSeconds(1)*/
-            // ),
-           // shooterRoller.setVelocityCommand(-10, -10),
-            //shooterRoller.setEnabledCommand(true),
-            intakeRoller.setEnabledCommand(true),
-            indexer.setEnabledCommand(true),
-            indexer.indexCommand(),
-            intakeRoller.intakeCommand(),
-
-            // Commands.waitUntil(this::noteIntook),
-            intakeRoller.stopCommand(),
-            indexer.stopCommand(),
-            shooterRoller.stopCommand()
-        ).finallyDo(() -> {
-            intakeRoller.stop();
-            indexer.stop();
-            //shooterRoller.stop();
-        });
-
-        command.addRequirements( indexer, intakeRoller); //Removed Shooter Pivot and Shooter Roller
-        return command;
-    }
-
-    public Command intakeUntilSensedAuto(double timeout) {
-        Command command = Commands.sequence(
-            // Commands.deadline(
-            //     /*Commands.waitUntil(() -> 
-            //         shooterPivot.hasReachedPosition(ShooterConstants.kHandoffPosition.get())),
-            //     handoff(),
-            //     Commands.waitSeconds(1)*/
-            // ),
-            //shooterRoller.setVelocityCommand(-10, -10),
-           // shooterRoller.setEnabledCommand(true),
-            intakeRoller.setEnabledCommand(true),
-            indexer.setEnabledCommand(true),
-            indexer.indexCommand(),
-            intakeRoller.intakeCommand()//,
-
-            // Commands.deadline(
-            //     Commands.waitSeconds(timeout), // testing - check wait time             
-            //     Commands.waitUntil(this::noteIntook)
-            // )
-        ).finallyDo(() -> {
-            intakeRoller.stop();
-            indexer.stop();
-            //shooterRoller.stop();
-        });
-
-        command.addRequirements(indexer, intakeRoller); // Removed ShooterPivot and ShooterRoller
-        return command;
-    }
-    public Command intakeUntilSensedNew(){
+    public Command intakeUntilSensed(){
         Command command = Commands.sequence(
             intakeRoller.setEnabledCommand(true),
             indexer.setEnabledCommand(true),
@@ -267,34 +208,12 @@ public class SuperSystem {
             indexer.stop();
            // shooterRoller.stop();
         });
+
+        command.addRequirements(indexer, intakeRoller);
         return command;
     }
 
-    public Command intakeNew() {
-        Command command = Commands.sequence(
-            shooterPivot.setEnabledCommand(true),
-            Commands.deadline(
-                Commands.waitUntil(() -> 
-                    shooterPivot.hasReachedPosition(ShooterConstants.kHandoffPosition.get())),
-                Commands.waitSeconds(1)
-            ),
-            shooterRoller.setEnabledCommand(true),
-            shooterRoller.setVelocityCommand(0, 0),
-            intakeRoller.setEnabledCommand(true),
-            indexer.setEnabledCommand(true),
-            indexer.indexToShooterCommand(),
-            intakeRoller.intakeCommand()
-        ).finallyDo(() -> {
-            intakeRoller.stop();
-            indexer.stop();
-            shooterRoller.stop();
-        });
-
-        command.addRequirements(indexer, intakeRoller, shooterPivot, shooterRoller);
-        return command;
-    }
-
-    public Command intakeToElevator() {
+    public Command intakeToTramp() {
         Command command = Commands.sequence(
             tramp.setElevatorDownCommand(),
             tramp.setEnabledCommand(true),

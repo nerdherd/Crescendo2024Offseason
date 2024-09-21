@@ -6,12 +6,9 @@ package frc.robot;
 
 import java.util.List;
 
-// import java.util.List;
-
-// import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
 
-// import edu.wpi.first.math.proto.Controller;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -21,45 +18,31 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-// import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ControllerConstants;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.commands.autos.FivePieceMidSecond;
 import frc.robot.commands.autos.FourPiece;
 import frc.robot.commands.autos.Mid5Piece;
+import frc.robot.subsystems.CANdleSubSystem;
 import frc.robot.subsystems.Climb;
-// import frc.robot.commands.autos.DriveToNoteTest;
-// import frc.robot.commands.autos.Mid4Piece;
-// import frc.robot.commands.autos.Mid4PieceSide;
-// import frc.robot.commands.autos.Mid5PieceMiddle;
-// import frc.robot.commands.autos.PreloadTaxi;
-// import frc.robot.commands.autos.Reliable4Piece;
-// import frc.robot.commands.autos.ThreePieceMid;
-// import frc.robot.commands.autos.PathVariants.PathA;
-// import frc.robot.commands.autos.PathVariants.PathAPre;
-// import frc.robot.commands.autos.PathVariants.PathB;
-// import frc.robot.commands.autos.PathVariants.PathD;
-// import frc.robot.commands.autos.PathVariants.PathE;
-// import frc.robot.commands.autos.PathVariants.PathF;
-// import frc.robot.subsystems.CANdleSubSystem;
-//import frc.robot.subsystems.Climber;
-// import frc.robot.subsystems.CANdleSubSystem.Status;
-import frc.robot.subsystems.IndexerV2;
+import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.IntakeRoller;
-// import frc.robot.subsystems.Reportable.LOG_LEVEL;
+import frc.robot.subsystems.Reportable.LOG_LEVEL;
 import frc.robot.subsystems.ShooterPivot;
 import frc.robot.subsystems.ShooterRoller;
 import frc.robot.subsystems.SuperSystem;
 import frc.robot.subsystems.Tramp;
+import frc.robot.subsystems.CANdleSubSystem.Status;
 import frc.robot.subsystems.imu.Gyro;
 import frc.robot.subsystems.imu.PigeonV2;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import frc.robot.subsystems.swerve.SwerveDrivetrain.DRIVE_MODE;
-// import frc.robot.subsystems.vision.NoteAssistance;
 import frc.robot.subsystems.vision.jurrasicMarsh.LimelightHelpers;
 import frc.robot.util.MAJoystick;
 import frc.robot.util.NerdyMath;
@@ -68,11 +51,9 @@ public class RobotContainer {
   public ShooterRoller shooterRoller = new ShooterRoller();
   public ShooterPivot shooterPivot = new ShooterPivot();
   public IntakeRoller intakeRoller = new IntakeRoller();
-  public IndexerV2 indexer = new IndexerV2();
+  public Indexer indexer = new Indexer();
   public Tramp tramp = new Tramp();
   public Climb climb = new Climb();
-
-  private boolean airplaneMode = true;
 
   public SuperSystem superSystem = new SuperSystem(intakeRoller, indexer, shooterPivot, shooterRoller, tramp, climb);
   
@@ -87,14 +68,13 @@ public class RobotContainer {
   private PS4Controller operatorController;
   private MAJoystick airplaneOperator;
   // private MAJoystick airplaneDriver;
+  private boolean airplaneMode = true;
 
-  // private final LOG_LEVEL loggingLevel = LOG_LEVEL.ALL;
+  private final LOG_LEVEL loggingLevel = LOG_LEVEL.ALL;
 
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
-
-  // private NoteAssistance noteCamera; 
   
-  // public CANdleSubSystem CANdle = new CANdleSubSystem();
+  public CANdleSubSystem CANdle = new CANdleSubSystem();
   private SwerveJoystickCommand swerveJoystickCommand;
   
   /**
@@ -117,7 +97,6 @@ public class RobotContainer {
     }
 
     try {
-      // noteCamera = new NoteAssistance(VisionConstants.kLimelightFrontName);
       swerveDrive = new SwerveDrivetrain(imu);
 
     } catch (IllegalArgumentException e) {
@@ -128,8 +107,7 @@ public class RobotContainer {
     LimelightHelpers.setLEDMode_ForceBlink(VisionConstants.kLimelightFrontName);
 
     initAutoChoosers();
-    // TODO? initvvv
-    // initShuffleboard();
+    initShuffleboard();
 
     // Configure the trigger bindings
     // Moved to teleop init
@@ -308,25 +286,33 @@ public class RobotContainer {
   public void initDefaultCommands_test() {}
 
   public void configureBindings_teleop() {
-    // TODO configure bindings pwease
-    if (airplaneMode){
-      airplaneOperator.getButton10().whileTrue(superSystem.intakeUntilSensedNew());
-      airplaneOperator.getButton10().whileTrue(superSystem.shootSpeaker());
-      airplaneOperator.getButton10().whileTrue(superSystem.intakeToElevator());
-      airplaneOperator.getButton10().whileTrue(superSystem.shootAmp());
 
+    if (airplaneMode){
+      airplaneOperator.getButton10().whileTrue(superSystem.intakeUntilSensed());
+      airplaneOperator.getButton10().whileTrue(superSystem.shootSpeaker());
+      airplaneOperator.getButton10().whileTrue(superSystem.intakeToTramp());
+      airplaneOperator.getButton10().whileTrue(superSystem.shootAmp());
     }
     else {
-      commandOperatorController.triangle().whileTrue(superSystem.intakeUntilSensedNew());
+      commandOperatorController.triangle().whileTrue(superSystem.intakeUntilSensed());
       commandOperatorController.R2().whileTrue(superSystem.shootSpeaker());
-      commandOperatorController.circle().whileTrue(superSystem.intakeToElevator());
+      commandOperatorController.circle().whileTrue(superSystem.intakeToTramp());
       commandOperatorController.R1().whileTrue(superSystem.shootAmp());
     }
-    
     
   }
 
   public void configureBindings_test() {}
+  
+  Trigger armTrigger = new Trigger(
+      () -> superSystem.shooterPivot.atTargetPositionAccurate()
+        && (superSystem.shooterPivot.getTargetPositionDegrees() > ShooterConstants.kFullStowPosition.get())
+        && (superSystem.shooterRoller.getVelocityLeft() > (superSystem.shooterRoller.getTargetVelocityLeft() * 0.6))
+        && (superSystem.shooterRoller.getVelocityRight() > (superSystem.shooterRoller.getTargetVelocityRight() * 0.6)) 
+        && superSystem.shooterRoller.getTargetVelocityLeft() > 0
+        && superSystem.shooterRoller.getTargetVelocityLeft() > 0
+    );
+
   // AprilTag Trigger
   Trigger aimTrigger = new Trigger(() -> {
     double desiredAngle = swerveDrive.getTurnToSpecificTagAngle(IsRedSide() ? 4 : 7);// TODO, update?
@@ -347,31 +333,31 @@ public class RobotContainer {
     // return apriltagCamera.apriltagInRange(IsRedSide() ? 4 : 7, 0, 0);
   });
   
-
-
-  /*public void configureLEDTriggers() {
+  public void configureLEDTriggers() {
     // Note Trigger
-    Trigger noteTrigger = new Trigger(superSystem::noteIntook);
-    noteTrigger.onTrue(Commands.runOnce(
-      () -> {
-        CANdle.setStatus(Status.HASNOTE);
-        SmartDashboard.putBoolean("Has Note", true);
-      }));
-    noteTrigger.onFalse(Commands.runOnce(
-      () -> {
-        SmartDashboard.putBoolean("Has Note", false); 
-        CANdle.setStatus(Status.TELEOP);
-      }
-    ));
+    // Trigger noteTrigger = new Trigger(superSystem::noteIntook);
+    
+    // noteTrigger.onTrue(Commands.runOnce(
+    //   () -> {
+    //     CANdle.setStatus(Status.HASNOTE);
+    //     SmartDashboard.putBoolean("Has Note", true);
+    //   }));
+    
+    // noteTrigger.onFalse(Commands.runOnce(
+    //   () -> {
+    //     SmartDashboard.putBoolean("Has Note", false); 
+    //     CANdle.setStatus(Status.TELEOP);
+    //   }
+    // ));
 
-    noteTrigger.and(aimTrigger.negate().and(armTrigger.negate())).onTrue(
-      Commands.runOnce(
-        () -> {
-          CANdle.setStatus(Status.HAS_TARGET);
-          SmartDashboard.putBoolean("Tag aimed", false); 
-        }
-      )
-    );
+    // noteTrigger.and(aimTrigger.negate().and(armTrigger.negate())).onTrue(
+    //   Commands.runOnce(
+    //     () -> {
+    //       CANdle.setStatus(Status.HAS_TARGET);
+    //       SmartDashboard.putBoolean("Tag aimed", false); 
+    //     }
+    //   )
+    // );
 
     armTrigger.and(aimTrigger.negate()).onTrue(
       Commands.runOnce(
@@ -385,13 +371,13 @@ public class RobotContainer {
     tab.addBoolean("Arm aimed", armTrigger);    
     tab.addBoolean("Drivebase aimed", aimTrigger);
 
-    armTrigger.negate().and(aimTrigger.negate()).and(noteTrigger).onTrue(
-      Commands.runOnce(
-        () -> {
-          CANdle.setStatus(Status.HASNOTE);
-        }  
-      )
-    );
+    // armTrigger.negate().and(aimTrigger.negate()).and(noteTrigger).onTrue(
+    //   Commands.runOnce(
+    //     () -> {
+    //       CANdle.setStatus(Status.HASNOTE);
+    //     }  
+    //   )
+    // );
 
     aimTrigger.and(armTrigger).onTrue(
       Commands.runOnce(
@@ -402,13 +388,12 @@ public class RobotContainer {
       )
     );
 
-    noteTrigger.negate().onTrue(Commands.runOnce(
-      () -> {
-        CANdle.setStatus(Status.TELEOP);
-        SmartDashboard.putBoolean("Tag aimed", false); 
-      }
-    ));
-    
+    // noteTrigger.negate().onTrue(Commands.runOnce(
+    //   () -> {
+    //     CANdle.setStatus(Status.TELEOP);
+    //     SmartDashboard.putBoolean("Tag aimed", false); 
+    //   }
+    // ));
 
     // if (driverController.getCircleButton()) { //turn to amp
     //         if (!IsRedSide()){
@@ -458,7 +443,7 @@ public class RobotContainer {
     // tagTrigger.onFalse(Commands.runOnce(
     //   () -> CANdle.setStatus(Status.TELEOP)
     // ));
-  }*/
+  }
 
   PathPlannerPath a01 = PathPlannerPath.fromPathFile("a01Path");
   PathPlannerPath a02 = PathPlannerPath.fromPathFile("a02Path");
@@ -562,59 +547,39 @@ public class RobotContainer {
   // );
 
   private void initAutoChoosers() {
-  	//List<String> paths = AutoBuilder.getAllAutoNames();
-    //autoChooser.addOption("Do Nothing", Commands.none());
-
-    // if (paths.contains("PreloadTaxiSourceSide")) {
-    //   autoChooser.addOption("Preload Taxi Source Side", new PreloadTaxi(swerveDrive, List.of(PathPlannerPath.fromPathFile("PreloadTaxiSourceSide")), superSystem));
-    // }
-
-    // if (paths.contains("PreloadTaxiPodiumSide")) {
-    //   autoChooser.addOption("Preload Taxi Podium Side", new PreloadTaxi(swerveDrive, List.of(PathPlannerPath.fromPathFile("PreloadTaxiPodiumSide")), superSystem));
-    // }
-
-    // if (paths.contains("TaxiOnly")) {
-    //   autoChooser.addOption("Taxi Only", AutoBuilder.buildAuto("TaxiOnly"));
-    // }
+  	List<String> paths = AutoBuilder.getAllAutoNames();
+    autoChooser.addOption("Do Nothing", Commands.none());
     
-
-    // if (paths.contains("Reliable4Piece")) {
-    //   autoChooser.setDefaultOption("Reliable 4 Piece", new Reliable4Piece(swerveDrive, "Reliable4Piece", superSystem));
-    // }
-
-    // if (paths.contains("NEW4Piece")) {
-    //   autoChooser.addOption("New 4 Piece", new Reliable4Piece(swerveDrive, "NEW4Piece", superSystem));
-    // }
-
+    if (paths.contains("TaxiOnly")) {
+      autoChooser.addOption("Taxi Only", AutoBuilder.buildAuto("TaxiOnly"));
+    }
+    
     autoChooser.addOption("Mid5Piece",new Mid5Piece(swerveDrive, List.of(a03,b32,b21,c14,c41), superSystem));
     autoChooser.addOption("5PieceMidSecond", new FivePieceMidSecond(swerveDrive, List.of(a03,b32,b21, c15, c51), superSystem));
     autoChooser.addOption("FourPiece", new FourPiece(swerveDrive, List.of(a01,b12,b23), superSystem));
-    // autoChooser.addOption("4PieceSourceSide", new Mid4PieceSide(swerveDrive, superSystem, noteCamera, List.of(a02,b2p6,c26,    d27,e7Y,aY3)));
 
     ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
 
     autosTab.add("Selected Auto", autoChooser);
   }
   
-  /*public void initShuffleboard() {
+  public void initShuffleboard() {
     imu.initShuffleboard(loggingLevel);
     swerveDrive.initShuffleboard(loggingLevel);
-    swerveDrive.initModuleShuffleboard(loggingLevel);    
-    noteCamera.initShuffleboard(LOG_LEVEL.MEDIUM);
+    swerveDrive.initModuleShuffleboard(loggingLevel);
 
     shooterRoller.initShuffleboard(loggingLevel);
     shooterPivot.initShuffleboard(loggingLevel);
     intakeRoller.initShuffleboard(loggingLevel);
     indexer.initShuffleboard(loggingLevel);
-    // superSystem.colorSensor.initShuffleboard(loggingLevel);
-    superSystem.bannerSensor.initShuffleboard(loggingLevel);
+    tramp.initShuffleboard(loggingLevel);
+    climb.initShuffleboard(loggingLevel);
 
     ShuffleboardTab tab = Shuffleboard.getTab("Main");
-    // tab.addNumber("Total Current Draw", pdp::getTotalCurrent);
+    tab.addNumber("Total Current Draw", pdp::getTotalCurrent);
     tab.addNumber("Voltage", () -> Math.abs(pdp.getVoltage()));
     tab.addNumber("apriltag angle", () -> swerveDrive.getTurnToSpecificTagAngle(IsRedSide() ? 4 : 7));// TODO, update?
   }
-  */
 
   public void initDefaultCommands() {} // TODO ????
 

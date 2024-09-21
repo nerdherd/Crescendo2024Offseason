@@ -467,5 +467,10 @@ public final class Constants {
         id=_id;
       }
     }
-  } 
+  }
+
+  public static class CANdleConstants {
+    public static final int CANdleID = 0; // TODO change later
+  }
+
 }

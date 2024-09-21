@@ -22,7 +22,7 @@ import frc.robot.util.NerdyMath;
 import frc.robot.Constants.IndexerConstants;
 import frc.robot.Constants.ShooterConstants;
 
-public class IndexerV2 extends SubsystemBase implements Reportable {
+public class Indexer extends SubsystemBase implements Reportable {
     
     private final TalonFX indexer;  
     private final TalonFX trap;
@@ -37,7 +37,7 @@ public class IndexerV2 extends SubsystemBase implements Reportable {
 
     private boolean enabled = false;
 
-    public IndexerV2() {
+    public Indexer() {
         indexer = new TalonFX(IndexerConstants.kIndexerMotorID, SuperStructureConstants.kCANivoreBusName);
         trap = new TalonFX(IndexerConstants.kTrapMotorID, SuperStructureConstants.kCANivoreBusName);
 

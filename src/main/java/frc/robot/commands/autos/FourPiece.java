@@ -31,7 +31,7 @@ public class FourPiece extends SequentialCommandGroup {
                 // Second piece
                 Commands.deadline(
                     AutoBuilder.followPath(autoPath.get(0)),
-                    superSystem.intakeNew()
+                    superSystem.intakeNote()
                 ),
                 // Shoot it
                 Commands.deadline(
@@ -41,7 +41,7 @@ public class FourPiece extends SequentialCommandGroup {
                 // Go to Third piece
                 Commands.deadline(
                     AutoBuilder.followPath(autoPath.get(1)),
-                    superSystem.intakeNew()
+                    superSystem.intakeNote()
                 ),
                 // Shoot it
                 Commands.deadline(
@@ -51,7 +51,7 @@ public class FourPiece extends SequentialCommandGroup {
                 // Go to Fourth piece
                 Commands.deadline(
                     AutoBuilder.followPath(autoPath.get(2)),
-                    superSystem.intakeNew()
+                    superSystem.intakeNote()
                 ),
                 // Shoot
                 Commands.deadline(
