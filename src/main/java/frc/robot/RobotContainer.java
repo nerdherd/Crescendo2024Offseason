@@ -31,6 +31,7 @@ import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.commands.autos.FivePieceMidSecond;
 import frc.robot.commands.autos.FourPiece;
 import frc.robot.commands.autos.Mid5Piece;
+import frc.robot.commands.autos.ThreePiece;
 import frc.robot.subsystems.Climb;
 // import frc.robot.commands.autos.DriveToNoteTest;
 // import frc.robot.commands.autos.Mid4Piece;
@@ -528,6 +529,12 @@ public class RobotContainer {
   // PathPlannerPath fS8 = PathPlannerPath.fromPathFile("fS8Path");
   // PathPlannerPath fast = PathPlannerPath.fromPathFile("c26TestPath");
 
+  PathPlannerPath f04 = PathPlannerPath.fromPathFile("f04");
+  PathPlannerPath zach = PathPlannerPath.fromPathFile("zach");
+  PathPlannerPath shootto5 = PathPlannerPath.fromPathFile("e7YPath");
+  PathPlannerPath fiveshoot = PathPlannerPath.fromPathFile("e7YPath");
+
+
 
   // final List<PathPlannerPath> pathGroupExample3 = List.of(
   //   a01, c15, a03
@@ -589,6 +596,7 @@ public class RobotContainer {
     autoChooser.addOption("Mid5Piece",new Mid5Piece(swerveDrive, List.of(a03,b32,b21,c14,c41), superSystem));
     autoChooser.addOption("5PieceMidSecond", new FivePieceMidSecond(swerveDrive, List.of(a03,b32,b21, c15, c51), superSystem));
     autoChooser.addOption("FourPiece", new FourPiece(swerveDrive, List.of(a01,b12,b23), superSystem));
+    autoChooser.addOption("ThreePieceAmp", new ThreePiece(swerveDrive, List.of(f04, zach), superSystem));
     // autoChooser.addOption("4PieceSourceSide", new Mid4PieceSide(swerveDrive, superSystem, noteCamera, List.of(a02,b2p6,c26,    d27,e7Y,aY3)));
 
     ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
