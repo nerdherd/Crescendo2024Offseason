@@ -1,33 +1,33 @@
 package frc.robot.subsystems;
 
-import frc.robot.Constants.BannerSensorConstants;
+import frc.robot.Constants.BeamBreakSensorConstants;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
-public class BannerSensor implements Reportable {
+public class BeamBreakSensor implements Reportable {
     private final int blackPort;
     private final int whitePort;
-    private final DigitalInput bannerSensorBlack;
-    private final DigitalInput bannerSensorWhite;
+    private final DigitalInput beamBreakSensorBlack;
+    private final DigitalInput beamBreakSensorWhite;
 
     private boolean noteDetected;
     private boolean lastBlackValue;
     private boolean lastWhiteValue;
     private boolean illegalInput = false;
 
-    public BannerSensor() {
-        blackPort = BannerSensorConstants.blackPort;
-        whitePort = BannerSensorConstants.whitePort;
-        bannerSensorBlack = new DigitalInput(blackPort);
-        bannerSensorWhite = new DigitalInput(whitePort);
+    public BeamBreakSensor() {
+        blackPort = BeamBreakSensorConstants.blackPort;
+        whitePort = BeamBreakSensorConstants.whitePort;
+        beamBreakSensorBlack = new DigitalInput(blackPort);
+        beamBreakSensorWhite = new DigitalInput(whitePort);
 
     }
 
     public boolean noteIntook() {
-        lastBlackValue = bannerSensorBlack.get();
-        lastWhiteValue = bannerSensorWhite.get();
+        lastBlackValue = beamBreakSensorBlack.get();
+        lastWhiteValue = beamBreakSensorWhite.get();
         if ((lastBlackValue && lastWhiteValue) || (!lastBlackValue && !lastWhiteValue)) {
             illegalInput = true;
             noteDetected = false;
@@ -40,7 +40,7 @@ public class BannerSensor implements Reportable {
             noteDetected = false;
         }
         else{
-            DriverStation.reportError("Fault in banner sensor, error code: ", true);
+            DriverStation.reportError("Fault in beam break sensor, error code: ", true);
             noteDetected = false;
         }
         return noteDetected;
@@ -57,7 +57,7 @@ public class BannerSensor implements Reportable {
     public void initShuffleboard(LOG_LEVEL priority) {
         ShuffleboardTab tab = Shuffleboard.getTab("Indexer");
         tab.addBoolean("Note Detected", this::noteIntook);
-        tab.addBoolean("Banner Sensor Connected", () -> !illegalInput);
+        tab.addBoolean("Beam Break Sensor Connected", () -> !illegalInput);
         tab.addBoolean("Last Black Value", () -> lastBlackValue);
         tab.addBoolean("Last White Value", () -> lastWhiteValue);
     }
