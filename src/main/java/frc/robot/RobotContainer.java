@@ -30,6 +30,7 @@ import frc.robot.commands.autos.FivePieceMidSecond;
 import frc.robot.commands.autos.FourPiece;
 import frc.robot.commands.autos.Mid5Piece;
 import frc.robot.commands.autos.ThreePiece;
+import frc.robot.commands.autos.ThreePieceMidSource;
 import frc.robot.subsystems.CANdleSubSystem;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Indexer;
@@ -495,26 +496,30 @@ public class RobotContainer {
   // PathPlannerPath d78 = PathPlannerPath.fromPathFile("d78Path");
   // PathPlannerPath d54 = PathPlannerPath.fromPathFile("d54Path");
 
-  // PathPlannerPath e4Y = PathPlannerPath.fromPathFile("e4YPath");
+  PathPlannerPath e4Y = PathPlannerPath.fromPathFile("e4YPath");
   // PathPlannerPath e5Y = PathPlannerPath.fromPathFile("e5YPath");
   // PathPlannerPath e7Y = PathPlannerPath.fromPathFile("e7YPath");
   // PathPlannerPath e7Z = PathPlannerPath.fromPathFile("e7ZPath");
   // PathPlannerPath e8Z = PathPlannerPath.fromPathFile("e8ZPath");
+  PathPlannerPath eZ7 = PathPlannerPath.fromPathFile("eZ7Path");
   PathPlannerPath e5Y = PathPlannerPath.fromPathFile("e5YPath");
   PathPlannerPath e6Y = PathPlannerPath.fromPathFile("e6YPath");
   PathPlannerPath e7Y = PathPlannerPath.fromPathFile("e7YPath");
+  PathPlannerPath e8Z = PathPlannerPath.fromPathFile("e8ZPath");
 
   // PathPlannerPath e6YShort = PathPlannerPath.fromPathFile("e6YPathShort");
 
   // PathPlannerPath f04 = PathPlannerPath.fromPathFile("f04Path");
   // PathPlannerPath f05 = PathPlannerPath.fromPathFile("f05Path");
   // PathPlannerPath f06 = PathPlannerPath.fromPathFile("f06Path");
-  // PathPlannerPath f07 = PathPlannerPath.fromPathFile("f07Path");
+   PathPlannerPath f07 = PathPlannerPath.fromPathFile("f07Path");
+  PathPlannerPath fY5 = PathPlannerPath.fromPathFile("fY5Path");
   // PathPlannerPath f08 = PathPlannerPath.fromPathFile("f08Path");
   // PathPlannerPath fS8 = PathPlannerPath.fromPathFile("fS8Path");
   // PathPlannerPath fast = PathPlannerPath.fromPathFile("c26TestPath");
 
-  PathPlannerPath f04 = PathPlannerPath.fromPathFile("f04");
+  PathPlannerPath f04 = PathPlannerPath.fromPathFile("f04Path");
+  PathPlannerPath fZ8 = PathPlannerPath.fromPathFile("fZ8Path");
   PathPlannerPath zach = PathPlannerPath.fromPathFile("zach");
   PathPlannerPath shootto5 = PathPlannerPath.fromPathFile("e7YPath");
   PathPlannerPath fiveshoot = PathPlannerPath.fromPathFile("e7YPath");
@@ -564,7 +569,8 @@ public class RobotContainer {
     autoChooser.addOption("Mid5Piece",new Mid5Piece(swerveDrive, List.of(a03,b32,b21,c14,c41), superSystem));
     autoChooser.addOption("5PieceMidSecond", new FivePieceMidSecond(swerveDrive, List.of(a03,b32,b21, c15, c51), superSystem));
     autoChooser.addOption("FourPiece", new FourPiece(swerveDrive, List.of(a01,b12,b23), superSystem));
-    autoChooser.addOption("ThreePieceAmp", new ThreePiece(swerveDrive, List.of(f04, zach), superSystem));
+    autoChooser.addOption("ThreePieceAmp", new ThreePiece(swerveDrive, List.of(f04, e4Y,fY5,e5Y), superSystem));
+    autoChooser.addOption("ThreePieceMidSource", new ThreePieceMidSource(swerveDrive, List.of(f07, eZ7,fZ8,e8Z), superSystem));
 
     ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
 
