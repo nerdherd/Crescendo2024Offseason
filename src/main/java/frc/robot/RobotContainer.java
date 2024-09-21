@@ -49,25 +49,25 @@ import frc.robot.util.MAJoystick;
 import frc.robot.util.NerdyMath;
 
 public class RobotContainer {
-  public ShooterRoller shooterRoller = new ShooterRoller();
-  public ShooterPivot shooterPivot = new ShooterPivot();
-  public IntakeRoller intakeRoller = new IntakeRoller();
-  public Indexer indexer = new Indexer();
-  public Tramp tramp = new Tramp();
-  public Climb climb = new Climb();
+  // public ShooterRoller shooterRoller = new ShooterRoller();
+  // public ShooterPivot shooterPivot = new ShooterPivot();
+  // public IntakeRoller intakeRoller = new IntakeRoller();
+  // public Indexer indexer = new Indexer();
+  // public Tramp tramp = new Tramp();
+  // public Climb climb = new Climb();
 
-  public SuperSystem superSystem = new SuperSystem(intakeRoller, indexer, shooterPivot, shooterRoller, tramp, climb);
+  // public SuperSystem superSystem = new SuperSystem(intakeRoller, indexer, shooterPivot, shooterRoller, tramp, climb);
   
   public Gyro imu = new PigeonV2(2);
   
   public SwerveDrivetrain swerveDrive;
-  public PowerDistribution pdp = new PowerDistribution(1, ModuleType.kRev);
+  // public PowerDistribution pdp = new PowerDistribution(1, ModuleType.kRev);
   
   private CommandPS4Controller commandDriverController;
   private PS4Controller driverController;
   private CommandPS4Controller commandOperatorController;
-  private PS4Controller operatorController;
-  private MAJoystick airplaneOperator;
+  // private PS4Controller operatorController;
+  // private MAJoystick airplaneOperator;
   // private MAJoystick airplaneDriver;
   private boolean airplaneMode = true;
 
@@ -75,8 +75,8 @@ public class RobotContainer {
 
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
   
-  public CANdleSubSystem CANdle = new CANdleSubSystem();
-  private SwerveJoystickCommand swerveJoystickCommand;
+  // public CANdleSubSystem CANdle = new CANdleSubSystem();
+  // private SwerveJoystickCommand swerveJoystickCommand;
   
   /**
    * The container for the robot. Contain
@@ -86,14 +86,14 @@ public class RobotContainer {
     if (airplaneMode){
       // airplaneDriver = new MAJoystick(
       //   ControllerConstants.kDriverControllerPort);
-      airplaneOperator = new MAJoystick(
-        ControllerConstants.kOperatorControllerPort);
+      // airplaneOperator = new MAJoystick(
+        // ControllerConstants.kOperatorControllerPort);
     } else {
       commandDriverController = new CommandPS4Controller(
         ControllerConstants.kDriverControllerPort);
       commandOperatorController = new CommandPS4Controller(
         ControllerConstants.kOperatorControllerPort);
-      operatorController = commandOperatorController.getHID();
+      // operatorController = commandOperatorController.getHID();
       driverController = commandDriverController.getHID();
     }
 
@@ -145,7 +145,7 @@ public class RobotContainer {
       
     }
     else {
-      swerveJoystickCommand = 
+      // swerveJoystickCommand = 
       new SwerveJoystickCommand(
         swerveDrive,
         () -> -commandDriverController.getLeftY(), // Horizontal translation
@@ -220,26 +220,26 @@ public class RobotContainer {
       );
     }
 
-    shooterPivot.setDefaultCommand(
-      new RunCommand(
-        () -> {
-          double increment = Math.signum(
-            NerdyMath.deadband(
-              -operatorController.getLeftY(), //0.5 rev/second 
-              -ControllerConstants.kDeadband, 
-              ControllerConstants.kDeadband
-            )
-          ) * 0.1;
-          SmartDashboard.putNumber("Increment", increment);
-          shooterPivot.incrementPosition(increment);
-             // (20 * x) degrees per second
-            // If x = 0.1, then v = 2 degrees per second
+    // shooterPivot.setDefaultCommand(
+    //   // new RunCommand(
+    //     () -> {
+    //       double increment = Math.signum(
+    //         NerdyMath.deadband(
+    //           -operatorController.getLeftY(), //0.5 rev/second 
+    //           -ControllerConstants.kDeadband, 
+    //           ControllerConstants.kDeadband
+    //         )
+    //       ) * 0.1;
+    //       SmartDashboard.putNumber("Increment", increment);
+    //       shooterPivot.incrementPosition(increment);
+    //          // (20 * x) degrees per second
+    //         // If x = 0.1, then v = 2 degrees per second
             
-        },
-        shooterPivot
-    ));
+    //     },
+    //     shooterPivot
+    // ));
     
-    swerveDrive.setDefaultCommand(swerveJoystickCommand);
+    // swerveDrive.setDefaultCommand(swerveJoystickCommand);
 
     // Point to angle
     // swerveDrive.setDefaultCommand(
@@ -288,31 +288,31 @@ public class RobotContainer {
 
   public void configureBindings_teleop() {
 
-    if (airplaneMode){
-      airplaneOperator.getButton10().whileTrue(superSystem.intakeUntilSensed());
-      airplaneOperator.getButton10().whileTrue(superSystem.shootSpeaker());
-      airplaneOperator.getButton10().whileTrue(superSystem.intakeToTramp());
-      airplaneOperator.getButton10().whileTrue(superSystem.shootAmp());
-    }
-    else {
-      commandOperatorController.triangle().whileTrue(superSystem.intakeUntilSensed());
-      commandOperatorController.R2().whileTrue(superSystem.shootSpeaker());
-      commandOperatorController.circle().whileTrue(superSystem.intakeToTramp());
-      commandOperatorController.R1().whileTrue(superSystem.shootAmp());
-    }
+    // if (airplaneMode){
+    //   // airplaneOperator.getButton10().whileTrue(superSystem.intakeUntilSensed());
+    //   // airplaneOperator.getButton10().whileTrue(superSystem.shootSpeaker());
+    //   // airplaneOperator.getButton10().whileTrue(superSystem.intakeToTramp());
+    //   // airplaneOperator.getButton10().whileTrue(superSystem.shootAmp());
+    // }
+    // else {
+    //   commandOperatorController.triangle().whileTrue(superSystem.intakeUntilSensed());
+    //   commandOperatorController.R2().whileTrue(superSystem.shootSpeaker());
+    //   commandOperatorController.circle().whileTrue(superSystem.intakeToTramp());
+    //   commandOperatorController.R1().whileTrue(superSystem.shootAmp());
+    // }
     
   }
 
   public void configureBindings_test() {}
   
-  Trigger armTrigger = new Trigger(
-      () -> superSystem.shooterPivot.atTargetPositionAccurate()
-        && (superSystem.shooterPivot.getTargetPositionDegrees() > ShooterConstants.kFullStowPosition.get())
-        && (superSystem.shooterRoller.getVelocityLeft() > (superSystem.shooterRoller.getTargetVelocityLeft() * 0.6))
-        && (superSystem.shooterRoller.getVelocityRight() > (superSystem.shooterRoller.getTargetVelocityRight() * 0.6)) 
-        && superSystem.shooterRoller.getTargetVelocityLeft() > 0
-        && superSystem.shooterRoller.getTargetVelocityLeft() > 0
-    );
+  // Trigger armTrigger = new Trigger(
+  //     () -> superSystem.shooterPivot.atTargetPositionAccurate()
+  //       && (superSystem.shooterPivot.getTargetPositionDegrees() > ShooterConstants.kFullStowPosition.get())
+  //       && (superSystem.shooterRoller.getVelocityLeft() > (superSystem.shooterRoller.getTargetVelocityLeft() * 0.6))
+  //       && (superSystem.shooterRoller.getVelocityRight() > (superSystem.shooterRoller.getTargetVelocityRight() * 0.6)) 
+  //       && superSystem.shooterRoller.getTargetVelocityLeft() > 0
+  //       && superSystem.shooterRoller.getTargetVelocityLeft() > 0
+  //   );
 
   // AprilTag Trigger
   Trigger aimTrigger = new Trigger(() -> {
@@ -360,16 +360,16 @@ public class RobotContainer {
     //   )
     // );
 
-    armTrigger.and(aimTrigger.negate()).onTrue(
-      Commands.runOnce(
-        () -> {
-          CANdle.setStatus(Status.SHOOTER_READY);
-        }  
-      )
-    );
+    // // armTrigger.and(aimTrigger.negate()).onTrue(
+    //   Commands.runOnce(
+    //     () -> {
+    //       CANdle.setStatus(Status.SHOOTER_READY);
+    //     }  
+    //   )
+    // );
 
     ShuffleboardTab tab = Shuffleboard.getTab("Main");
-    tab.addBoolean("Arm aimed", armTrigger);    
+    // tab.addBoolean("Arm aimed", armTrigger);    
     tab.addBoolean("Drivebase aimed", aimTrigger);
 
     // armTrigger.negate().and(aimTrigger.negate()).and(noteTrigger).onTrue(
@@ -380,14 +380,14 @@ public class RobotContainer {
     //   )
     // );
 
-    aimTrigger.and(armTrigger).onTrue(
-      Commands.runOnce(
-        () -> {
-          CANdle.setStatus(Status.SHOTREADY);
-          SmartDashboard.putBoolean("Tag aimed", true); 
-        }
-      )
-    );
+    // aimTrigger.and(armTrigger).onTrue(
+    //   Commands.runOnce(
+    //     () -> {
+    //       // CANdle.setStatus(Status.SHOTREADY);
+    //       SmartDashboard.putBoolean("Tag aimed", true); 
+    //     }
+    //   )
+    // );
 
     // noteTrigger.negate().onTrue(Commands.runOnce(
     //   () -> {
@@ -561,10 +561,10 @@ public class RobotContainer {
       autoChooser.addOption("Taxi Only", AutoBuilder.buildAuto("TaxiOnly"));
     }
     
-    autoChooser.addOption("Mid5Piece",new Mid5Piece(swerveDrive, List.of(a03,b32,b21,c14,c41), superSystem));
-    autoChooser.addOption("5PieceMidSecond", new FivePieceMidSecond(swerveDrive, List.of(a03,b32,b21, c15, c51), superSystem));
-    autoChooser.addOption("FourPiece", new FourPiece(swerveDrive, List.of(a01,b12,b23), superSystem));
-    autoChooser.addOption("ThreePieceAmp", new ThreePiece(swerveDrive, List.of(f04, zach), superSystem));
+    // autoChooser.addOption("Mid5Piece",new Mid5Piece(swerveDrive, List.of(a03,b32,b21,c14,c41), superSystem));
+    // autoChooser.addOption("5PieceMidSecond", new FivePieceMidSecond(swerveDrive, List.of(a03,b32,b21, c15, c51), superSystem));
+    // autoChooser.addOption("FourPiece", new FourPiece(swerveDrive, List.of(a01,b12,b23), superSystem));
+    // autoChooser.addOption("ThreePieceAmp", new ThreePiece(swerveDrive, List.of(f04, zach), superSystem));
 
     ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
 
@@ -576,17 +576,17 @@ public class RobotContainer {
     swerveDrive.initShuffleboard(loggingLevel);
     swerveDrive.initModuleShuffleboard(loggingLevel);
 
-    shooterRoller.initShuffleboard(loggingLevel);
-    shooterPivot.initShuffleboard(loggingLevel);
-    intakeRoller.initShuffleboard(loggingLevel);
-    indexer.initShuffleboard(loggingLevel);
-    tramp.initShuffleboard(loggingLevel);
-    climb.initShuffleboard(loggingLevel);
+    // shooterRoller.initShuffleboard(loggingLevel);
+    // shooterPivot.initShuffleboard(loggingLevel);
+    // intakeRoller.initShuffleboard(loggingLevel);
+    // indexer.initShuffleboard(loggingLevel);
+    // tramp.initShuffleboard(loggingLevel);
+    // climb.initShuffleboard(loggingLevel);
 
     ShuffleboardTab tab = Shuffleboard.getTab("Main");
-    tab.addNumber("Total Current Draw", pdp::getTotalCurrent);
-    tab.addNumber("Voltage", () -> Math.abs(pdp.getVoltage()));
-    tab.addNumber("apriltag angle", () -> swerveDrive.getTurnToSpecificTagAngle(IsRedSide() ? 4 : 7));// TODO, update?
+    // tab.addNumber("Total Current Draw", pdp::getTotalCurrent);
+    // tab.addNumber("Voltage", () -> Math.abs(pdp.getVoltage()));
+    // tab.addNumber("apriltag angle", () -> swerveDrive.getTurnToSpecificTagAngle(IsRedSide() ? 4 : 7));// TODO, update?
   }
 
   public void initDefaultCommands() {} // TODO ????

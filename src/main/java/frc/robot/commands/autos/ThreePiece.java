@@ -24,28 +24,28 @@ public class ThreePiece extends SequentialCommandGroup {
             Commands.sequence(
                 // Preload
                 Commands.deadline(
-                    Commands.waitSeconds(1.5),
-                    superSystem.shootSpeaker() // change later
+                    Commands.waitSeconds(1.5)
+                    // superSystem.shootSpeaker() // change later
                 ),
                 // Second piece
                 Commands.deadline(
-                    AutoBuilder.followPath(autoPath.get(0)),
-                    superSystem.intakeNew()
+                    AutoBuilder.followPath(autoPath.get(0))
+                    // superSystem.intakeNew()
                 ),
                 // Shoot it
                 Commands.deadline(
-                    Commands.waitSeconds(1),
-                    superSystem.shootSpeaker()
+                    Commands.waitSeconds(1)
+                    // superSystem.shootSpeaker()
                 ),
                 // Go to Third piece
                 Commands.deadline(
-                    AutoBuilder.followPath(autoPath.get(1)),
-                    superSystem.intakeNew()
+                    AutoBuilder.followPath(autoPath.get(1))
+                    // superSystem.intakeNew()
                 ),
                 // Shoot it
                 Commands.deadline(
-                    Commands.waitSeconds(1),
-                    superSystem.shootSpeaker()
+                    Commands.waitSeconds(1)
+                    // superSystem.shootSpeaker()
                 )
             )
         );

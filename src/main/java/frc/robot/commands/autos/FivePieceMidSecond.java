@@ -21,43 +21,43 @@ public class FivePieceMidSecond extends SequentialCommandGroup{
             Commands.sequence(
                 // Preload
                 Commands.deadline(
-                    Commands.waitSeconds(1.5),
-                    supersystem.shootSpeaker()
+                    Commands.waitSeconds(1.5)
+                    // supersystem.shootSpeaker()
                     // get Piece out robot
                 ),
                 Commands.deadline(
-                    AutoBuilder.followPath(pathGroup.get(0)),
-                    supersystem.intakeNote()
+                    AutoBuilder.followPath(pathGroup.get(0))
+                    // supersystem.intakeNote()
                     // Piece 1 a01Path
                 ),
                 Commands.deadline(
-                    Commands.waitSeconds(1.5),
-                    supersystem.shootSpeaker()
+                    Commands.waitSeconds(1.5)
+                    // supersystem.shootSpeaker()
                     // get Piece out robot
                 ),
                 Commands.deadline(
-                    AutoBuilder.followPath(pathGroup.get(1)),
-                    supersystem.intakeNote()
+                    AutoBuilder.followPath(pathGroup.get(1))
+                    // supersystem.intakeNote()
                     // Piece 2 a02Path
                 ),
                 Commands.deadline(
-                    Commands.waitSeconds(1.5),
-                    supersystem.shootSpeaker()
+                    Commands.waitSeconds(1.5)
+                    // supersystem.shootSpeaker()
                     // get Piece out robot
                 ),
                 Commands.deadline(
-                    AutoBuilder.followPath(pathGroup.get(2)),
-                    supersystem.intakeNote()
+                    AutoBuilder.followPath(pathGroup.get(2))
+                    // supersystem.intakeNote()
                     // Piece 3 a03Path
                 ),
                 Commands.deadline(
-                    Commands.waitSeconds(1.5),
-                    supersystem.shootSpeaker()
+                    Commands.waitSeconds(1.5)
+                    // supersystem.shootSpeaker()
                     // get Piece out robot
                 ),
                 Commands.deadline(
-                    AutoBuilder.followPath(pathGroup.get(3)),
-                    supersystem.intakeNote()
+                    AutoBuilder.followPath(pathGroup.get(3))
+                    // supersystem.intakeNote()
                     // Piece 4 c37Path
                 ),
                 
@@ -66,8 +66,8 @@ public class FivePieceMidSecond extends SequentialCommandGroup{
                     // Return to a position in which the robot can shoot
                 ),
                 Commands.deadline(
-                    Commands.waitSeconds(1.5),
-                    supersystem.shootSpeaker()
+                    Commands.waitSeconds(1.5)
+                    // supersystem.shootSpeaker()
                     // get Piece out robot
                 )
                 

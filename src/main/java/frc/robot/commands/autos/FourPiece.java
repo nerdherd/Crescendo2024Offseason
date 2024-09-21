@@ -24,38 +24,38 @@ public class FourPiece extends SequentialCommandGroup {
             Commands.sequence(
                 // Preload
                 Commands.deadline(
-                    Commands.waitSeconds(1.5),
-                    superSystem.shootSpeaker() // change later
+                    Commands.waitSeconds(1.5)
+                    // superSystem.shootSpeaker() // change later
                 ),
                 // Second piece
                 Commands.deadline(
-                    AutoBuilder.followPath(autoPath.get(0)),
-                    superSystem.intakeNote()
+                    AutoBuilder.followPath(autoPath.get(0))
+                    // superSystem.intakeNote()
                 ),
                 // Shoot it
                 Commands.deadline(
-                    Commands.waitSeconds(1),
-                    superSystem.shootSpeaker()
+                    Commands.waitSeconds(1)
+                    // superSystem.shootSpeaker()
                 ),
                 // Go to Third piece
                 Commands.deadline(
-                    AutoBuilder.followPath(autoPath.get(1)),
-                    superSystem.intakeNote()
+                    AutoBuilder.followPath(autoPath.get(1))
+                    // superSystem.intakeNote()
                 ),
                 // Shoot it
                 Commands.deadline(
-                    Commands.waitSeconds(1),
-                    superSystem.shootSpeaker()
+                    Commands.waitSeconds(1)
+                    // superSystem.shootSpeaker()
                 ),
                 // Go to Fourth piece
                 Commands.deadline(
-                    AutoBuilder.followPath(autoPath.get(2)),
-                    superSystem.intakeNote()
+                    AutoBuilder.followPath(autoPath.get(2))
+                    // superSystem.intakeNote()
                 ),
                 // Shoot
                 Commands.deadline(
-                    Commands.waitSeconds(1),
-                    superSystem.shootSpeaker()
+                    Commands.waitSeconds(1)
+                    // superSystem.shootSpeaker()
                 )
             )
         );
