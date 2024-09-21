@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.33,
-      "y": 5.55
+      "x": 0.67,
+      "y": 6.78
     },
-    "rotation": 0.0
+    "rotation": 58.80518158964361
   },
   "command": {
     "type": "sequential",
@@ -14,19 +14,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "a01Path"
+            "pathName": "f04"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "b12Path"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "b23Path"
+            "pathName": "zach"
           }
         }
       ]
