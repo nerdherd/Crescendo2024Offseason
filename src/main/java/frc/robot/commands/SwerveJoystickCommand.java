@@ -102,13 +102,6 @@ public class SwerveJoystickCommand extends Command {
         addRequirements(swerveDrive);
     }
 
-    public SwerveJoystickCommand(SwerveDrivetrain swerveDrive2, Supplier<Double> xSpdFunction2, Object ySpdFunction2,
-            Supplier<Double> turningSpdFunction2, Supplier<Boolean> fieldOrientedFunction2,
-            Supplier<Boolean> towSupplier2, Supplier<Boolean> precisionSupplier2,
-            Supplier<Boolean> turnToAngleSupplier2, Supplier<Double> desiredAngleSupplier) {
-        //TODO Auto-generated constructor stub
-    }
-
     @Override
     public void initialize() {}
 

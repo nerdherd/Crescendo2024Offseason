@@ -45,8 +45,6 @@ public class MAJoystick {
     public double getZAxis() { return ma_joystick.getRawAxis(2); }
     public double getSliderAxis() { return ma_joystick.getRawAxis(3); }
 
-    public Object getLeftY() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getLeftY'");
-    }
+
+    
 }
