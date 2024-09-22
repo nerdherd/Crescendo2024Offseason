@@ -145,10 +145,10 @@ public class RobotContainer {
     if (airplaneMode) {
       new SwerveJoystickCommand(
         swerveDrive,
-        ()-> airplaneDriver.getLeftY(),
-        airplaneDriver::getLeftY,
+        ()-> airplaneDriver.getYAxis(),
+        airplaneDriver::getYAxis,
         () -> {
-          return airplaneDriver.getRightX();
+          return airplaneDriver.getXAxis();
         },
         () -> false, // should be robot oriented now on true
         () -> false,
@@ -168,36 +168,34 @@ public class RobotContainer {
           if (
             airplaneDriver.getThumbButton())
             {
-            if (!IsRedSide()) {
-              return 315.0;
-            } else {
-              return 45.0;
-            }
-            if  (airplaneDriver.getButton3()) {
-              return swerveDrive.getTurnToSpecificTagAngle(IsRedSide() ? 4 : 7);
-            }
-            if (airplaneDriver.getButton4()){ //turn to amp
-              if (!IsRedSide()){
-                return 270.0;
+              if (!IsRedSide()) {
+                return 315.0;
+              } else {
+                return 45.0;
               }
+            }
+          if  (airplaneDriver.getButton3()) {
+            return swerveDrive.getTurnToSpecificTagAngle(IsRedSide() ? 4 : 7);
+          }
+          if (airplaneDriver.getButton4()){ //turn to amp
+            if (!IsRedSide()){
+              return 270.0;
+            }
             return 90.0;
-            }
-            else 
-            if (airplaneDriver.getButton5()) { //turn to speaker
-              return 0.0;
-            }
-            else if (airplaneDriver.getButton6()) {
-              return 180.0;
-            }
+          }
+          else 
+          if (airplaneDriver.getButton5()) { //turn to speaker
+            return 0.0;
+          }
+          else if (airplaneDriver.getButton6()) {
+          return 180.0;
+          }
           // if (driverController.getPSButton()) { // Turn to shuffleboard angle
           //   return SmartDashboard.getNumber("Test Desired Angle", 0);
           // }
-            return 0.0; 
-          }
-        }
-        
-      );
-        
+          return 0.0; 
+         }       
+      );    
     }
     else {
        //swerveJoystickCommand = 
