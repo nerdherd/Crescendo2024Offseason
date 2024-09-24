@@ -30,11 +30,11 @@ public class ThreePieceAmp extends SequentialCommandGroup {
                 // Second piece
                 Commands.deadline(
                     AutoBuilder.followPath(autoPath.get(0)),
-                    superSystem.intakeNew()
+                    superSystem.intakeUntilSensed()
                 ),
                 // Go to Shoot Zone
                 Commands.deadline(
-                    AutoBuilder.followPath(autoPath.get(1)),
+                    AutoBuilder.followPath(autoPath.get(1))
                 ),
                 // Shoot it
                 Commands.deadline(
@@ -44,11 +44,11 @@ public class ThreePieceAmp extends SequentialCommandGroup {
                 // Go to Third piece
                 Commands.deadline(
                     AutoBuilder.followPath(autoPath.get(2)),
-                    superSystem.intakeNew()
+                    superSystem.intakeUntilSensed()
                 ),
                 // Go to Shoot Zone
                  Commands.deadline(
-                    AutoBuilder.followPath(autoPath.get(3)),
+                    AutoBuilder.followPath(autoPath.get(3))
                 ),
                 // Shoot it
                 Commands.deadline(

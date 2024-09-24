@@ -27,7 +27,7 @@ public class FivePieceMidSecond extends SequentialCommandGroup{
                 ),
                 Commands.deadline(
                     AutoBuilder.followPath(pathGroup.get(0)),
-                    supersystem.intakeNote()
+                    supersystem.intakeUntilSensed()
                     // Piece 1 a01Path
                 ),
                 Commands.deadline(
@@ -37,7 +37,7 @@ public class FivePieceMidSecond extends SequentialCommandGroup{
                 ),
                 Commands.deadline(
                     AutoBuilder.followPath(pathGroup.get(1)),
-                    supersystem.intakeNote()
+                    supersystem.intakeUntilSensed()
                     // Piece 2 a02Path
                 ),
                 Commands.deadline(
@@ -47,7 +47,7 @@ public class FivePieceMidSecond extends SequentialCommandGroup{
                 ),
                 Commands.deadline(
                     AutoBuilder.followPath(pathGroup.get(2)),
-                    supersystem.intakeNote()
+                    supersystem.intakeUntilSensed()
                     // Piece 3 a03Path
                 ),
                 Commands.deadline(
@@ -57,7 +57,7 @@ public class FivePieceMidSecond extends SequentialCommandGroup{
                 ),
                 Commands.deadline(
                     AutoBuilder.followPath(pathGroup.get(3)),
-                    supersystem.intakeNote()
+                    supersystem.intakeUntilSensed()
                     // Piece 4 c37Path
                 ),
                 

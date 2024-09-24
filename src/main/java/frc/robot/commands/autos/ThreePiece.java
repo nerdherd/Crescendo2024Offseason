@@ -30,7 +30,7 @@ public class ThreePiece extends SequentialCommandGroup {
                 // Second piece
                 Commands.deadline(
                     AutoBuilder.followPath(autoPath.get(0)),
-                    superSystem.intakeNew()
+                    superSystem.intakeUntilSensed()
                 ),
                 // Shoot it
                 Commands.deadline(
@@ -40,7 +40,7 @@ public class ThreePiece extends SequentialCommandGroup {
                 // Go to Third piece
                 Commands.deadline(
                     AutoBuilder.followPath(autoPath.get(1)),
-                    superSystem.intakeNew()
+                    superSystem.intakeUntilSensed()
                 ),
                 // Shoot it
                 Commands.deadline(

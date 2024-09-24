@@ -30,7 +30,7 @@ public class ThreePieceMidSource extends SequentialCommandGroup {
                 // Second piece
                 Commands.deadline(
                     AutoBuilder.followPath(autoPath.get(0)),
-                    superSystem.intakeNew()
+                    superSystem.intakeUntilSensed()
                 ),
                 // Drive back to shoot zone
                 Commands.deadline(
@@ -44,7 +44,7 @@ public class ThreePieceMidSource extends SequentialCommandGroup {
                 // Go to Third piece
                 Commands.deadline(
                     AutoBuilder.followPath(autoPath.get(2)),
-                    superSystem.intakeNew()
+                    superSystem.intakeUntilSensed()
                 ),
                 // Drive back to shoot zone
                 Commands.deadline(
