@@ -6,9 +6,9 @@ import frc.robot.RobotContainer;
 import frc.robot.Constants.ClimbConstants.ClimbPostions;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.TrapConstants;
-//import frc.robot.Constants.BannerSensorConstants.BannerSensorPorts;
-//import frc.robot.subsystems.vision.DriverAssist;
-//import frc.robot.subsystems.vision.ShooterVisionAdjustment;
+import frc.robot.Constants.BeambreakConstants;
+// import frc.robot.subsystems.vision.DriverAssist;
+// import frc.robot.subsystems.vision.ShooterVisionAdjustment;
 import frc.robot.util.NerdyLine;
 import frc.robot.util.NerdyMath;
 
@@ -23,7 +23,7 @@ public class SuperSystem {
     public ShooterPivot shooterPivot;
     public ShooterRoller shooterRoller;
     public Tramp tramp;
-    // public BannerSensor topBannerSensor, bottomBannerSensor;
+    public BeamBreakSensor beamBreakSensor;
     public Climb climb;
 
     private double[] distances = {1.2,   2.483,   3.015,    3.573,   4.267,   4.697}; // distances from 4/6
@@ -32,21 +32,15 @@ public class SuperSystem {
     private double angleOffset = 0.0;
     private NerdyLine angleLine;
 
-    public SuperSystem(IntakeRoller intakeRoller, Indexer indexer, ShooterPivot shooterPivot, ShooterRoller shooterRoller, Tramp tramp, Climb climb) {
+    public SuperSystem(IntakeRoller intakeRoller, Indexer indexer, ShooterPivot shooterPivot, ShooterRoller shooterRoller, Tramp tramp, Climb climb, BeamBreakSensor beamBreakSensor) {
         this.intakeRoller = intakeRoller;
         this.indexer = indexer;
         this.shooterPivot = shooterPivot;
         this.shooterRoller = shooterRoller;
         this.tramp = tramp;
-        // this.topBannerSensor = new BannerSensor(BannerSensorPorts.TOP);
-        // this.bottomBannerSensor = new BannerSensor(BannerSensorPorts.BOTTOM);
+        this.beamBreakSensor = beamBreakSensor;
         this.climb = climb;
     }
-
-    // public boolean noteIntook() {
-    //     // return colorSensor.noteIntook() || bannerSensor.noteIntook();
-    //     // return topBannerSensor.noteIntook() && !bottomBannerSensor.noteIntook(); // TODO top yes bot
-    // }
 
     public double getShooterAngle(SwerveDrivetrain swerve)
     {
@@ -198,8 +192,7 @@ public class SuperSystem {
             indexer.setEnabledCommand(true),
             indexer.indexToShooterCommand(),
             intakeRoller.intakeCommand(),
-            
-            // Commands.waitUntil(this::noteIntook),
+            Commands.waitUntil(beamBreakSensor::noteIntook),
             indexer.setEnabledCommand(false),
             intakeRoller.stopCommand()
 
@@ -212,6 +205,8 @@ public class SuperSystem {
         command.addRequirements(indexer, intakeRoller);
         return command;
     }
+
+
 
     public Command intakeToTramp() {
         Command command = Commands.sequence(
