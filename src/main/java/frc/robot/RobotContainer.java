@@ -36,6 +36,7 @@ import frc.robot.subsystems.CANdleSubSystem;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.IntakeRoller;
+import frc.robot.subsystems.Reportable;
 import frc.robot.subsystems.Reportable.LOG_LEVEL;
 import frc.robot.subsystems.ShooterPivot;
 import frc.robot.subsystems.ShooterRoller;
@@ -50,7 +51,7 @@ import frc.robot.subsystems.vision.jurrasicMarsh.LimelightHelpers;
 import frc.robot.util.MAJoystick;
 import frc.robot.util.NerdyMath;
 
-public class RobotContainer {
+public class RobotContainer implements Reportable {
   public ShooterRoller shooterRoller = new ShooterRoller();
   public ShooterPivot shooterPivot = new ShooterPivot();
   public IntakeRoller intakeRoller = new IntakeRoller();
@@ -609,5 +610,29 @@ public class RobotContainer {
 
     swerveDrive.setDriveMode(DRIVE_MODE.AUTONOMOUS);
     return currentAuto;
+  }
+
+  @Override
+  public void reportToSmartDashboard(LOG_LEVEL priority) {}
+
+  @Override
+  public void initShuffleboard(LOG_LEVEL level) {
+    ShuffleboardTab tab = Shuffleboard.getTab("RobotContainer");
+
+    if (level == LOG_LEVEL.ALL) {
+      tab.addBoolean("Driver R1", () -> driverController.getR1Button());
+      tab.addBoolean("Driver R2 (Sniper Button)", () -> driverController.getR2Button());
+      tab.addBoolean("Driver L1", () -> driverController.getL1Button());
+      tab.addBoolean("Driver L2", () -> driverController.getL2Button());
+      tab.addBoolean("Driver Share", () -> driverController.getShareButton());
+      tab.addBoolean("Driver Options", () -> driverController.getOptionsButton());
+      
+      tab.addBoolean("Operator L1", () -> operatorController.getL1Button());
+      tab.addBoolean("Operator L2", () -> operatorController.getL2Button());
+      tab.addBoolean("Operator Square", () -> operatorController.getSquareButton());
+      tab.addBoolean("Operator Cross", () -> operatorController.getCrossButton());
+      tab.addBoolean("Operator Circle", () -> operatorController.getCircleButton());
+      tab.addBoolean("Operator Triangle", () -> operatorController.getTriangleButton());
+    }
   }
 }
