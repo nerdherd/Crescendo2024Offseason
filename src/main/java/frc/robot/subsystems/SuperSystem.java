@@ -23,55 +23,27 @@ public class SuperSystem {
     public ShooterPivot shooterPivot;
     public ShooterRoller shooterRoller;
     public Tramp tramp;
-    public BeamBreakSensor beamBreakSensor;
+    public BeamBreakSensor intakeBeamBreak;
+    public BeamBreakSensor trampBeamBreak;
+    public BeamBreakSensor shooterBeamBreak;
     public Climb climb;
 
-    private double[] distances = {1.2,   2.483,   3.015,    3.573,   4.267,   4.697}; // distances from 4/6
-    private double[] angles = {-52.470, -32.861, -29.114, -25.663, -21.413, -20.8}; // angles from 4/6
+    private double[] distances = {0,0,0,0,0,0}; // distances are old
+    private double[] angles = {0,0,0,0,0,0}; // angles are old
     private double lastAngle = -0.2;
     private double angleOffset = 0.0;
     private NerdyLine angleLine;
 
-    public SuperSystem(IntakeRoller intakeRoller, Indexer indexer, ShooterPivot shooterPivot, ShooterRoller shooterRoller, Tramp tramp, Climb climb, BeamBreakSensor beamBreakSensor) {
+    public SuperSystem(IntakeRoller intakeRoller, Indexer indexer, ShooterPivot shooterPivot, ShooterRoller shooterRoller, Tramp tramp, Climb climb, BeamBreakSensor intakeBeamBreak, BeamBreakSensor trampBeamBreak, BeamBreakSensor shooterBeamBreak) {
         this.intakeRoller = intakeRoller;
         this.indexer = indexer;
         this.shooterPivot = shooterPivot;
         this.shooterRoller = shooterRoller;
         this.tramp = tramp;
-        this.beamBreakSensor = beamBreakSensor;
+        this.intakeBeamBreak = intakeBeamBreak;
+        this.trampBeamBreak = trampBeamBreak;
+        this.shooterBeamBreak = shooterBeamBreak;
         this.climb = climb;
-    }
-
-    public double getShooterAngle(SwerveDrivetrain swerve)
-    {
-        return getShooterAngle(swerve, false);
-    }
-    public void incrementOffset(double increment)
-    {
-        angleOffset += increment;
-        angleOffset = NerdyMath.clamp(angleOffset, -10, 10);
-    }
-    public void resetOffset()
-    {
-        angleOffset = 0;
-    }
-
-    public double getShooterAngle(SwerveDrivetrain swerve, boolean preserveOldValue)
-    {
-        double distance = swerve.getDistanceFromTag(preserveOldValue, RobotContainer.IsRedSide() ? 4 : 7);
-        if(distance < distances[0]) {
-            SmartDashboard.putBoolean("Vision failed", true);
-            return (preserveOldValue ? lastAngle : -0.2);
-        }
-        if (distance > distances[distances.length - 1]) {
-            SmartDashboard.putBoolean("Vision failed", true);
-            return (preserveOldValue ? lastAngle : -0.3);
-        }
-        
-        double output = NerdyMath.clamp(angleLine.getOutput(distance), ShooterConstants.kFullStowPosition.get(), 20);
-        output += angleOffset;
-        lastAngle = output;
-        return output + 1.5;
     }
 
     public Command getReadyForAmp() {
@@ -112,26 +84,6 @@ public class SuperSystem {
         );
 
         command.addRequirements(indexer, intakeRoller); // Removed shooterPivot, shooterRoller
-
-        return command;
-    }
-
-     public Command panicButton() {
-        Command command = Commands.sequence(
-           // shooterPivot.setPositionCommand(6),
-           // shooterRoller.setVelocityCommand(-20),
-           // shooterRoller.setEnabledCommand(true),
-            indexer.indexCommand(),
-            indexer.setEnabledCommand(true),
-            Commands.waitUntil(() -> false)
-        ).finallyDo(
-            () -> {
-              //  shooterRoller.stop();
-                indexer.stop();
-            }
-        );
-
-        command.addRequirements(indexer); // Deleted Shooter Pivot and Shooter Roller
 
         return command;
     }
@@ -190,23 +142,23 @@ public class SuperSystem {
         Command command = Commands.sequence(
             intakeRoller.setEnabledCommand(true),
             indexer.setEnabledCommand(true),
+            shooterRoller.setEnabledCommand(true),
+            shooterRoller.setVelocity(-10, -10),
             indexer.indexToShooterCommand(),
             intakeRoller.intakeCommand(),
-            Commands.waitUntil(beamBreakSensor::noteIntook),
+            Commands.waitUntil(shooterBeamBreak::noteSensed),
             indexer.setEnabledCommand(false),
             intakeRoller.stopCommand()
 
         ).finallyDo(() -> {
             intakeRoller.stop();
             indexer.stop();
-           // shooterRoller.stop();
+            shooterRoller.stop();
         });
 
         command.addRequirements(indexer, intakeRoller);
         return command;
     }
-
-
 
     public Command intakeToTramp() {
         Command command = Commands.sequence(
@@ -222,7 +174,8 @@ public class SuperSystem {
             intakeRoller.setEnabledCommand(true),
             indexer.setEnabledCommand(true),
             indexer.indexToElevatorCommand(),
-            intakeRoller.intakeCommand()
+            intakeRoller.intakeCommand(),
+            Commands.waitUntil(trampBeamBreak::noteSensed)
         ).finallyDo(() -> {
             intakeRoller.stop();
             indexer.stop();
@@ -233,6 +186,28 @@ public class SuperSystem {
         return command;
     }
 
+    public Command shooterToTramp() {
+        Command command = Commands.sequence(
+            tramp.setElevatorDownCommand(),
+            tramp.setEnabledCommand(true),
+            Commands.deadline(
+                Commands.waitUntil(() -> 
+                tramp.hasReachedPosition(TrapConstants.kElevatorDownPosition)),
+                Commands.waitSeconds(1)
+            ),
+            shooterRoller.setVelocityCommand(0, 0),
+            shooterRoller.setEnabledCommand(true),
+            indexer.setEnabledCommand(true),
+            indexer.indexToElevatorCommand(),
+            Commands.waitUntil(trampBeamBreak::noteSensed)
+        ).finallyDo(() -> {
+            indexer.stop();
+            shooterRoller.stop();
+        });
+
+        command.addRequirements(indexer, shooterPivot, shooterRoller);
+        return command;
+    }
 
     public Command shootSpeaker() {
         Command command = Commands.sequence(
@@ -448,6 +423,40 @@ public class SuperSystem {
             }
         );
         return command; 
+    }
+
+    public double getShooterAngle(SwerveDrivetrain swerve)
+    {
+        return getShooterAngle(swerve, false);
+    }
+    
+    public void incrementOffset(double increment)
+    {
+        angleOffset += increment;
+        angleOffset = NerdyMath.clamp(angleOffset, -10, 10);
+    }
+    
+    public void resetOffset()
+    {
+        angleOffset = 0;
+    }
+
+    public double getShooterAngle(SwerveDrivetrain swerve, boolean preserveOldValue)
+    {
+        double distance = swerve.getDistanceFromTag(preserveOldValue, RobotContainer.IsRedSide() ? 4 : 7);
+        if(distance < distances[0]) {
+            SmartDashboard.putBoolean("Vision failed", true);
+            return (preserveOldValue ? lastAngle : -0.2);
+        }
+        if (distance > distances[distances.length - 1]) {
+            SmartDashboard.putBoolean("Vision failed", true);
+            return (preserveOldValue ? lastAngle : -0.3);
+        }
+        
+        double output = NerdyMath.clamp(angleLine.getOutput(distance), ShooterConstants.kFullStowPosition.get(), 20);
+        output += angleOffset;
+        lastAngle = output;
+        return output + 1.5;
     }
 
     private boolean isPassing = false;

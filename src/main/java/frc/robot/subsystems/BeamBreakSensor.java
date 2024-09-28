@@ -25,7 +25,7 @@ public class BeamBreakSensor implements Reportable {
 
     }
 
-    public boolean noteIntook() {
+    public boolean noteSensed() {
         lastBlackValue = beamBreakSensorBlack.get();
         lastWhiteValue = beamBreakSensorWhite.get();
         if ((lastBlackValue && lastWhiteValue) || (!lastBlackValue && !lastWhiteValue)) {
@@ -46,7 +46,7 @@ public class BeamBreakSensor implements Reportable {
         return noteDetected;
     }
 
-    public boolean noteIntookWithoutPolling() {
+    public boolean noteSensedWithoutPolling() {
         return noteDetected;
     }
 
@@ -56,7 +56,7 @@ public class BeamBreakSensor implements Reportable {
     @Override
     public void initShuffleboard(LOG_LEVEL priority) {
         ShuffleboardTab tab = Shuffleboard.getTab("Indexer");
-        tab.addBoolean("Note Detected", this::noteIntook);
+        tab.addBoolean("Note Detected", this::noteSensed);
         tab.addBoolean("Beam Break Sensor Connected", () -> !illegalInput);
         tab.addBoolean("Last Black Value", () -> lastBlackValue);
         tab.addBoolean("Last White Value", () -> lastWhiteValue);

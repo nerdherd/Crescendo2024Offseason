@@ -270,10 +270,6 @@ public class ShooterRoller extends SubsystemBase implements Reportable {
         return Commands.runOnce(() -> setVelocity(topVelocity, bottomVelocity));
     }
  
-    public Command setReverseVelocityCommand(double topVelocity, double bottomVelocity) {
-        return Commands.runOnce(() -> setVelocity(topVelocity, bottomVelocity));
-    }
- 
     public Command incrementLeftVelocityCommand(double increment) {
         return Commands.runOnce(() -> incrementLeftVelocity(increment));
     }

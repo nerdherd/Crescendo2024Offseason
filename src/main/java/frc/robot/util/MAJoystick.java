@@ -29,7 +29,7 @@ public class MAJoystick {
 
     public JoystickButton getTrigger() {return trigger;}
     public JoystickButton getThumbButton() {return thumbButton;}
-    public JoystickButton getButton3() {return button3;}
+    public JoystickButton getButton3() {return button3;} 
     public JoystickButton getButton4() {return button4;}
     public JoystickButton getButton5() {return button5;}
     public JoystickButton getButton6() {return button6;}

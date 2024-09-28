@@ -67,15 +67,15 @@ public final class Constants {
     public static final double kDriveMotorDeadband = 0.02;
     public static final double kTurnMotorDeadband = 0.001;
 
-    public static final PrefDouble kPTurning = new PrefDouble("kPTurning",0.55); // 0.6
-    public static final PrefDouble kITurning = new PrefDouble("kITurning",0);
-    public static final PrefDouble kDTurning = new PrefDouble("kDTurning",0.02); 
-    public static final PrefDouble kFTurning = new PrefDouble("kFTurning",0.015); 
+    public static final PrefDouble kPTurning = new PrefDouble("kPTurning",0.55); // 0.55 abruticus
+    public static final PrefDouble kITurning = new PrefDouble("kITurning",0); //0 abructicus
+    public static final PrefDouble kDTurning = new PrefDouble("kDTurning",0.02); //0.02 abructicus
+    public static final PrefDouble kFTurning = new PrefDouble("kFTurning",0.015); //0.015 abructicus
 
-    public static final PrefDouble kPDrive = new PrefDouble("kPDrive",0.13); // 0.6
-    public static final PrefDouble kIDrive = new PrefDouble("kIDrive",0);
-    public static final PrefDouble kDDrive = new PrefDouble("kDDrive",0); 
-    public static final PrefDouble kVDrive = new PrefDouble("kVDrive",0.0469); 
+    public static final PrefDouble kPDrive = new PrefDouble("kPDrive",0.13); // 0.13 abruticus
+    public static final PrefDouble kIDrive = new PrefDouble("kIDrive",0); //0 abructicus
+    public static final PrefDouble kDDrive = new PrefDouble("kDDrive",0); //0 abructicus
+    public static final PrefDouble kVDrive = new PrefDouble("kVDrive",0.0469); //0.0469 abructicus
 
     public static final String kCANivoreName = "rio";
 
@@ -87,9 +87,9 @@ public final class Constants {
   } 
 
   public static final class SwerveDriveConstants {
-    public static final double kVisionSTDx = 0.7; //0.9
-    public static final double kVisionSTDy = 0.7; //0.9
-    public static final double kVisionSTDtheta = 1000; //Old: 69696969
+    public static final double kVisionSTDx = 0.7; //0.7 abruticus
+    public static final double kVisionSTDy = 0.7; //0.7 abructicus
+    public static final double kVisionSTDtheta = 1000; // 1000 abructicus
     public static final Matrix<N3, N1> kBaseVisionPoseSTD = MatBuilder.fill(
                                                               Nat.N3(), Nat.N1(), 
                                                               kVisionSTDx,
@@ -97,14 +97,14 @@ public final class Constants {
                                                               kVisionSTDtheta);
     // VecBuilder.fill(kVisionSTDx, kVisionSTDy, kVisionSTDtheta);
 
-    public static final PrefDouble kPThetaTeleop = new PrefDouble("kP Theta Teleop", 4);
-    public static final PrefDouble kIThetaTeleop = new PrefDouble("kI Theta Teleop", 0);
-    public static final PrefDouble kDThetaTeleop = new PrefDouble("kD Theta Teleop", 0.1);
+    public static final PrefDouble kPThetaTeleop = new PrefDouble("kP Theta Teleop", 4); //4 abruticus
+    public static final PrefDouble kIThetaTeleop = new PrefDouble("kI Theta Teleop", 0); //0 abruticus
+    public static final PrefDouble kDThetaTeleop = new PrefDouble("kD Theta Teleop", 0.1); //0.1 abruticus
 
     // Distance between right and left wheels
-    public static final double kTrackWidth = Units.inchesToMeters(21);
+    public static final double kTrackWidth = Units.inchesToMeters(21); 
     // Distance between front and back wheels
-    public static final double kWheelBase = Units.inchesToMeters(21);
+    public static final double kWheelBase = Units.inchesToMeters(21); 
 
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
       new Translation2d(kWheelBase / 2, kTrackWidth / 2),
@@ -112,7 +112,7 @@ public final class Constants {
       new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
       new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
     
-    public static final int kFRDriveID = 11;
+    public static final int kFRDriveID = 11; 
     public static final int kFLDriveID = 21;
     public static final int kBLDriveID = 31;
     public static final int kBRDriveID = 41;
@@ -198,7 +198,7 @@ public final class Constants {
   }
 
   public static final class PathPlannerConstants {
-    public static final double kPPMaxVelocity = 3;
+    public static final double kPPMaxVelocity = 3; 
     public static final double kPPMaxAcceleration = 3;
     public static final double kPPMaxAngularVelocity = Math.PI * 2;
     public static final double kPPMaxAngularAcceleration = Math.PI * 2;
@@ -227,14 +227,14 @@ public final class Constants {
     public static final double kSunflowerI = 0;
     public static final double kSunflowerD = 0;
     // todo: fix names and ip's
-    public static final String kLimelightFrontName = "limelight-front";
-    public static final String kLimelightFrontIP = "10.6.87.25:5802";
-    public static final String kLimelightLeftName = "limelight-left";
-    public static final String kLimelightLeftIP = "10.6.87.25:5802";
-    public static final String kLimelightRightName = "limelight-right";
-    public static final String kLimelightRightIP = "10.6.87.25:5802";
-    public static final String kLimelightBackName = "limelight-back";
-    public static final String kLimelightBackIP = "10.6.87.25:5802";
+    public static final String kLimelightFrontName = "limelight-front"; //kLimelightFrontName abruticus
+    public static final String kLimelightFrontIP = "10.6.87.25:5802"; //kLimelightFrontIP abruticus
+    public static final String kLimelightLeftName = "limelight-left"; //kLimelightLeftName abruticus
+    public static final String kLimelightLeftIP = "10.6.87.25:5802"; // value from kLimelightLeftIP abruticus
+    public static final String kLimelightRightName = "limelight-right"; // value from kLimelightRightName abruticus
+    public static final String kLimelightRightIP = "10.6.87.25:5802"; // value from kLimelightRightIP abruticus
+    public static final String kLimelightBackName = "limelight-back"; // value from kLimelightBackName  abruticus
+    public static final String kLimelightBackIP = "10.6.87.25:5802"; // value from kLimelightBackIP abruticus
     public static final int kAprilTagPipeline = 4;
     public static final double fieldXOffset = 8.27; // Certified (Half field dimensions)
     public static final double fieldYOffset = 4.01; // Certified (Half as well)
@@ -267,10 +267,10 @@ public final class Constants {
   }
 
   public static final class ShooterConstants {
-    public static final int kTopMotorID = 17;
-    public static final int kBottomMotorID = 18;
-    public static final int kIntakePower = 0;
-    public static final int kOuttakePower = 0;
+    public static final int kTopMotorID = 17; //17 abruticus
+    public static final int kBottomMotorID = 18; //18 abruticus
+    public static final int kIntakePower = 0; //0 abruticus
+    public static final int kOuttakePower = 0; //0 abruticus
     public static final PrefDouble kPTopMotor = new PrefDouble("P Top Motor", 0);
     public static final PrefDouble kITopMotor = new PrefDouble("I Top Motor", 0);
     public static final PrefDouble kDTopMotor = new PrefDouble("D Top Motor", 0);
@@ -281,12 +281,12 @@ public final class Constants {
     public static final PrefDouble kDBottomMotor = new PrefDouble("D Bottom Motor", 0);
     public static final PrefDouble kVBottomMotor =new PrefDouble("V Bottom Motor", 0);
 
-    public static final int kLeftMotorID = 51;
-    public static final int kRightMotorID = 52;
-    public static final int kShooterPigeonID = 9;
-    public static final int kLeftPivotMotorID = 53;
-    public static final int kRightPivotMotorID = 54;
-    public static final int kThroughBorePort = 3;
+    public static final int kLeftMotorID = 51; //51 abruticus
+    public static final int kRightMotorID = 52; //52 abruticus
+    public static final int kShooterPigeonID = 9; //9 abrtuicus
+    public static final int kLeftPivotMotorID = 53; //53 abruticus
+    public static final int kRightPivotMotorID = 54; //54 abruticus
+    public static final int kThroughBorePort = 3; //3 abruticus
  
     // In revolutions!
     public static final double kShooterNeutralDeadband = 0.01;
@@ -337,8 +337,8 @@ public final class Constants {
  
     public static final PrefDouble kSpeakerPosition  = new PrefDouble("Pivot Speaker Position", -52.5);
     public static final PrefDouble kSpeakerPositionAuto  = new PrefDouble("Pivot Speaker Position Auto", -46);
-    public static final PrefDouble kSpeakerPositionAutoStart  = new PrefDouble("Pivot Speaker Position Auto", -40); // Change to 37
-    public static final PrefDouble kSpeakerPositionAutoStart2  = new PrefDouble("Pivot Speaker Position Auto", -27); // Change to 23
+    public static final PrefDouble kSpeakerPositionAutoStart  = new PrefDouble("Pivot Speaker Position Auto", -40); 
+    public static final PrefDouble kSpeakerPositionAutoStart2  = new PrefDouble("Pivot Speaker Position Auto", -27); 
     public static final PrefDouble kSpeakerPosition2 = new PrefDouble("Pivot Speaker Position 2", -31);
     public static final PrefDouble kSpeakerPosition3 = new PrefDouble("Pivot Speaker Position 3", -29);
     public static final PrefDouble kNeutralPosition  = new PrefDouble("Pivot Neutral Position", 36);
@@ -355,13 +355,13 @@ public final class Constants {
     public static final PrefDouble kFullStowPosition = new PrefDouble("Pivot Full Stow Position", -60);
     public static final PrefDouble kPrepClimbPosition = new PrefDouble("Pivot Prep Climb Position", 0);
  
-    public static final PrefDouble kPPivotMotor = new PrefDouble("kP Shooter Pivot", 60);
-    public static final PrefDouble kIPivotMotor = new PrefDouble("kI Shooter Pivot", 0);
-    public static final PrefDouble kDPivotMotor = new PrefDouble("kD Shooter Pivot", 0);
-    public static final PrefDouble kVPivotMotor = new PrefDouble("kV Shooter Pivot", 25);
-    public static final PrefDouble kSPivotMotor = new PrefDouble("kS Shooter Pivot", 0.26);
-    public static final PrefDouble kAPivotMotor = new PrefDouble("kA Shooter Pivot", 0.5);
-    public static final PrefDouble kGPivotMotor = new PrefDouble("kG Shooter Pivot", 0.44);
+    public static final PrefDouble kPPivotMotor = new PrefDouble("kP Shooter Pivot", 60); //Old values from Abruticus
+    public static final PrefDouble kIPivotMotor = new PrefDouble("kI Shooter Pivot", 0); //Old values from Abruticus
+    public static final PrefDouble kDPivotMotor = new PrefDouble("kD Shooter Pivot", 0); //Old values from Abruticus
+    public static final PrefDouble kVPivotMotor = new PrefDouble("kV Shooter Pivot", 25); //Old values from Abruticus
+    public static final PrefDouble kSPivotMotor = new PrefDouble("kS Shooter Pivot", 0.26); //Old values from Abruticus
+    public static final PrefDouble kAPivotMotor = new PrefDouble("kA Shooter Pivot", 0.5); //Old values from Abruticus
+    public static final PrefDouble kGPivotMotor = new PrefDouble("kG Shooter Pivot", 0.44); //Old values from Abruticus
  
     public static final PrefDouble kCruiseAcceleration = new PrefDouble("Shooter Pivot Cruise Acceleration", 1.7);
     public static final PrefDouble kCruiseVelocity = new PrefDouble("Shooter Pivot Cruise Velocity", 0.425);
@@ -371,7 +371,7 @@ public final class Constants {
     public static final PrefDouble kPivotDeadbandClose = new PrefDouble ("Shooter Pivot Deadband Close", 2);
  
     // in degrees
-    public static final PrefDouble kPivotOffset = new PrefDouble("Shooter Pivot Offset", 248.4);
+    public static final PrefDouble kPivotOffset = new PrefDouble("Shooter Pivot Offset", 0); //Old values from Abruticus 248.4
   }
 
   public static final class IntakeConstants {
@@ -387,56 +387,62 @@ public final class Constants {
     public static final double kIntakeMaxVelocity =  100;
     public static final double kIntakeMinVelocity = -100;
 
-    public static final PrefDouble kPRightIntakeMotor = new PrefDouble("kP Right Intake Roller", 1);
-    public static final PrefDouble kIRightIntakeMotor = new PrefDouble("kI Right Intake Roller", 0);
-    public static final PrefDouble kDRightIntakeMotor = new PrefDouble("kD Right Intake Roller", 0.003);
-    public static final PrefDouble kVRightIntakeMotor = new PrefDouble("kV Right Intake Roller", 0.19);
+    public static final PrefDouble kPRightIntakeMotor = new PrefDouble("kP Right Intake Roller", 1); //Old values from Abruticus
+    public static final PrefDouble kIRightIntakeMotor = new PrefDouble("kI Right Intake Roller", 0); //Old values from Abruticus
+    public static final PrefDouble kDRightIntakeMotor = new PrefDouble("kD Right Intake Roller", 0.003); //Old values from Abruticus
+    public static final PrefDouble kVRightIntakeMotor = new PrefDouble("kV Right Intake Roller", 0.19); //Old values from Abruticus
 
-    public static final PrefDouble kPLeftIntakeMotor = new PrefDouble("kP Left Intake Roller", 1); //tune
-    public static final PrefDouble kILeftIntakeMotor = new PrefDouble("kI Left Intake Roller", 0); //tune
-    public static final PrefDouble kDLeftIntakeMotor = new PrefDouble("kD Left Intake Roller", 0.003); //tune
-    public static final PrefDouble kVLeftIntakeMotor = new PrefDouble("kV Left Intake Roller", 0.19); //tune
+    public static final PrefDouble kPLeftIntakeMotor = new PrefDouble("kP Left Intake Roller", 1); //Old values from Abruticus
+    public static final PrefDouble kILeftIntakeMotor = new PrefDouble("kI Left Intake Roller", 0); //Old values from Abruticus
+    public static final PrefDouble kDLeftIntakeMotor = new PrefDouble("kD Left Intake Roller", 0.003); //Old values from Abruticus
+    public static final PrefDouble kVLeftIntakeMotor = new PrefDouble("kV Left Intake Roller", 0.19); //Old values from Abruticus
     
   }
   
   public static final class IndexerConstants {
-    public static final int kIndexerMotorID = 55;
-    public static final int kTrapMotorID = 59;
+    public static final int kIndexerMotorID = 55; //Old values from Abruticus
+    public static final int kTrapMotorID = 59; //Old values from Abruticus
 
     public static final double kIndexerNeutralDeadband = 0.05;
 
-    public static final PrefDouble kIndexerVelocityRPS = new PrefDouble("Indexer Velocity", 90);
-    public static final PrefDouble kTrapVelocityRPS = new PrefDouble("Trap Velocity", 81);
+    public static final PrefDouble kIndexerVelocityRPS = new PrefDouble("Indexer Velocity", 90); //Old values from Abruticus
+    public static final PrefDouble kTrapVelocityRPS = new PrefDouble("Trap Velocity", 81); //Old values from Abruticus
 
-    public static final PrefDouble kIndexerReverseRPS = new PrefDouble("Indexer Reverse Velocity", -10);
-    public static final double kIndexerMinVelocityRPS = -100;
-    public static final double kIndexerMaxVelocityRPS = 100;
+    public static final PrefDouble kIndexerReverseRPS = new PrefDouble("Indexer Reverse Velocity", -10); //Old values from Abruticus
+    public static final double kIndexerMinVelocityRPS = -100; //Old values from Abruticus
+    public static final double kIndexerMaxVelocityRPS = 100; //Old values from Abruticus
 
     public static final PrefDouble kIndexerVelocityIncrement = new PrefDouble("Indexer Velocity Increment", 10);
 
-    public static final PrefDouble kPIndexerMotor = new PrefDouble("kP Indexer Pivot Motor", 0.9);
-    public static final PrefDouble kIIndexerMotor = new PrefDouble("kI Indexer Pivot Motor", 0);
-    public static final PrefDouble kDIndexerMotor = new PrefDouble("kD Indexer Pivot Motor", 0);
-    public static final PrefDouble kVIndexerMotor = new PrefDouble("kV Indexer Pivot Motor", 0.12);
+    public static final PrefDouble kPIndexerMotor = new PrefDouble("kP Indexer Pivot Motor", 0.9); //Old values from Abruticus
+    public static final PrefDouble kIIndexerMotor = new PrefDouble("kI Indexer Pivot Motor", 0); //Old values from Abruticus
+    public static final PrefDouble kDIndexerMotor = new PrefDouble("kD Indexer Pivot Motor", 0); //Old values from Abruticus
+    public static final PrefDouble kVIndexerMotor = new PrefDouble("kV Indexer Pivot Motor", 0.12); //Old values from Abruticus
 
-    public static final PrefDouble kPTrapMotor = new PrefDouble("kP Indexer Trap Motor", 0.9);
-    public static final PrefDouble kITrapMotor = new PrefDouble("kI Indexer Trap Motor", 0);
-    public static final PrefDouble kDTrapMotor = new PrefDouble("kD Indexer Trap Motor", 0);
-    public static final PrefDouble kVTrapMotor = new PrefDouble("kV Indexer Trap Motor", 0.12);
+    public static final PrefDouble kPTrapMotor = new PrefDouble("kP Indexer Trap Motor", 0.9); //Old values from Abruticus
+    public static final PrefDouble kITrapMotor = new PrefDouble("kI Indexer Trap Motor", 0); //Old values from Abruticus
+    public static final PrefDouble kDTrapMotor = new PrefDouble("kD Indexer Trap Motor", 0); //Old values from Abruticus
+    public static final PrefDouble kVTrapMotor = new PrefDouble("kV Indexer Trap Motor", 0.12); //Old values from Abruticus
   }
 
   public static final class TrapConstants {
-    public static final int kElevatorID = 99;
-    public static final int kElevatorAmpPosition = 200;
-    public static final int kElevatorTrapPosition = 100;
-    public static final int kElevatorDownPosition = 0;
+    public static final int kElevatorID = 99; //tune
+    public static final int kElevatorAmpPosition = 200; //tune
+    public static final int kElevatorTrapPosition = 100; //tune
+    public static final int kElevatorDownPosition = 0; //tune
     public static final PrefDouble kElevatorDeadband = new PrefDouble("Elevator Deadband", 0.0); // make this a real value as well
-    public static final int kTrampSpeed = 900000000; // TODO make this a real value
+    public static final int kTrampSpeed = 5; //tune
   }
 
   public static final class BeamBreakSensorConstants {
     public static final int blackPort = 8;
     public static final int whitePort = 9;
+    public static final int shooterBlackPort = 0; //Fix variable
+    public static final int shooterWhitePort = 0; //Fix variable
+    public static final int intakeBlackPort = 0;
+    public static final int intakeWhitePort = 0;
+    public static final int trampBlackPort = 0;
+    public static final int trampWhitePort = 0;
   }
 
   public static class ClimbConstants {
