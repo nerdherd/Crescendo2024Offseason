@@ -31,6 +31,7 @@ import frc.robot.commands.autos.FourPiece;
 import frc.robot.commands.autos.Mid5Piece;
 import frc.robot.commands.autos.ThreePiece;
 import frc.robot.commands.autos.ThreePieceMidSource;
+import frc.robot.subsystems.BeamBreakSensor;
 import frc.robot.subsystems.CANdleSubSystem;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Indexer;
@@ -56,8 +57,9 @@ public class RobotContainer {
   public Indexer indexer = new Indexer();
   public Tramp tramp = new Tramp();
   public Climb climb = new Climb();
+  public BeamBreakSensor beamBreakSensor = new BeamBreakSensor();
 
-  public SuperSystem superSystem = new SuperSystem(intakeRoller, indexer, shooterPivot, shooterRoller, tramp, climb);
+  public SuperSystem superSystem = new SuperSystem(intakeRoller, indexer, shooterPivot, shooterRoller, tramp, climb, beamBreakSensor);
   
   public Gyro imu = new PigeonV2(2);
   
@@ -337,20 +339,20 @@ public class RobotContainer {
   
   public void configureLEDTriggers() {
     // Note Trigger
-    // Trigger noteTrigger = new Trigger(superSystem::noteIntook);
+    Trigger noteTrigger = new Trigger(beamBreakSensor::noteIntook);
     
-    // noteTrigger.onTrue(Commands.runOnce(
-    //   () -> {
-    //     CANdle.setStatus(Status.HASNOTE);
-    //     SmartDashboard.putBoolean("Has Note", true);
-    //   }));
+    noteTrigger.onTrue(Commands.runOnce(
+      () -> {
+        CANdle.setStatus(Status.HASNOTE);
+        SmartDashboard.putBoolean("Has Note", true);
+      }));
     
-    // noteTrigger.onFalse(Commands.runOnce(
-    //   () -> {
-    //     SmartDashboard.putBoolean("Has Note", false); 
-    //     CANdle.setStatus(Status.TELEOP);
-    //   }
-    // ));
+    noteTrigger.onFalse(Commands.runOnce(
+      () -> {
+        SmartDashboard.putBoolean("Does Not Have Note", false); 
+        CANdle.setStatus(Status.TELEOP);
+      }
+    ));
 
     // noteTrigger.and(aimTrigger.negate().and(armTrigger.negate())).onTrue(
     //   Commands.runOnce(
@@ -361,25 +363,25 @@ public class RobotContainer {
     //   )
     // );
 
-    armTrigger.and(aimTrigger.negate()).onTrue(
-      Commands.runOnce(
-        () -> {
-          CANdle.setStatus(Status.SHOOTER_READY);
-        }  
-      )
-    );
+    // armTrigger.and(aimTrigger.negate()).onTrue(
+    //   Commands.runOnce(
+    //     () -> {
+    //       CANdle.setStatus(Status.SHOOTER_READY);
+    //     }  
+    //   )
+    // );
 
     ShuffleboardTab tab = Shuffleboard.getTab("Main");
     tab.addBoolean("Arm aimed", armTrigger);    
     tab.addBoolean("Drivebase aimed", aimTrigger);
 
-    // armTrigger.negate().and(aimTrigger.negate()).and(noteTrigger).onTrue(
-    //   Commands.runOnce(
-    //     () -> {
-    //       CANdle.setStatus(Status.HASNOTE);
-    //     }  
-    //   )
-    // );
+    armTrigger.negate().and(aimTrigger.negate()).and(noteTrigger).onTrue(
+      Commands.runOnce(
+        () -> {
+          CANdle.setStatus(Status.HASNOTE);
+        }  
+      )
+    );
 
     aimTrigger.and(armTrigger).onTrue(
       Commands.runOnce(
