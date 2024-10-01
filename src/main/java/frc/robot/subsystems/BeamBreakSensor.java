@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants.BeamBreakSensorConstants;
+import frc.robot.Constants.BeamBreakSensorConstants.Ports;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -17,12 +18,11 @@ public class BeamBreakSensor implements Reportable {
     private boolean lastWhiteValue;
     private boolean illegalInput = false;
 
-    public BeamBreakSensor() {
-        blackPort = BeamBreakSensorConstants.blackPort;
-        whitePort = BeamBreakSensorConstants.whitePort;
+    public BeamBreakSensor(Ports ports) {
+        blackPort = ports.blackPort;
+        whitePort = ports.whitePort;
         beamBreakSensorBlack = new DigitalInput(blackPort);
         beamBreakSensorWhite = new DigitalInput(whitePort);
-
     }
 
     public boolean noteSensed() {

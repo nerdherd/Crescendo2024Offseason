@@ -435,14 +435,19 @@ public final class Constants {
   }
 
   public static final class BeamBreakSensorConstants {
-    public static final int blackPort = 8;
-    public static final int whitePort = 9;
-    public static final int shooterBlackPort = 0; //Fix variable
-    public static final int shooterWhitePort = 0; //Fix variable
-    public static final int intakeBlackPort = 0;
-    public static final int intakeWhitePort = 0;
-    public static final int trampBlackPort = 0;
-    public static final int trampWhitePort = 0;
+    public enum Ports {
+      um(8,9),
+      Intake(0,0),
+      Shooter(0,0),
+      Tramp(0,0)
+      ;
+
+      public int blackPort, whitePort;
+      Ports(int _black, int _white) {
+        this.blackPort = _black;
+        this.whitePort = _white;
+      }
+    }
   }
 
   public static class ClimbConstants {

@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.VisionConstants;
+import frc.robot.Constants.BeamBreakSensorConstants.Ports;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.commands.autos.FivePieceMidSecond;
 import frc.robot.commands.autos.FourPiece;
@@ -59,9 +60,11 @@ public class RobotContainer implements Reportable {
   public Indexer indexer = new Indexer();
   public Tramp tramp = new Tramp();
   public Climb climb = new Climb();
-  public BeamBreakSensor beamBreakSensor = new BeamBreakSensor();
+  public BeamBreakSensor intakeBeamBreak = new BeamBreakSensor(Ports.Intake);
+  public BeamBreakSensor trampBeamBreak = new BeamBreakSensor(Ports.Tramp);
+  public BeamBreakSensor shooterBeamBreak = new BeamBreakSensor(Ports.Shooter);
 
-  public SuperSystem superSystem = new SuperSystem(intakeRoller, indexer, shooterPivot, shooterRoller, tramp, climb, beamBreakSensor);
+  public SuperSystem superSystem = new SuperSystem(intakeRoller, indexer, shooterPivot, shooterRoller, tramp, climb, intakeBeamBreak, trampBeamBreak, shooterBeamBreak);
   
   public Gyro imu = new PigeonV2(2);
   
