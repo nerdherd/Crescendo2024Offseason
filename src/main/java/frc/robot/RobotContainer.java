@@ -32,17 +32,18 @@ import frc.robot.commands.autos.Mid5Piece;
 import frc.robot.commands.autos.ThreePiece;
 import frc.robot.commands.autos.ThreePieceMidSource;
 import frc.robot.subsystems.BeamBreakSensor;
-import frc.robot.subsystems.CANdleSubSystem;
+// import frc.robot.subsystems.CANdleSubSystem;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.IntakeRoller;
+import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Reportable;
 import frc.robot.subsystems.Reportable.LOG_LEVEL;
 import frc.robot.subsystems.ShooterPivot;
 import frc.robot.subsystems.ShooterRoller;
 import frc.robot.subsystems.SuperSystem;
 import frc.robot.subsystems.Tramp;
-import frc.robot.subsystems.CANdleSubSystem.Status;
+// import frc.robot.subsystems.CANdleSubSystem.Status;
 import frc.robot.subsystems.imu.Gyro;
 import frc.robot.subsystems.imu.PigeonV2;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
@@ -79,7 +80,7 @@ public class RobotContainer implements Reportable {
 
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
   
-  public CANdleSubSystem CANdle = new CANdleSubSystem();
+  public LED candle = new LED();
   private SwerveJoystickCommand swerveJoystickCommand;
   
   /**
@@ -340,20 +341,20 @@ public class RobotContainer implements Reportable {
   
   public void configureLEDTriggers() {
     // Note Trigger
-    Trigger noteTrigger = new Trigger(beamBreakSensor::noteIntook);
+    // Trigger noteTrigger = new Trigger(() -> beamBreakSensor.noteSensed());
     
-    noteTrigger.onTrue(Commands.runOnce(
-      () -> {
-        CANdle.setStatus(Status.HASNOTE);
-        SmartDashboard.putBoolean("Has Note", true);
-      }));
+    // noteTrigger.onTrue(Commands.runOnce(
+    //   () -> {
+    //     CANdle.setStatus(Status.HASNOTE);
+    //     SmartDashboard.putBoolean("Has Note", true);
+    //   }));
     
-    noteTrigger.onFalse(Commands.runOnce(
-      () -> {
-        SmartDashboard.putBoolean("Does Not Have Note", false); 
-        CANdle.setStatus(Status.TELEOP);
-      }
-    ));
+    // noteTrigger.onFalse(Commands.runOnce(
+    //   () -> {
+    //     SmartDashboard.putBoolean("Does Not Have Note", false); 
+    //     CANdle.setStatus(Status.TELEOP);
+    //   }
+    // ));
 
     // noteTrigger.and(aimTrigger.negate().and(armTrigger.negate())).onTrue(
     //   Commands.runOnce(
@@ -372,26 +373,26 @@ public class RobotContainer implements Reportable {
     //   )
     // );
 
-    ShuffleboardTab tab = Shuffleboard.getTab("Main");
-    tab.addBoolean("Arm aimed", armTrigger);    
-    tab.addBoolean("Drivebase aimed", aimTrigger);
+    // ShuffleboardTab tab = Shuffleboard.getTab("Main");
+    // tab.addBoolean("Arm aimed", armTrigger);    
+    // tab.addBoolean("Drivebase aimed", aimTrigger);
 
-    armTrigger.negate().and(aimTrigger.negate()).and(noteTrigger).onTrue(
-      Commands.runOnce(
-        () -> {
-          CANdle.setStatus(Status.HASNOTE);
-        }  
-      )
-    );
+    // armTrigger.negate().and(aimTrigger.negate()).and(noteTrigger).onTrue(
+    //   Commands.runOnce(
+    //     () -> {
+    //       CANdle.setStatus(Status.HASNOTE);
+    //     }  
+    //   )
+    // );
 
-    aimTrigger.and(armTrigger).onTrue(
-      Commands.runOnce(
-        () -> {
-          CANdle.setStatus(Status.SHOTREADY);
-          SmartDashboard.putBoolean("Tag aimed", true); 
-        }
-      )
-    );
+    // aimTrigger.and(armTrigger).onTrue(
+    //   Commands.runOnce(
+    //     () -> {
+    //       CANdle.setStatus(Status.SHOTREADY);
+    //       SmartDashboard.putBoolean("Tag aimed", true); 
+    //     }
+    //   )
+    // );
 
     // noteTrigger.negate().onTrue(Commands.runOnce(
     //   () -> {

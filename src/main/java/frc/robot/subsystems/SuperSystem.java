@@ -143,7 +143,7 @@ public class SuperSystem {
             intakeRoller.setEnabledCommand(true),
             indexer.setEnabledCommand(true),
             shooterRoller.setEnabledCommand(true),
-            shooterRoller.setVelocity(-10, -10),
+            shooterRoller.setVelocityCommand(-10),
             indexer.indexToShooterCommand(),
             intakeRoller.intakeCommand(),
             Commands.waitUntil(shooterBeamBreak::noteSensed),

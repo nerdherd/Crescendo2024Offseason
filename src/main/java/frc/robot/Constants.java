@@ -475,8 +475,20 @@ public final class Constants {
     }
   }
 
-  public static class CANdleConstants {
+  public static class LEDConstants {
     public static final int CANdleID = 0; // TODO change later
+    public static final int CANdleLength = 8;
+
+    public enum LEDStrip {
+      CANDLE(0,8)
+      ;
+
+      public int index, count;
+      LEDStrip(int _index, int _count) {
+        this.index = _index;
+        this.count = _count;
+      }
+    }
   }
 
 }
