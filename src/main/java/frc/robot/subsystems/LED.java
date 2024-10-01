@@ -94,11 +94,22 @@ public class LED extends SubsystemBase {
         return Commands.runOnce(()->setState(State.SHOOTING));
     }
     
+    /**
+     * sets section to pattern
+     * @param colors pattern to set
+     * @param index index of section
+     * @param count count of section
+     */
     private void setStrip(Color[] colors, int index, int count) {
         for (int i = 0; i < count; i++) {
-            stripColors[index   + i] = colors[i % colors.length];
+            stripColors[index + i] = colors[i % colors.length];
         }
     }
+    /**
+     * setStrip based on section
+     * @param colors
+     * @param section
+     */
     private void setStrip(Color[] colors, LEDStrip section){
         setStrip(colors, section.index, section.count);
     }
@@ -113,6 +124,9 @@ public class LED extends SubsystemBase {
     public void configLedType(LEDStripType type) { candle.configLEDType(type, 0); }
     public void configStatusLedBehavior(boolean offWhenActive) { candle.configStatusLedState(offWhenActive, 0); }
     
+    /**
+     * applies strip colors
+     */
     private void updateCANdle() {
         for (int i = 0; i < stripColors.length; i++) {
             setLED(stripColors[i], i);
@@ -120,11 +134,15 @@ public class LED extends SubsystemBase {
     }
 
     private int delay = 0;
+    // Runs 5 times a second
     @Override
     public void periodic() {
         delay++;
         if (delay >= 10) {
             delay = 0;
+
+            // TODO draws go here
+
             updateCANdle();
         }
     }
