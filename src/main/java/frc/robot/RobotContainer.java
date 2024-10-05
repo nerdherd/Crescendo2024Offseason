@@ -60,10 +60,6 @@ public class RobotContainer implements Reportable {
   public Indexer indexer = new Indexer();
   public Tramp tramp = new Tramp();
   public Climb climb = new Climb();
-  // TODO: delete old code once verified it works
-  // public BeamBreakSensor intakeBeamBreak = new BeamBreakSensor(Ports.Intake);
-  // public BeamBreakSensor trampBeamBreak = new BeamBreakSensor(Ports.Tramp);
-  // public BeamBreakSensor shooterBeamBreak = new BeamBreakSensor(Ports.Shooter);
   public BeamBreakSensor intakeBeamBreak = new BeamBreakSensor(BeamBreakSensorConstants.kIntakeSensorId);
   public BeamBreakSensor trampBeamBreak = new BeamBreakSensor(BeamBreakSensorConstants.kTrampSensorId);
   public BeamBreakSensor shooterBeamBreak = new BeamBreakSensor(BeamBreakSensorConstants.kShooterSensorId);

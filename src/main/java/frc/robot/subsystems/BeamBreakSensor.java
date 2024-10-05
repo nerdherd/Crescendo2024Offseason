@@ -8,48 +8,17 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
 public class BeamBreakSensor implements Reportable {
-    // TODO: delete these comments after verifying it works
-
-    // private final int blackPort;
-    // private final int whitePort;
-    // private final DigitalInput beamBreakSensorBlack;
-    // private final DigitalInput beamBreakSensorWhite;
     private final int port;
     private final DigitalInput beamBreakSensor;
 
     private boolean noteDetected;
-    // private boolean lastBlackValue;
-    // private boolean lastWhiteValue;
-    // private boolean illegalInput = false;
 
     public BeamBreakSensor(int portIn) {
-        // blackPort = ports.blackPort;
-        // whitePort = ports.whitePort;
-        // beamBreakSensorBlack = new DigitalInput(blackPort);
-        // beamBreakSensorWhite = new DigitalInput(whitePort);
         port = portIn;
         beamBreakSensor = new DigitalInput(port);
     }
 
     public boolean noteSensed() {
-        // lastBlackValue = beamBreakSensorBlack.get();
-        // lastWhiteValue = beamBreakSensorWhite.get();
-        // if ((lastBlackValue && lastWhiteValue) || (!lastBlackValue && !lastWhiteValue)) {
-        //     illegalInput = true;
-        //     noteDetected = false;
-        // }
-
-        // if(!lastBlackValue && lastWhiteValue){
-        //     noteDetected = true;
-        // }
-        // else if(lastBlackValue && !lastWhiteValue){
-        //     noteDetected = false;
-        // }
-        // else{
-        //     DriverStation.reportError("Fault in beam break sensor, error code: ", true);
-        //     noteDetected = false;
-        // }
-        // return noteDetected;
         noteDetected = !beamBreakSensor.get();
         return noteDetected;
     }
@@ -65,9 +34,6 @@ public class BeamBreakSensor implements Reportable {
     public void initShuffleboard(LOG_LEVEL priority) {
         ShuffleboardTab tab = Shuffleboard.getTab("Indexer");
         tab.addBoolean("Note Detected", this::noteSensed);
-        // tab.addBoolean("Beam Break Sensor Connected", () -> !illegalInput);
-        // tab.addBoolean("Last Black Value", () -> lastBlackValue);
-        // tab.addBoolean("Last White Value", () -> lastWhiteValue);
     }
     
 }

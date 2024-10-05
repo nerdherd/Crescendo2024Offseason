@@ -436,23 +436,9 @@ public final class Constants {
 
   public static final class BeamBreakSensorConstants {
     // TODO: update with real values
-    // TODO: delete comments when verified it works
     public static final int kIntakeSensorId = 8;
     public static final int kShooterSensorId = 0;
     public static final int kTrampSensorId = 0;
-    // public enum Ports {
-    //   um(8,9),
-    //   Intake(0,0),
-    //   Shooter(0,0),
-    //   Tramp(0,0)
-    //   ;
-
-    //   public int blackPort, whitePort;
-    //   Ports(int _black, int _white) {
-    //     this.blackPort = _black;
-    //     this.whitePort = _white;
-    //   }
-    // }
   }
 
   public static class ClimbConstants {
