@@ -208,9 +208,9 @@ public class RobotContainer implements Reportable {
           }
           if (driverController.getCircleButton()) { //turn to amp
             if (!IsRedSide()){
-              return 270.0;
+              return 90.0;
             }
-            return 90.0;
+            return 270.0;
           }
           else 
           if (driverController.getL1Button()) { //turn to speaker
