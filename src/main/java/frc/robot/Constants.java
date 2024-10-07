@@ -77,7 +77,7 @@ public final class Constants {
     public static final PrefDouble kDDrive = new PrefDouble("kDDrive",0); //0 abructicus
     public static final PrefDouble kVDrive = new PrefDouble("kVDrive",0.0469); //0.0469 abructicus
 
-    public static final String kCANivoreName = "rio";
+    public static final String kCANivoreName = "CANivore";
 
     public static final double driverMotorCurrentLimit = 40.0;
     public static final double driverMotorCurrentThreshold = 30.0;
