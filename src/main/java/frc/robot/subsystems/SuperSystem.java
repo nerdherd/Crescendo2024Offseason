@@ -73,8 +73,6 @@ public class SuperSystem {
     //     return command;
     //     }
 
-
-
     public Command stow() {
         Command command = Commands.sequence(
             intakeRoller.stopCommand(),

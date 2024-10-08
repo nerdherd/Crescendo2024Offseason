@@ -85,6 +85,7 @@ public class RobotContainer implements Reportable {
   
   public LED candle = new LED();
   private SwerveJoystickCommand swerveJoystickCommand;
+  private Command visionShotCommand;
   
   /**
    * The container for the robot. Contain
@@ -190,12 +191,16 @@ public class RobotContainer implements Reportable {
           ); // Turn to angle
         }, 
         // () -> false, // Turn to angle (disabled)
-        () -> { // Turn To angle Direction
+        () -> { // Turn To angle Direction | TODO WIP
           if (
           //   (driverController.getTouchpad() && superSystem.getIsPassing())
           //  || 
-           driverController.getTriangleButton()) 
+           driverController.getTriangleButton()) // turn to speaker
            {
+            return 0.0;
+            
+          }
+          if (driverController.getSquareButton()) {
             if (!IsRedSide()) {
               return 315.0;
             } else {
@@ -203,18 +208,21 @@ public class RobotContainer implements Reportable {
             }
           }
           if (driverController.getL2Button()) {
-            return swerveDrive.getTurnToSpecificTagAngle(IsRedSide() ? 4 : 7); // TODO, update?
-            // 4 if red side, 7 if blue
+            return swerveDrive.getTurnToSpecificTagAngle(IsRedSide() ? 4 : 7); // 4 if red side, 7 if blue | TODO, update?
           }
-          if (driverController.getCircleButton()) { //turn to amp
+          if (driverController.getCircleButton()) { // turn to amp
             if (!IsRedSide()){
               return 90.0;
             }
             return 270.0;
           }
           else 
-          if (driverController.getL1Button()) { //turn to speaker
-            return 0.0;
+          if (driverController.getL1Button()) {
+            if (!IsRedSide()) {
+              return 315.0;
+            } else {
+              return 45.0;
+            }
           }
           else if (driverController.getR1Button()) {
             return 180.0;
@@ -303,10 +311,18 @@ public class RobotContainer implements Reportable {
       airplaneOperator.getButton10().whileTrue(superSystem.shootAmp());
     }
     else {
-      commandOperatorController.triangle().whileTrue(superSystem.intakeUntilSensed());
-      commandOperatorController.R2().whileTrue(superSystem.shootSpeaker());
-      commandOperatorController.circle().whileTrue(superSystem.intakeToTramp());
-      commandOperatorController.R1().whileTrue(superSystem.shootAmp());
+      commandDriverController.L2().whileTrue(superSystem.shootSpeakerAutoAim());
+      commandDriverController.L1().whileTrue(superSystem.shootSpeaker());
+      commandDriverController.R1().whileTrue(superSystem.shootAmp());
+      commandDriverController.share().whileTrue(
+      Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle())
+      );
+      commandDriverController.touchpad().whileTrue(shooterRoller.shootSpeaker());
+      commandDriverController.triangle().whileTrue();
+      commandDriverController.square().whileTrue();
+      commandDriverController.cross().whileTrue();
+      commandDriverController.circle().whileTrue();
+      commandOperatorController.L2();
     }
     
   }
