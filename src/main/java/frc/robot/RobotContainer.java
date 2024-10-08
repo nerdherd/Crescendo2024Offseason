@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.ctre.phoenix6.hardware.TalonFX;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -11,11 +13,13 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.commands.autos.DriveForward;
+import frc.robot.subsystems.IntakeRoller;
 import frc.robot.subsystems.Reportable;
 import frc.robot.subsystems.imu.Gyro;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
@@ -26,6 +30,7 @@ public class RobotContainer implements Reportable {
   public Gyro imu = null;
   
   public SwerveDrivetrain swerveDrive;
+  public IntakeRoller intakeRoller;
   public PowerDistribution pdp = new PowerDistribution(1, ModuleType.kRev);
   
   private CommandPS4Controller commandDriverController;
@@ -54,11 +59,10 @@ public class RobotContainer implements Reportable {
     } catch (IllegalArgumentException e) {
       DriverStation.reportError("Illegal Swerve Drive Module Type", e.getStackTrace());
     }
+    intakeRoller = new IntakeRoller();
 
     LimelightHelpers.setLEDMode_ForceBlink(VisionConstants.kLimelightBackName);
     LimelightHelpers.setLEDMode_ForceBlink(VisionConstants.kLimelightFrontName);
-
-    initShuffleboard();
 
     // Configure the trigger bindings
     // Moved to teleop init
@@ -169,7 +173,18 @@ public class RobotContainer implements Reportable {
 
   public void initDefaultCommands_test() {}
 
-  public void configureBindings_teleop() {}
+  public void configureBindings_teleop() {
+    commandOperatorController.L1().whileTrue(
+      Commands.sequence(
+        intakeRoller.setEnabledCommand(true),
+        intakeRoller.setVelocityCommand(-8)
+      )).onFalse(intakeRoller.stopCommand());
+    commandOperatorController.R1().whileTrue(
+      Commands.sequence(
+        intakeRoller.setEnabledCommand(true),
+        intakeRoller.setVelocityCommand(8)
+      )).onFalse(intakeRoller.stopCommand());
+  }
 
   public void configureBindings_test() {}
   
@@ -178,6 +193,7 @@ public class RobotContainer implements Reportable {
   public void initShuffleboard() {
     swerveDrive.initShuffleboard(loggingLevel);
     swerveDrive.initModuleShuffleboard(loggingLevel);
+    intakeRoller.initShuffleboard(loggingLevel);
 
     ShuffleboardTab tab = Shuffleboard.getTab("Main");
     tab.addNumber("Total Current Draw", pdp::getTotalCurrent);
