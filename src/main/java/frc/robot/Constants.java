@@ -77,7 +77,7 @@ public final class Constants {
     public static final PrefDouble kDDrive = new PrefDouble("kDDrive",0); //0 abructicus
     public static final PrefDouble kVDrive = new PrefDouble("kVDrive",0.0469); //0.0469 abructicus
 
-    public static final String kCANivoreName = "rio";
+    public static final String kCANivoreName = "CANivore";
 
     public static final double driverMotorCurrentLimit = 40.0;
     public static final double driverMotorCurrentThreshold = 30.0;
@@ -375,8 +375,7 @@ public final class Constants {
   }
 
   public static final class IntakeConstants {
-    public static final int kRightIntakeMotorID = 56;
-    public static final int kLeftIntakeMotorID = 57; //change later
+    public static final int kIntakeMotorID = 56; //change later
 
     public static final double kIntakeNeutralDeadband = 0.01;
 
@@ -387,16 +386,10 @@ public final class Constants {
     public static final double kIntakeMaxVelocity =  100;
     public static final double kIntakeMinVelocity = -100;
 
-    public static final PrefDouble kPRightIntakeMotor = new PrefDouble("kP Right Intake Roller", 1); //Old values from Abruticus
-    public static final PrefDouble kIRightIntakeMotor = new PrefDouble("kI Right Intake Roller", 0); //Old values from Abruticus
-    public static final PrefDouble kDRightIntakeMotor = new PrefDouble("kD Right Intake Roller", 0.003); //Old values from Abruticus
-    public static final PrefDouble kVRightIntakeMotor = new PrefDouble("kV Right Intake Roller", 0.19); //Old values from Abruticus
-
-    public static final PrefDouble kPLeftIntakeMotor = new PrefDouble("kP Left Intake Roller", 1); //Old values from Abruticus
-    public static final PrefDouble kILeftIntakeMotor = new PrefDouble("kI Left Intake Roller", 0); //Old values from Abruticus
-    public static final PrefDouble kDLeftIntakeMotor = new PrefDouble("kD Left Intake Roller", 0.003); //Old values from Abruticus
-    public static final PrefDouble kVLeftIntakeMotor = new PrefDouble("kV Left Intake Roller", 0.19); //Old values from Abruticus
-    
+    public static final PrefDouble kPIntakeMotor = new PrefDouble("kP Intake Roller", 1); //Old values from Abruticus
+    public static final PrefDouble kIIntakeMotor = new PrefDouble("kI Intake Roller", 0); //Old values from Abruticus
+    public static final PrefDouble kDIntakeMotor = new PrefDouble("kD Intake Roller", 0.003); //Old values from Abruticus
+    public static final PrefDouble kVIntakeMotor = new PrefDouble("kV Intake Roller", 0.19); //Old values from Abruticus
   }
   
   public static final class IndexerConstants {

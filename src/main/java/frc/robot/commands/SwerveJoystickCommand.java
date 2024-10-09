@@ -4,6 +4,7 @@ import java.util.function.Supplier;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -155,7 +156,7 @@ public class SwerveJoystickCommand extends Command {
             swerveDrive.setDriveMode(DRIVE_MODE.FIELD_ORIENTED);
             chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                 filteredXSpeed, filteredYSpeed, filteredTurningSpeed, 
-                swerveDrive.getImu().getRotation2d());
+                new Rotation2d());
         } else {
             swerveDrive.setDriveMode(DRIVE_MODE.ROBOT_ORIENTED);
             chassisSpeeds = new ChassisSpeeds(

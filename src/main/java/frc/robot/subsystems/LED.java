@@ -16,7 +16,7 @@ import frc.robot.Constants.LEDConstants;
 import frc.robot.Constants.LEDConstants.LEDStrip;
 
 public class LED extends SubsystemBase {
-    private final CANdle candle = new CANdle(Constants.LEDConstants.CANdleID, "rio");
+    private final CANdle candle = new CANdle(Constants.LEDConstants.CANdleID, Constants.SuperStructureConstants.kCANivoreBusName);
     private Color[] stripColors = new Color[LEDConstants.CANdleLength];
 
     private State state = State.DISABLED;
