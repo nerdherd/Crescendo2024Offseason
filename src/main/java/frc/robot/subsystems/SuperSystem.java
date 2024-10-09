@@ -141,12 +141,10 @@ public class SuperSystem {
             intakeRoller.setEnabledCommand(true),
             indexer.setEnabledCommand(true),
             shooterRoller.setEnabledCommand(true),
-            shooterRoller.setVelocityCommand(-10),
-            indexer.indexToShooterCommand(),
             intakeRoller.intakeCommand(),
-            Commands.waitUntil(shooterBeamBreak::noteSensed),
-            indexer.setEnabledCommand(false),
-            intakeRoller.stopCommand()
+            indexer.indexToShooterCommand(),
+            shooterRoller.setVelocityCommand(-10),
+            Commands.waitUntil(shooterBeamBreak::noteSensed)
 
         ).finallyDo(() -> {
             intakeRoller.stop();
@@ -158,36 +156,10 @@ public class SuperSystem {
         return command;
     }
 
-    public Command intakeToTramp() {
-        Command command = Commands.sequence(
-            tramp.setElevatorDownCommand(),
-            tramp.setEnabledCommand(true),
-            Commands.deadline(
-                Commands.waitUntil(() -> 
-                tramp.hasReachedPosition(TrapConstants.kElevatorDownPosition)),
-                Commands.waitSeconds(1)
-            ),
-            shooterRoller.setVelocityCommand(0, 0),
-            shooterRoller.setEnabledCommand(true),
-            intakeRoller.setEnabledCommand(true),
-            indexer.setEnabledCommand(true),
-            indexer.indexToElevatorCommand(),
-            intakeRoller.intakeCommand(),
-            Commands.waitUntil(trampBeamBreak::noteSensed)
-        ).finallyDo(() -> {
-            intakeRoller.stop();
-            indexer.stop();
-            shooterRoller.stop();
-        });
-
-        command.addRequirements(indexer, intakeRoller, shooterPivot, shooterRoller);
-        return command;
-    }
-
     public Command shooterToTramp() {
         Command command = Commands.sequence(
-            tramp.setElevatorDownCommand(),
             tramp.setEnabledCommand(true),
+            tramp.setElevatorDownCommand(),
             Commands.deadline(
                 Commands.waitUntil(() -> 
                 tramp.hasReachedPosition(TrapConstants.kElevatorDownPosition)),
@@ -370,7 +342,7 @@ public class SuperSystem {
             intakeRoller.setVelocityCommand(-50),
             Commands.runOnce(() -> SmartDashboard.putBoolean("Outtaking", true)),
             indexer.setEnabledCommand(true),
-            indexer.setVelocityCommand(-50, 50),
+            indexer.setVelocityCommand(-50),
             Commands.runOnce(() -> SmartDashboard.putBoolean("Intake roller", true)),
             Commands.waitUntil(() -> false)
         ).finallyDo(

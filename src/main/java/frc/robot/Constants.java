@@ -435,11 +435,14 @@ public final class Constants {
   }
 
   public static class ClimbConstants {
-    public static final int kClimbMotorID = 0;
+    public static final int kLeftClimbMotorID = 0;
+    public static final int kRightClimbMotorID = 0;
+
     public static final PrefDouble kClimbMinPosition = new PrefDouble("Climb Min Position", 0.0);
     public static final PrefDouble kClimbMaxPosition = new PrefDouble("Climb Max Position", 1.0);
     public static final PrefDouble kClimbPositionOffset = new PrefDouble("Climb Position Offset", 0.0);
     
+
     public static final PrefDouble kClimbkP = new PrefDouble("Climb Motor kP", 0.0);
     public static final PrefDouble kClimbkI = new PrefDouble("Climb Motor kI", 0.0);
     public static final PrefDouble kClimbkD = new PrefDouble("Climb Motor kD", 0.0);

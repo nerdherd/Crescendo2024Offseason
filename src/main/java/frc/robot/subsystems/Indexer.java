@@ -24,14 +24,11 @@ import frc.robot.Constants.ShooterConstants;
 
 public class Indexer extends SubsystemBase implements Reportable {
     
-    private final TalonFX indexer;  
-    private final TalonFX trap;
+    private final TalonFX indexer;
 
     private final TalonFXConfigurator indexerConfigurator;  
-    private final TalonFXConfigurator trapConfigurator;
 
     private final VelocityVoltage indexerVelocityRequest = new VelocityVoltage(0, 0, true, 0, 0, false, false, false);
-    private final VelocityVoltage trapVelocityRequest = new VelocityVoltage(0, 0, true, 0, 0, false, false, false);
 
     private final NeutralOut brakeRequest = new NeutralOut();
 
@@ -39,13 +36,8 @@ public class Indexer extends SubsystemBase implements Reportable {
 
     public Indexer() {
         indexer = new TalonFX(IndexerConstants.kIndexerMotorID, SuperStructureConstants.kCANivoreBusName);
-        trap = new TalonFX(IndexerConstants.kTrapMotorID, SuperStructureConstants.kCANivoreBusName);
 
         indexerConfigurator = indexer.getConfigurator();
-        trapConfigurator = trap.getConfigurator();
-
-
-        // trap.setControl(new Follower(IndexerConstants.kIndexerMotorID, false));
 
         CommandScheduler.getInstance().registerSubsystem(this);
         
@@ -71,37 +63,15 @@ public class Indexer extends SubsystemBase implements Reportable {
         indexerConfigs.CurrentLimits.SupplyTimeThreshold = 0.25;
         indexerConfigs.Audio.AllowMusicDurDisable = true;
 
-        TalonFXConfiguration trapConfigs = new TalonFXConfiguration();
-        trapConfigurator.refresh(trapConfigs);
-        trapConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
-        trapConfigs.Voltage.PeakForwardVoltage = 11.5;
-        trapConfigs.Voltage.PeakReverseVoltage = -11.5;
-        trapConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        trapConfigs.MotorOutput.DutyCycleNeutralDeadband = IndexerConstants.kIndexerNeutralDeadband;
-        trapConfigs.CurrentLimits.SupplyCurrentLimit = 40;
-        trapConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
-        // indexerConfigs.CurrentLimits.StatorCurrentLimit = 50;
-        // indexerConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
-        trapConfigs.CurrentLimits.SupplyCurrentThreshold = 50;
-        trapConfigs.CurrentLimits.SupplyTimeThreshold = 0.25;
-        trapConfigs.Audio.AllowMusicDurDisable = true;
-        
         StatusCode indexerResponse = indexerConfigurator.apply(indexerConfigs);
-        StatusCode trapResponse = trapConfigurator.apply(trapConfigs);
 
         if (!indexerResponse.isOK()){
             DriverStation.reportError("Could not apply indexer configs, error code:"+ indexerResponse.toString(), new Error().getStackTrace());
-        }
-
-        if (!trapResponse.isOK()){
-            DriverStation.reportError("Could not apply trap configs, error code:"+ trapResponse.toString(), new Error().getStackTrace());
         }
     }
 
     public void configurePID() {
         IndexerConstants.kIndexerVelocityRPS.loadPreferences();
-        IndexerConstants.kTrapVelocityRPS.loadPreferences();
-
         IndexerConstants.kIndexerReverseRPS.loadPreferences();
 
         TalonFXConfiguration indexerMotorConfigs = new TalonFXConfiguration();
@@ -116,26 +86,10 @@ public class Indexer extends SubsystemBase implements Reportable {
         indexerMotorConfigs.Slot0.kD = IndexerConstants.kDIndexerMotor.get();
         indexerMotorConfigs.Slot0.kV = IndexerConstants.kVIndexerMotor.get();
 
-        TalonFXConfiguration trapMotorConfigs = new TalonFXConfiguration();
-        
-        trapConfigurator.refresh(indexerMotorConfigs);
-        IndexerConstants.kPTrapMotor.loadPreferences();
-        IndexerConstants.kITrapMotor.loadPreferences();
-        IndexerConstants.kDTrapMotor.loadPreferences();
-        IndexerConstants.kVTrapMotor.loadPreferences();
-        trapMotorConfigs.Slot0.kP = IndexerConstants.kPTrapMotor.get();
-        trapMotorConfigs.Slot0.kI = IndexerConstants.kITrapMotor.get();
-        trapMotorConfigs.Slot0.kD = IndexerConstants.kDTrapMotor.get();
-        trapMotorConfigs.Slot0.kV = IndexerConstants.kVTrapMotor.get();
-
         StatusCode indexerResponse = indexerConfigurator.apply(indexerMotorConfigs);
-        StatusCode trapResponse = trapConfigurator.apply(trapMotorConfigs);
 
         if (!indexerResponse.isOK()){
             DriverStation.reportError("Could not apply indexer configs, error code:"+ indexerResponse.toString(), new Error().getStackTrace());
-        }
-        if (!trapResponse.isOK()){
-            DriverStation.reportError("Could not apply trap configs, error code:"+ trapResponse.toString(), new Error().getStackTrace());
         }
     }
 
@@ -143,11 +97,8 @@ public class Indexer extends SubsystemBase implements Reportable {
     public void periodic() {
         if (enabled) {
             indexer.setControl(indexerVelocityRequest);
-            trap.setControl(trapVelocityRequest);
         } else {
             indexer.setControl(brakeRequest);
-            trap.setControl(brakeRequest);
-
         }
     }
 
@@ -156,9 +107,7 @@ public class Indexer extends SubsystemBase implements Reportable {
     public void stop() {
         this.enabled = false;
         indexerVelocityRequest.Velocity = 0;
-        trapVelocityRequest.Velocity = 0;
         indexer.setControl(brakeRequest);
-        trap.setControl(brakeRequest);
     }
 
     public void setEnabled(boolean enabled) {
@@ -171,24 +120,6 @@ public class Indexer extends SubsystemBase implements Reportable {
         indexerVelocityRequest.Velocity = 
             NerdyMath.clamp(
                 velocity, 
-                IndexerConstants.kIndexerMinVelocityRPS, 
-                IndexerConstants.kIndexerMaxVelocityRPS);
-        trapVelocityRequest.Velocity = 
-            NerdyMath.clamp(
-                velocity, 
-                IndexerConstants.kIndexerMinVelocityRPS, 
-                IndexerConstants.kIndexerMaxVelocityRPS);
-    }
-
-    public void setVelocity(double indexerVelocity, double trapVelocity) {
-        indexerVelocityRequest.Velocity = 
-            NerdyMath.clamp(
-                indexerVelocity, 
-                IndexerConstants.kIndexerMinVelocityRPS, 
-                IndexerConstants.kIndexerMaxVelocityRPS);
-        trapVelocityRequest.Velocity = 
-            NerdyMath.clamp(
-                trapVelocity, 
                 IndexerConstants.kIndexerMinVelocityRPS, 
                 IndexerConstants.kIndexerMaxVelocityRPS);
     }
@@ -209,10 +140,6 @@ public class Indexer extends SubsystemBase implements Reportable {
 
     public Command setVelocityCommand(double velocity) {
         return Commands.runOnce(() -> setVelocity(velocity));
-    }
-
-    public Command setVelocityCommand(double indexerVelocity, double trapVelocity) {
-        return Commands.runOnce(() -> setVelocity(indexerVelocity, trapVelocity));
     }
 
     public Command incrementVelocityCommand(double increment) {
@@ -247,7 +174,7 @@ public class Indexer extends SubsystemBase implements Reportable {
     }
 
     public Command indexCommand() {
-        return setVelocityCommand(IndexerConstants.kIndexerVelocityRPS.get(), IndexerConstants.kTrapVelocityRPS.get());
+        return setVelocityCommand(IndexerConstants.kIndexerVelocityRPS.get());
     }
 
     public Command reverseIndexCommand() {
@@ -274,7 +201,5 @@ public class Indexer extends SubsystemBase implements Reportable {
         tab.addBoolean("Indexer Subsystem Enabled", () -> enabled);
         tab.addDouble("Indexer Position", () -> indexer.getPosition().getValueAsDouble());
         tab.addDouble("Indexer Velocity", () -> indexer.getVelocity().getValueAsDouble());
-        tab.addDouble("Trap Position", () -> trap.getPosition().getValueAsDouble());
-        tab.addDouble("Trap Velocity", () -> trap.getVelocity().getValueAsDouble());
     }
 }

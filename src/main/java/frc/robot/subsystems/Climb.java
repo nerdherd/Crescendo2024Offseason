@@ -4,8 +4,10 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -21,20 +23,37 @@ import frc.robot.Constants.SuperStructureConstants;
 import frc.robot.Constants.ClimbConstants.ClimbPostions;
 
 public class Climb extends SubsystemBase implements Reportable {
-    private final TalonFX climbMotor;
-    private final TalonFXConfigurator climbConfigurator;
-    private final VelocityVoltage climbMotorVelocityRequest = new VelocityVoltage(0, 0, true, 0, 0, false, false, false);
+    private final TalonFX leftClimbMotor;
+    private final TalonFX rightClimbMotor;
+    private final TalonFXConfigurator leftClimbConfigurator;
+    private final TalonFXConfigurator rightClimbConfigurator;
+
+    private final VelocityVoltage leftClimbMotorVelocityRequest = new VelocityVoltage(0, 0, true, 0, 0, false, false, false);
+    private final VelocityVoltage rightClimbMotorVelocityRequest = new VelocityVoltage(0, 0, true, 0, 0, false, false, false);
+    
+    private final VoltageOut leftVoltageRequest = new VoltageOut(0);
+    private final VoltageOut rightVoltageRequest = new VoltageOut(0);
+
+    private final Follower followRequest = new Follower(ClimbConstants.kLeftClimbMotorID, true);
+
     private final PIDController climbPID = new PIDController(0, 0, 0);
 
     private final NeutralOut brakeRequest = new NeutralOut();
     
     private ClimbPostions climbPositionState = ClimbPostions.NEUTRAL;
+
     private boolean enabled = true;
+    public boolean velocityControl = true;
 
     public Climb() {
-        climbMotor = new TalonFX(Constants.ClimbConstants.kClimbMotorID, SuperStructureConstants.kCANivoreBusName);
-        climbMotor.setInverted(false); // todo reversed?????
-        climbConfigurator = climbMotor.getConfigurator();
+        leftClimbMotor = new TalonFX(Constants.ClimbConstants.kLeftClimbMotorID, SuperStructureConstants.kCANivoreBusName);
+        leftClimbMotor.setInverted(false); // todo reversed?????
+        leftClimbConfigurator = leftClimbMotor.getConfigurator();
+
+        rightClimbMotor = new TalonFX(Constants.ClimbConstants.kLeftClimbMotorID, SuperStructureConstants.kCANivoreBusName);
+        rightClimbConfigurator = rightClimbMotor.getConfigurator();
+
+        rightClimbMotor.setControl(followRequest);
         
         configureMotor();
     }
@@ -42,14 +61,22 @@ public class Climb extends SubsystemBase implements Reportable {
      * configure motors things
      */
     public void configureMotor() {
-        TalonFXConfiguration climbMotorConfigs = new TalonFXConfiguration();
-        climbConfigurator.refresh(climbMotorConfigs);
+        TalonFXConfiguration leftClimbMotorConfigs = new TalonFXConfiguration();
+        leftClimbConfigurator.refresh(leftClimbMotorConfigs);
+
+        TalonFXConfiguration rightClimbMotorConfigs = new TalonFXConfiguration();
+        rightClimbConfigurator.refresh(rightClimbMotorConfigs);
 
         // todo fill in configs
 
-        StatusCode status = climbConfigurator.apply(climbMotorConfigs);
+        StatusCode status = leftClimbConfigurator.apply(leftClimbMotorConfigs);
         if (!status.isOK()) {
-            DriverStation.reportError("Could not apply climb motor configs, error code: " + status.toString(), new Error().getStackTrace());
+            DriverStation.reportError("Could not apply left climb motor configs, error code: " + status.toString(), new Error().getStackTrace());
+        }
+
+        status = rightClimbConfigurator.apply(rightClimbMotorConfigs);
+        if (!status.isOK()) {
+            DriverStation.reportError("Could not apply right climb motor configs, error code: " + status.toString(), new Error().getStackTrace());
         }
     }
     /**
@@ -59,7 +86,7 @@ public class Climb extends SubsystemBase implements Reportable {
         // load Preferences (Constants.*Constants.property.loadPreferences())
         TalonFXConfiguration climbConfiguration = new TalonFXConfiguration();
 
-        climbMotor.getConfigurator().refresh(climbConfiguration);
+        leftClimbMotor.getConfigurator().refresh(climbConfiguration);
 
         // todo load preferences/apply to climbConfiguration
         ClimbConstants.kClimbkP.loadPreferences();
@@ -70,7 +97,7 @@ public class Climb extends SubsystemBase implements Reportable {
         climbPID.setPID(ClimbConstants.kClimbkP.get(), ClimbConstants.kClimbkI.get(), ClimbConstants.kClimbkD.get());
         climbPID.setTolerance(ClimbConstants.kClimbPIDErrorTolerance.get(), ClimbConstants.kClimbPIDErrorDerivativeTolerance.get());
 
-        StatusCode status = climbMotor.getConfigurator().apply(climbConfiguration);
+        StatusCode status = leftClimbMotor.getConfigurator().apply(climbConfiguration);
         if (!status.isOK()) {
             DriverStation.reportError("Could not apply climb motor PID configs, error code: " + status.toString(), new Error().getStackTrace());
         }
@@ -79,19 +106,19 @@ public class Climb extends SubsystemBase implements Reportable {
     @Override
     public void periodic() {
         if (!enabled) {
-            climbMotor.setControl(brakeRequest);
+            leftClimbMotor.setControl(brakeRequest);
             setPositionStateNeutral();
             return;
         }
 
-        if(Math.abs(climbMotorVelocityRequest.Velocity) < 0.5) {
-            climbMotorVelocityRequest.Velocity = 0;
-            climbMotor.setControl(brakeRequest);
+        if(Math.abs(leftClimbMotorVelocityRequest.Velocity) < 0.5) {
+            leftClimbMotorVelocityRequest.Velocity = 0;
+            leftClimbMotor.setControl(brakeRequest);
             setPositionStateNeutral();
             return;
         }
         
-        climbMotor.setControl(climbMotorVelocityRequest);
+        leftClimbMotor.setControl(leftClimbMotorVelocityRequest);
         // STATE MACHINE KYLE HUANG FOREVER
         switch (climbPositionState) {
             case TOP:
@@ -100,7 +127,7 @@ public class Climb extends SubsystemBase implements Reportable {
                     return;
                 }
                 //ClimbConstants.kClimbMaxPosition.loadPreferences();
-                setClimbVelocity(climbPID.calculate(climbMotor.getPosition().getValueAsDouble(), ClimbConstants.kClimbMaxPosition.get()));
+                setClimbVelocity(climbPID.calculate(leftClimbMotor.getPosition().getValueAsDouble(), ClimbConstants.kClimbMaxPosition.get()));
                 break;
             case BOTTOM:
                 if (climbPID.atSetpoint()) {
@@ -108,12 +135,12 @@ public class Climb extends SubsystemBase implements Reportable {
                     return;
                 }
                 //ClimbConstants.kClimbMinPosition.loadPreferences();
-                setClimbVelocity(climbPID.calculate(climbMotor.getPosition().getValueAsDouble(), ClimbConstants.kClimbMinPosition.get()));
+                setClimbVelocity(climbPID.calculate(leftClimbMotor.getPosition().getValueAsDouble(), ClimbConstants.kClimbMinPosition.get()));
                 break;
             default:
                 climbPID.reset();
-                climbMotorVelocityRequest.Velocity = 0;
-                climbMotor.setControl(brakeRequest);
+                leftClimbMotorVelocityRequest.Velocity = 0;
+                leftClimbMotor.setControl(brakeRequest);
                 break;
         }
     }
@@ -150,7 +177,7 @@ public class Climb extends SubsystemBase implements Reportable {
      * @param verbosity velocity
      */
     private void setClimbVelocity(double verbosity) {
-        climbMotorVelocityRequest.Velocity = verbosity; // verbosity
+        leftClimbMotorVelocityRequest.Velocity = verbosity; // verbosity
     }
 
     // ~~~~~~ CONTROL COMMANDS ~~~~~~
@@ -200,8 +227,8 @@ public class Climb extends SubsystemBase implements Reportable {
     public void initShuffleboard(LOG_LEVEL priority) {
         ShuffleboardTab tab = Shuffleboard.getTab("Climb");
         tab.addBoolean("Climb Motor Enabled", () -> enabled);
-        tab.addDouble("Climb Motor Position", () -> climbMotor.getPosition().getValueAsDouble());
-        tab.addDouble("Climb Motor Velocity", () -> climbMotor.getVelocity().getValueAsDouble());
+        tab.addDouble("Climb Motor Position", () -> leftClimbMotor.getPosition().getValueAsDouble());
+        tab.addDouble("Climb Motor Velocity", () -> leftClimbMotor.getVelocity().getValueAsDouble());
     }
 
 }

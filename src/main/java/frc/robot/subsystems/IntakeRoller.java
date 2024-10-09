@@ -25,7 +25,7 @@ import frc.robot.Constants.ShooterConstants;
 
 public class IntakeRoller extends SubsystemBase implements Reportable {
 
-    private final TalonFX IntakeMotor;
+    private final TalonFX intakeMotor;
     private final TalonFXConfigurator IntakeConfigurator;
     private final VelocityVoltage VelocityRequest = new VelocityVoltage(0, 0, true, 0, 0, false, false, false);
     private final VoltageOut VoltageRequest = new VoltageOut(0, true, false, false, false);
@@ -36,9 +36,9 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
     public boolean velocityControl = true;
 
     public IntakeRoller() {
-        IntakeMotor = new TalonFX(IntakeConstants.kIntakeMotorID, "rio");
-        IntakeMotor.setInverted(false); //check later
-        IntakeConfigurator = IntakeMotor.getConfigurator();
+        intakeMotor = new TalonFX(IntakeConstants.kIntakeMotorID, "rio");
+        intakeMotor.setInverted(false); //check later
+        IntakeConfigurator = intakeMotor.getConfigurator();
 
         CommandScheduler.getInstance().registerSubsystem(this);
 
@@ -78,7 +78,7 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
 
         TalonFXConfiguration IntakeMotorConfigs = new TalonFXConfiguration();
         
-        IntakeMotor.getConfigurator().refresh(IntakeMotorConfigs);
+        intakeMotor.getConfigurator().refresh(IntakeMotorConfigs);
         IntakeConstants.kPIntakeMotor.loadPreferences();
         IntakeConstants.kIIntakeMotor.loadPreferences();
         IntakeConstants.kDIntakeMotor.loadPreferences();
@@ -88,7 +88,7 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
         IntakeMotorConfigs.Slot0.kD = 0; //IntakeConstants.kDIntakeMotor.get();
         IntakeMotorConfigs.Slot0.kV = 0.1; //IntakeConstants.kVIntakeMotor.get();
 
-        StatusCode Result = IntakeMotor.getConfigurator().apply(IntakeMotorConfigs);
+        StatusCode Result = intakeMotor.getConfigurator().apply(IntakeMotorConfigs);
 
         if (!Result.isOK()){
             DriverStation.reportError("Could not apply intake configs, error code:"+ Result.toString(), new Error().getStackTrace());
@@ -98,23 +98,23 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
     @Override
     public void periodic() {
         if (!enabled) {
-            IntakeMotor.setControl(brakeRequest);
+            intakeMotor.setControl(brakeRequest);
             return;
         }
 
         if (Math.abs(VelocityRequest.Velocity) < 0.5) {
             VelocityRequest.Velocity = 0;
-            IntakeMotor.setControl(brakeRequest);
+            intakeMotor.setControl(brakeRequest);
             return;
         }
 
         if (velocityControl) {
-            IntakeMotor.setControl(VelocityRequest);
+            intakeMotor.setControl(VelocityRequest);
             return;
         }
         
         VoltageRequest.Output = VelocityRequest.Velocity * 12 / 100;
-        IntakeMotor.setControl(VoltageRequest);
+        intakeMotor.setControl(VoltageRequest);
     }
 
     //****************************** VELOCITY METHODS ******************************//
@@ -122,7 +122,7 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
     public void stop() {
         this.enabled = false;
         VelocityRequest.Velocity = 0;
-        IntakeMotor.setControl(brakeRequest);
+        intakeMotor.setControl(brakeRequest);
     }
 
     public void setEnabled(boolean enabled) {
@@ -222,7 +222,7 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
     public void initShuffleboard(LOG_LEVEL priority) {
         ShuffleboardTab tab = Shuffleboard.getTab("Intake");
         tab.addBoolean("Intake Roller Enabled", () -> enabled);
-        tab.addDouble("Intake Velocity", () -> IntakeMotor.getVelocity().getValueAsDouble());
+        tab.addDouble("Intake Velocity", () -> intakeMotor.getVelocity().getValueAsDouble());
     }
     
 }
