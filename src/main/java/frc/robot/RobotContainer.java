@@ -27,7 +27,7 @@ import frc.robot.subsystems.swerve.SwerveDrivetrain.DRIVE_MODE;
 import frc.robot.subsystems.vision.jurrasicMarsh.LimelightHelpers;
 
 public class RobotContainer implements Reportable {
-  public Gyro imu = null;
+  public Gyro imu = new PigeonV2(2);
   
   public SwerveDrivetrain swerveDrive;
   public IntakeRoller intakeRoller;
