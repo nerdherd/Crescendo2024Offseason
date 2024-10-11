@@ -183,6 +183,8 @@ public class RobotContainer implements Reportable {
   public void initDefaultCommands_test() {}
 
   public void configureBindings_teleop() {
+    commandDriverController.share().whileTrue(Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle()));
+
     commandOperatorController.L1().whileTrue(
       Commands.sequence(
         intakeRoller.setEnabledCommand(true),
