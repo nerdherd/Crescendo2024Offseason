@@ -119,7 +119,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
          *     in meters, y position in meters, and heading in radians). Increase these numbers to trust
          *     the vision pose measurement less.
         */
-        this.poseEstimator = new SwerveDrivePoseEstimator(kDriveKinematics, new Rotation2d(), getModulePositions(), new Pose2d(),
+        this.poseEstimator = new SwerveDrivePoseEstimator(kDriveKinematics, gryo.getImu().Rotation2d(), getModulePositions(), new Pose2d(),
           VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)), // TODO: Set pose estimator weights
           VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30))); 
         
@@ -222,7 +222,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             runModules();
         }
         
-        poseEstimator.update(new Rotation2d(), getModulePositions());
+        poseEstimator.update(gyro.getImu().Rotation2d(), getModulePositions());
 
         if (enableVisionPE)
         {
@@ -298,7 +298,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
      * @param pose  A Pose2D representing the pose of the robot
      */
     public void resetOdometry(Pose2d pose) {
-        poseEstimator.resetPosition(new Rotation2d(), getModulePositions(), pose);
+        poseEstimator.resetPosition(gryo.getImu().Rotation2d(), getModulePositions(), pose);
     }
 
     public void resetOdometryWithAlliance(Pose2d pose){
@@ -314,7 +314,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         // gyro.setOffset(0);
         Pose2d pose = getPose();
         Pose2d newPose = new Pose2d(pose.getX(), pose.getY(), RobotContainer.IsRedSide() ? Rotation2d.fromDegrees(180) : Rotation2d.fromDegrees(0));
-        poseEstimator.resetPosition(new Rotation2d(), getModulePositions(), newPose);
+        poseEstimator.resetPosition(, getModulePositions(), newPose);
     }
 
     public void resetGyroFromPoseWithAlliance(Pose2d pose) {
@@ -519,7 +519,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     public void driveFieldOriented(double xSpeed, double ySpeed, double turnSpeed) {
         setModuleStates(
             SwerveDriveConstants.kDriveKinematics.toSwerveModuleStates(
-                ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, turnSpeed, new Rotation2d())
+                ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, turnSpeed,gyro.getImu().Rotation2d() )
             )
         );
     }

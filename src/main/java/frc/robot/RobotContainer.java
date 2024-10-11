@@ -34,13 +34,14 @@ import frc.robot.subsystems.ShooterRoller;
 import frc.robot.subsystems.SuperSystem;
 import frc.robot.subsystems.Tramp;
 import frc.robot.subsystems.imu.Gyro;
+import frc.robot.subsystems.imu.PigeonV2;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import frc.robot.subsystems.swerve.SwerveDrivetrain.DRIVE_MODE;
 import frc.robot.subsystems.vision.jurrasicMarsh.LimelightHelpers;
 import frc.robot.util.NerdyMath;
 
 public class RobotContainer implements Reportable {
-  public Gyro imu = null;
+  public Gyro imu = new PigeonV2(2);
   
   public Indexer indexer = new Indexer();
   public IntakeRoller intakeRoller = new IntakeRoller();
