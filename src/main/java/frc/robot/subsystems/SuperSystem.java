@@ -165,7 +165,7 @@ public class SuperSystem {
                 tramp.hasReachedPosition(TrapConstants.kElevatorDownPosition)),
                 Commands.waitSeconds(1)
             ),
-            shooterRoller.setVelocityCommand(0, 0),
+            shooterRoller.setVelocityCommand(0, 0), // TODO placeholder values
             shooterRoller.setEnabledCommand(true),
             indexer.setEnabledCommand(true),
             indexer.indexToElevatorCommand(),
@@ -176,6 +176,33 @@ public class SuperSystem {
         });
 
         command.addRequirements(indexer, shooterPivot, shooterRoller);
+        return command;
+    }
+
+    public Command shoot() { // copypasted from old code
+        Command command = Commands.either(
+            // Pass
+            Commands.sequence(
+                Commands.runOnce(() -> isPassing = true),
+                shooterPivot.setPositionCommand(ShooterConstants.kSpeakerPosition.get()),
+                shooterRoller.setEnabledCommand(true),
+                shooterRoller.setVelocityCommand(37),
+                Commands.waitSeconds(0.3),
+                indexer.setEnabledCommand(true),
+                indexer.indexCommand()
+            ),
+            // Shoot
+            Commands.sequence(
+                Commands.runOnce(() -> isPassing = false),
+                indexer.setEnabledCommand(true),
+                indexer.indexCommand()
+            ),
+            () -> shooterRoller.getTargetVelocityLeft() == 0
+               && shooterRoller.getTargetVelocityRight() == 0
+        );
+
+        command.addRequirements(indexer);
+
         return command;
     }
 
@@ -206,7 +233,7 @@ public class SuperSystem {
         Command command = Commands.sequence(
             tramp.setEnabledCommand(true),
             tramp.setElevatorAmpCommand(),
-            tramp.settrampShootCommand()
+            tramp.setTrampShootCommand()
 
 
         ).finallyDo(() -> {
