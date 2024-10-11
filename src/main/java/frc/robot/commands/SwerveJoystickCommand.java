@@ -156,7 +156,7 @@ public class SwerveJoystickCommand extends Command {
             swerveDrive.setDriveMode(DRIVE_MODE.FIELD_ORIENTED);
             chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                 filteredXSpeed, filteredYSpeed, filteredTurningSpeed, 
-                swerveDrive.getImu().Rotation2d();
+                swerveDrive.getImu().getRotation2d());
         } else {
             swerveDrive.setDriveMode(DRIVE_MODE.ROBOT_ORIENTED);
             chassisSpeeds = new ChassisSpeeds(
