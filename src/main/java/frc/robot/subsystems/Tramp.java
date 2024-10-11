@@ -138,7 +138,7 @@ public class Tramp extends SubsystemBase implements Reportable{
     }
 
     // elevator tramp Shoot
-    public Command settrampShootCommand() {
+    public Command setTrampShootCommand() {
         return Commands.runOnce(() -> trampShoot());
     }
 
