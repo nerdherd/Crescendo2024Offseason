@@ -178,9 +178,9 @@ public final class Constants {
   }
 
   public static final class SwerveAutoConstants {
-    public static final PrefDouble kPTurnToAngle = new PrefDouble("kP Theta Teleop", 6);
-    public static final PrefDouble kITurnToAngle = new PrefDouble("kI Theta Teleop", 0);
-    public static final PrefDouble kDTurnToAngle = new PrefDouble("kD Theta Teleop", 0.2);
+    public static final double kPTurnToAngle = 6;
+    public static final double kITurnToAngle = 0;
+    public static final double kDTurnToAngle = 0.2;
     public static final double kTurnToAnglePositionToleranceAngle = 5;
     public static final double kTurnToAngleVelocityToleranceAnglesPerSec = 2;
     public static final double kTurnToAngleFeedForwardDegreesPerSecond = 6;

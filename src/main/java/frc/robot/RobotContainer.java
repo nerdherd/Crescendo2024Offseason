@@ -195,9 +195,13 @@ public class RobotContainer implements Reportable {
           }
           return 270.0;
         }
-        // if (driverController.getCrossButton()) {
-        //   return 180.0;
-        // }
+        if (driverController.getCrossButton()) {
+           return 180.0;
+         }
+        
+         if(driverController.getTriangleButton()) {
+            return 0.0;
+         }
         if (driverController.getL2Button()) {
           return swerveDrive.getTurnToSpecificTagAngle(IsRedSide() ? 4 : 7); // 4 if red side, 7 if blue | TODO, update?
         }
