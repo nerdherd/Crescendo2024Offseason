@@ -159,8 +159,8 @@ public class RobotContainer implements Reportable {
       () -> false, // should be robot oriented now on true
       () -> false,
       // driverController::getCrossButton, // Towing
-      // driverController::getR2Button, // Precision/"Sniper Button"
-      () -> driverController.getR2Button(), // Precision mode (disabled)
+      driverController::getR2Button, // Precision/"Sniper Button"
+      // () -> driverController.getR2Button(), // Precision mode (disabled)
       () -> {
         return (
           driverController.getR1Button() 
@@ -219,105 +219,81 @@ public class RobotContainer implements Reportable {
 
   public void initDefaultCommands_test() {}
 
-  // Trigger armTrigger = new Trigger(
-  //   () -> shooterPivot.atTargetPositionAccurate()
-  //       && shooterPivot.getTargetPositionDegrees() > ShooterConstants.kFullStowPosition.get()
-  //       && shooterRoller.getVelocityLeft() > (shooterRoller.getTargetVelocityLeft() * 0.6)
-  //       && shooterRoller.getTargetVelocityLeft() > 0
-  //       && shooterRoller.getVelocityRight() > (shooterRoller.getTargetVelocityRight() * 0.6)
-  //       && shooterRoller.getTargetVelocityRight() > 0
-  // );
-
   public void configureBindings_teleop() {
-    // commandDriverController.share() is unbound
+
     commandDriverController.options().whileTrue(
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle())
     );
-    // commandDriverController.touchpad().whileTrue(superSystem.shoot())
-    //   .whileFalse(superSystem.stow());
     
-    commandDriverController.L2().whileTrue(Commands.sequence( // copypasted from old code
-      Commands.race(
-        superSystem.shootSpeakerAutoAim(),
+    commandDriverController.L2().whileTrue(
+      Commands.sequence(
+        shooterPivot.setEnabledCommand(true),
+        shooterRoller.setEnabledCommand(true),
+        shooterRoller.setRightVelocityCommand(-1),
+        shooterPivot.setPositionCommand(ShooterConstants.kSpeakerPosition.get()),
+        Commands.waitUntil(() -> shooterPivot.hasReachedPositionAccurate(ShooterConstants.kSpeakerPosition.get())),
+        Commands.waitUntil(() -> shooterRoller.atTargetVelocityRight()),
+        shooterRoller.setLeftVelocityCommand(-1),
+        Commands.waitUntil(() -> !shooterBeamBreak.noteSensed())
+      )).onFalse(
         Commands.sequence(
-          Commands.race(
-            // Commands.waitUntil(() -> 
-            //   // aimTrigger.getAsBoolean() 
-            //   // && 
-            //   armTrigger.getAsBoolean()
-            // ),
-            Commands.waitSeconds(1.5)
-          ),
-          Commands.waitSeconds(0.1),
-          superSystem.indexer.setEnabledCommand(true),
-          superSystem.indexer.indexCommand(),
-          Commands.either(
-            Commands.none(),
-            Commands.waitSeconds(0.5),
-            () -> shooterBeamBreak.noteSensed()
-          ),
-          Commands.waitUntil(() -> !shooterBeamBreak.noteSensed())
+          shooterPivot.setEnabledCommand(false),
+          shooterRoller.setEnabledCommand(false)
         )
-      ),
-      superSystem.stow()
-    )).whileFalse(superSystem.stow());
-    // commandDriverController.R2() is in SwerveJoysitckCommand
-    commandDriverController.L1().whileTrue(superSystem.shootSpeaker());
-    commandDriverController.L2().whileTrue(superSystem.shootAmp());
-    commandDriverController.share().whileTrue(
-      Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle())
-    );
-    // commandDriverController.options() is unbound
-    commandDriverController.touchpad().whileTrue(superSystem.shoot())
-      .whileFalse(superSystem.stow());
-    // Driver lleft joystick controls SwerveDrive movement
-    // Driver lleft joystick controls SwerveDrive turning
-    commandOperatorController.R2().whileTrue(superSystem.climbSequenceHoldCommand()).onFalse(superSystem.climbSequenceRealeaseCommand());
-    commandOperatorController.L2().whileTrue(superSystem.intakeUntilSensed());
-    //commandOperatorController.R2().whileTrue(shooterRoller.shootSpeaker());
-    commandOperatorController.L1().whileTrue(
-      Commands.sequence(
-        intakeRoller.setEnabledCommand(true),
-        intakeRoller.setVelocityCommand(-8)
-      )).onFalse(intakeRoller.stopCommand());
-    commandOperatorController.R1().whileTrue(
-      Commands.sequence(
-        intakeRoller.setEnabledCommand(true),
-        intakeRoller.setVelocityCommand(8)
-      )).onFalse(intakeRoller.stopCommand());
-      commandOperatorController.triangle().whileTrue(indexer.indexToElevatorCommand());
-      commandOperatorController.square().whileTrue(tramp.setElevatorTrapCommand());
-      commandOperatorController.circle().whileTrue(tramp.setElevatorTrapCommand());
-      commandOperatorController.cross().whileTrue(tramp.setTrampShootCommand());
-      // commandOperatorController.share() is unbound
-      // commandOperatorController.share() is unbound
-      commandOperatorController.touchpad().whileTrue(climb.setPositionStateTopCommand());
-      // Operator left joystick manually controlls ShooterPivot
-    // commandDriverController.R2() is in SwerveJoystickCommand
-    // commandDriverController.L1().whileTrue(superSystem.shootSpeaker()); is in SwerveJoystickCommand
-    // commandDriverController.L2().whileTrue(superSystem.shootAmp()); is in SwerveJoystickCommand
-    // Driver left joystick controls SwerveDrive movement
-    // Driver right joystick controls SwerveDrive turning
+      );
 
-    // commandOperatorController.R2().whileTrue(shooterRoller.shootSpeaker()); -> is unbound
-    // commandOperatorController.L1().whileTrue( -> is unbound
-    //   Commands.sequence(
-    //     intakeRoller.setEnabledCommand(true),
-    //     intakeRoller.setVelocityCommand(-8)
-    //   )).onFalse(intakeRoller.stopCommand());
-    // commandOperatorController.R1().whileTrue(
-    //   Commands.sequence(
-    //     intakeRoller.setEnabledCommand(true),
-    //     intakeRoller.setVelocityCommand(8)
-    //   )).onFalse(intakeRoller.stopCommand());
-    // commandOperatorController.triangle().whileTrue(indexer.indexToElevatorCommand()); -> is unbound
-    commandOperatorController.square().whileTrue(tramp.setElevatorTrapCommand());
-    commandOperatorController.circle().whileTrue(tramp.setElevatorAmpCommand());
-    commandOperatorController.cross().whileTrue(tramp.setTrampShootCommand());
-    // commandOperatorController.share() is unbound
-    // commandOperatorController.share() is unbound
-    // commandOperatorController.touchpad().whileTrue(climb.setPositionStateTopCommand()); -> is unbound
-    // Operator left joystick manually controlls ShooterPivot -> is unbound
+    commandOperatorController.share().whileTrue(
+      Commands.sequence(
+        climb.setEnabledCommand(true),
+        climb.setPositionStateTopCommand()
+
+      )).onFalse(
+        climb.setEnabledCommand(false)
+      );
+
+    commandOperatorController.options().whileTrue(
+      Commands.sequence(
+        climb.setEnabledCommand(true),
+        climb.setPositionStateBottomCommand()
+
+      )).onFalse(
+        climb.setEnabledCommand(false)
+      );
+    commandOperatorController.L2().whileTrue(
+      Commands.sequence(
+        intakeRoller.setEnabledCommand(true),
+        intakeRoller.intakeCommand(),
+        Commands.waitUntil(() -> intakeBeamBreak.noteSensed())
+      )).onFalse(
+        intakeRoller.setEnabledCommand(false)
+    );
+    commandOperatorController.triangle().whileTrue(
+      Commands.sequence(
+        shooterPivot.setEnabledCommand(true),
+        shooterPivot.moveToNeutral()
+      )).onFalse(
+        shooterPivot.setEnabledCommand(false)
+
+
+    );
+
+    commandOperatorController.square().whileTrue(
+      Commands.sequence(
+        tramp.setEnabledCommand(true),
+        tramp.setElevatorAmpCommand()
+      )).onFalse(
+        tramp.setEnabledCommand(false)
+      );
+    
+    commandOperatorController.cross().whileTrue(
+      Commands.sequence(
+        tramp.setEnabledCommand(true),
+        tramp.setTrampShootCommand(),
+        Commands.waitUntil(() -> trampBeamBreak.noteSensed())
+      )).onFalse(
+        tramp.setEnabledCommand(false)
+      );
+    
   }
 
   public void configureBindings_test() {}
