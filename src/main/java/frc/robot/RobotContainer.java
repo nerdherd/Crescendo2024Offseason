@@ -261,9 +261,9 @@ public class RobotContainer implements Reportable {
       .whileFalse(superSystem.stow());
     // Driver lleft joystick controls SwerveDrive movement
     // Driver lleft joystick controls SwerveDrive turning
-
+    commandOperatorController.R2().whileTrue(superSystem.climbSequenceHoldCommand()).onFalse(superSystem.climbSequenceRealeaseCommand());
     commandOperatorController.L2().whileTrue(superSystem.intakeUntilSensed());
-    commandOperatorController.R2().whileTrue(shooterRoller.shootSpeaker());
+    //commandOperatorController.R2().whileTrue(shooterRoller.shootSpeaker());
     commandOperatorController.L1().whileTrue(
       Commands.sequence(
         intakeRoller.setEnabledCommand(true),

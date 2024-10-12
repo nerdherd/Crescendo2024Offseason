@@ -296,24 +296,24 @@ public final class Constants {
     public static final double kShooterMaxVelocityRPS =  100;
     public static final double kShooterMinVelocityRPS = -100;
  
-    public static final PrefDouble kTopOuttakeHigh  = new PrefDouble("Top Shooter Outtake High", 70); // Was 50    3/3/24 Code Orange
-    public static final PrefDouble kTopOuttakeLow   = new PrefDouble("Top Shooter Outtake Low", 20);
+    public static final PrefDouble kLeftOuttakeHigh  = new PrefDouble("Top Shooter Outtake High", 70); // Was 50    3/3/24 Code Orange
+    public static final PrefDouble kLeftOuttakeLow   = new PrefDouble("Top Shooter Outtake Low", 20);
     public static final PrefDouble kTopOuttakeLowAutostart   = new PrefDouble("Top Shooter Outtake Low", 50);// to save spain time
     public static final PrefDouble kTopOuttakeHighAutostart   = new PrefDouble("Top Shooter Outtake High Auto", 70);// to save spain time
-    public static final PrefDouble kTopOuttakeMidAutostart = new PrefDouble("Top Shooter Outtake Auto", 60);
-    public static final PrefDouble kTopOuttakeAuto1 = new PrefDouble("Top Shooter Outtake Auto 1", 20);
-    public static final PrefDouble kTopOuttakeAuto2 = new PrefDouble("Top Shooter Outtake Auto 2", 100);
+    public static final PrefDouble kLeftOuttakeMidAutostart = new PrefDouble("Top Shooter Outtake Auto", 60);
+    public static final PrefDouble kLeftOuttakeAuto1 = new PrefDouble("Top Shooter Outtake Auto 1", 20);
+    public static final PrefDouble kLeftOuttakeAuto2 = new PrefDouble("Top Shooter Outtake Auto 2", 100);
     public static final PrefDouble kTopOuttakeAuto3 = new PrefDouble("Top Shooter Outtake Auto 3", 100);
-    public static final PrefDouble kTopOuttakeAmp   = new PrefDouble("Top Shooter Outtake Amp", 10);
-    public static final PrefDouble kTopIntake       = new PrefDouble("Top Shooter Intake", -10);
+    public static final PrefDouble kLeftOuttakeAmp   = new PrefDouble("Top Shooter Outtake Amp", 10);
+    public static final PrefDouble kLeftIntake       = new PrefDouble("Top Shooter Intake", -10);
  
-    public static final PrefDouble kBottomOuttakeHigh  = new PrefDouble("Bottom Shooter Outtake High", 80);
-    public static final PrefDouble kBottomOuttakeLow   = new PrefDouble("Bottom Shooter Outtake Low", 20);
-    public static final PrefDouble kBottomOuttakeAuto1 = new PrefDouble("Bottom Shooter Outtake Auto 1", 20);
-    public static final PrefDouble kBottomOuttakeAuto2 = new PrefDouble("Bottom Shooter Outtake Auto 2", 60);
+    public static final PrefDouble kRightOuttakeHigh  = new PrefDouble("Bottom Shooter Outtake High", 80);
+    public static final PrefDouble kRightOuttakeLow   = new PrefDouble("Bottom Shooter Outtake Low", 20);
+    public static final PrefDouble kRightOuttakeAuto1 = new PrefDouble("Bottom Shooter Outtake Auto 1", 20);
+    public static final PrefDouble kRightOuttakeAuto2 = new PrefDouble("Bottom Shooter Outtake Auto 2", 60);
     public static final PrefDouble kBottomOuttakeAuto3 = new PrefDouble("Bottom Shooter Outtake Auto 3", 60);
-    public static final PrefDouble kBottomOuttakeAmp   = new PrefDouble("Bottom Shooter Outtake Amp", 10);
-    public static final PrefDouble kBottomIntake       = new PrefDouble("Bottom Shooter Intake", -10);
+    public static final PrefDouble kRightOuttakeAmp   = new PrefDouble("Bottom Shooter Outtake Amp", 10);
+    public static final PrefDouble kRightIntake       = new PrefDouble("Bottom Shooter Intake", -10);
  
     public static final PrefDouble kPLeftMotor = new PrefDouble("kP Left Shooter", 0.2);
     public static final PrefDouble kILeftMotor = new PrefDouble("kI Left Shooter", 0.0004);

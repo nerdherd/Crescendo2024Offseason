@@ -161,20 +161,21 @@ public class SuperSystem {
             tramp.setEnabledCommand(true),
             tramp.setElevatorDownCommand(),
             Commands.deadline(
-                Commands.waitUntil(() -> 
-                tramp.hasReachedPosition(TrapConstants.kElevatorDownPosition)),
+                Commands.waitUntil(() -> tramp.hasReachedPosition(TrapConstants.kElevatorDownPosition)),
                 Commands.waitSeconds(1)
             ),
-            shooterRoller.setVelocityCommand(0, 0), // TODO placeholder values
             shooterRoller.setEnabledCommand(true),
+            shooterRoller.setLeftVelocityCommand(1), // Change Later
             indexer.setEnabledCommand(true),
-            indexer.indexToElevatorCommand(),
-            Commands.waitUntil(trampBeamBreak::noteSensed)
+            indexer.setVelocityCommand(-1),
+            Commands.deadline(
+                Commands.waitUntil(trampBeamBreak::noteSensed),
+                Commands.waitSeconds(1)
+            )
         ).finallyDo(() -> {
             indexer.stop();
             shooterRoller.stop();
         });
-
         command.addRequirements(indexer, shooterPivot, shooterRoller);
         return command;
     }
@@ -401,11 +402,8 @@ public class SuperSystem {
 
     public Command climbSequenceHoldCommand(){
         Command command = Commands.sequence(
-            climb.setEnabledCommand(true)
-        ).finallyDo(
-            () -> {
-                climb.setPositionState(ClimbPostions.TOP);
-            }
+            climb.setEnabledCommand(true),
+            climb.setPositionStateTopCommand()
         );
         return command;
         
@@ -413,11 +411,8 @@ public class SuperSystem {
     
     public Command climbSequenceRealeaseCommand(){
         Command command = Commands.sequence(
-            climb.setEnabledCommand(true)
-        ).finallyDo(
-            () -> {
-                climb.setPositionState(ClimbPostions.BOTTOM);
-            }
+            climb.setEnabledCommand(true),
+            climb.setPositionStateBottomCommand()
         );
         return command; 
     }
