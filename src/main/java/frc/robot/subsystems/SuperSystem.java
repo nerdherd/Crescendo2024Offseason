@@ -143,7 +143,7 @@ public class SuperSystem {
             shooterRoller.setEnabledCommand(true),
             intakeRoller.intakeCommand(),
             indexer.indexToShooterCommand(),
-            shooterRoller.setVelocityCommand(-10),
+            shooterRoller.setVelocityCommand(-1),
             Commands.waitUntil(shooterBeamBreak::noteSensed)
 
         ).finallyDo(() -> {
@@ -168,10 +168,7 @@ public class SuperSystem {
             shooterRoller.setLeftVelocityCommand(1), // Change Later
             indexer.setEnabledCommand(true),
             indexer.setVelocityCommand(-1),
-            Commands.deadline(
-                Commands.waitUntil(trampBeamBreak::noteSensed),
-                Commands.waitSeconds(1)
-            )
+            Commands.waitUntil(trampBeamBreak::noteSensed)
         ).finallyDo(() -> {
             indexer.stop();
             shooterRoller.stop();
@@ -209,17 +206,16 @@ public class SuperSystem {
 
     public Command shootSpeaker() {
         Command command = Commands.sequence(
-            shooterRoller.shootSpeakerRight(),
             shooterRoller.setEnabledCommand(true),
+            shooterRoller.shootSpeakerRight(),
             Commands.deadline(
                 Commands.waitUntil(() ->
                     shooterRoller.atTargetVelocityRight()),
                 Commands.waitSeconds(1)
             ),
-            shooterPivot.moveToSpeaker(),
             shooterPivot.setEnabledCommand(true),
-            indexer.indexToShooterCommand(),
-            indexer.setEnabledCommand(true)
+            shooterPivot.moveToSpeaker(),
+            shooterRoller.setLeftVelocityCommand(-1)
         ).finallyDo(() -> {
             indexer.stop();
             shooterPivot.stop();
@@ -235,11 +231,9 @@ public class SuperSystem {
             tramp.setEnabledCommand(true),
             tramp.setElevatorAmpCommand(),
             tramp.setTrampShootCommand()
-
-
         ).finallyDo(() -> {
-            tramp.stop();
             tramp.setElevatorDownCommand();
+            tramp.stop();
         });
         return command;
     }
