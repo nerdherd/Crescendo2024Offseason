@@ -22,6 +22,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.util.preferences.PrefBool;
 import frc.robot.util.preferences.PrefDouble;
 
@@ -471,12 +472,22 @@ public final class Constants {
     public static final int CANdleID = 0; // TODO change later
     public static final int CANdleLength = 8;
 
-    public enum LEDStrip {
-      CANDLE(0,8)
+    public static class Colors {
+      public static final Color BLACK = new Color(0.0, 0.0, 0.0); // shows up as nothing
+      public static final Color WHITE = new Color(1.0,1.0,1.0); 
+      public static final Color RED = new Color(1.0, 0.0, 0.0); 
+      public static final Color GREEN = new Color(0.0, 1.0, 0.0); 
+      public static final Color BLUE = new Color(0.0, 0.0, 1.0); 
+      public static final Color NERDHERD_BLUE = new Color(0.132, 0.415, 1.0); // #071635 as base, brightened fully
+    }
+    
+    public enum LEDStrips {
+      ALL(0, CANdleLength),
+      CANDLE(0,8),
       ;
 
       public int index, count;
-      LEDStrip(int _index, int _count) {
+      LEDStrips(int _index, int _count) {
         this.index = _index;
         this.count = _count;
       }
