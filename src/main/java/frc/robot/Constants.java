@@ -178,9 +178,9 @@ public final class Constants {
   }
 
   public static final class SwerveAutoConstants {
-    public static final double kPTurnToAngle = SmartDashboard.getNumber("kP Theta Teleop", 6);
-    public static final double kITurnToAngle = SmartDashboard.getNumber("kI Theta Teleop", 0);
-    public static final double kDTurnToAngle = SmartDashboard.getNumber("kD Theta Teleop", 0.2);
+    public static final PrefDouble kPTurnToAngle = new PrefDouble("kP Theta Teleop", 6);
+    public static final PrefDouble kITurnToAngle = new PrefDouble("kI Theta Teleop", 0);
+    public static final PrefDouble kDTurnToAngle = new PrefDouble("kD Theta Teleop", 0.2);
     public static final double kTurnToAnglePositionToleranceAngle = 5;
     public static final double kTurnToAngleVelocityToleranceAnglesPerSec = 2;
     public static final double kTurnToAngleFeedForwardDegreesPerSecond = 6;
@@ -223,9 +223,9 @@ public final class Constants {
     public static final double kFrontCameraHeightMeters = 0;
     public static final double kNoteHeightMeters = 0;
     public static final double kCameraPitchRadians = 0;
-    public static final double kSunflowerP = 0.2;
-    public static final double kSunflowerI = 0;
-    public static final double kSunflowerD = 0;
+    public static final PrefDouble kSunflowerP = new PrefDouble("SunflowerP", 0.2);
+    public static final PrefDouble kSunflowerI = new PrefDouble("SunflowerI", 0);
+    public static final PrefDouble kSunflowerD = new PrefDouble("SunflowerD", 0);
     // todo: fix names and ip's
     public static final String kLimelightFrontName = "limelight-front"; //kLimelightFrontName abruticus
     public static final String kLimelightFrontIP = "10.6.87.25:5802"; //kLimelightFrontIP abruticus
@@ -279,7 +279,7 @@ public final class Constants {
     public static final PrefDouble kPBottomMotor = new PrefDouble("P Bottom Motor", 0);
     public static final PrefDouble kIBottomMotor = new PrefDouble("I Bottom Motor", 0);
     public static final PrefDouble kDBottomMotor = new PrefDouble("D Bottom Motor", 0);
-    public static final PrefDouble kVBottomMotor =new PrefDouble("V Bottom Motor", 0);
+    public static final PrefDouble kVBottomMotor = new PrefDouble("V Bottom Motor", 0);
 
     public static final int kLeftMotorID = 51; //51 abruticus
     public static final int kRightMotorID = 52; //52 abruticus
@@ -296,24 +296,24 @@ public final class Constants {
     public static final double kShooterMaxVelocityRPS =  100;
     public static final double kShooterMinVelocityRPS = -100;
  
-    public static final PrefDouble kLeftOuttakeHigh  = new PrefDouble("Top Shooter Outtake High", 70); // Was 50    3/3/24 Code Orange
-    public static final PrefDouble kLeftOuttakeLow   = new PrefDouble("Top Shooter Outtake Low", 20);
-    public static final PrefDouble kTopOuttakeLowAutostart   = new PrefDouble("Top Shooter Outtake Low", 50);// to save spain time
-    public static final PrefDouble kTopOuttakeHighAutostart   = new PrefDouble("Top Shooter Outtake High Auto", 70);// to save spain time
-    public static final PrefDouble kLeftOuttakeMidAutostart = new PrefDouble("Top Shooter Outtake Auto", 60);
-    public static final PrefDouble kLeftOuttakeAuto1 = new PrefDouble("Top Shooter Outtake Auto 1", 20);
+    public static final PrefDouble kLeftOuttakeHigh = new PrefDouble("Top Shooter Outtake High", 70); // Was 50    3/3/24 Code Orange
+    public static final PrefDouble kLeftOuttakeLow  = new PrefDouble("Top Shooter Outtake Low",  20);
+    public static final PrefDouble kTopOuttakeLowAutostart  = new PrefDouble("Top Shooter Outtake Low", 50); // to save spain time
+    public static final PrefDouble kTopOuttakeHighAutostart = new PrefDouble("Top Shooter Outtake High Auto", 70); // to save spain time
+    public static final PrefDouble kLeftOuttakeMidAutostart = new PrefDouble("Top Shooter Outtake Auto",      60);
+    public static final PrefDouble kLeftOuttakeAuto1 = new PrefDouble("Top Shooter Outtake Auto 1",  20);
     public static final PrefDouble kLeftOuttakeAuto2 = new PrefDouble("Top Shooter Outtake Auto 2", 100);
-    public static final PrefDouble kTopOuttakeAuto3 = new PrefDouble("Top Shooter Outtake Auto 3", 100);
+    public static final PrefDouble kTopOuttakeAuto3  = new PrefDouble("Top Shooter Outtake Auto 3", 100);
     public static final PrefDouble kLeftOuttakeAmp   = new PrefDouble("Top Shooter Outtake Amp", 10);
     public static final PrefDouble kLeftIntake       = new PrefDouble("Top Shooter Intake", -10);
  
-    public static final PrefDouble kRightOuttakeHigh  = new PrefDouble("Bottom Shooter Outtake High", 80);
-    public static final PrefDouble kRightOuttakeLow   = new PrefDouble("Bottom Shooter Outtake Low", 20);
-    public static final PrefDouble kRightOuttakeAuto1 = new PrefDouble("Bottom Shooter Outtake Auto 1", 20);
-    public static final PrefDouble kRightOuttakeAuto2 = new PrefDouble("Bottom Shooter Outtake Auto 2", 60);
+    public static final PrefDouble kRightOuttakeHigh = new PrefDouble("Bottom Shooter Outtake High", 80);
+    public static final PrefDouble kRightOuttakeLow  = new PrefDouble("Bottom Shooter Outtake Low",  20);
+    public static final PrefDouble kRightOuttakeAuto1  = new PrefDouble("Bottom Shooter Outtake Auto 1", 20);
+    public static final PrefDouble kRightOuttakeAuto2  = new PrefDouble("Bottom Shooter Outtake Auto 2", 60);
     public static final PrefDouble kBottomOuttakeAuto3 = new PrefDouble("Bottom Shooter Outtake Auto 3", 60);
-    public static final PrefDouble kRightOuttakeAmp   = new PrefDouble("Bottom Shooter Outtake Amp", 10);
-    public static final PrefDouble kRightIntake       = new PrefDouble("Bottom Shooter Intake", -10);
+    public static final PrefDouble kRightOuttakeAmp = new PrefDouble("Bottom Shooter Outtake Amp", 10);
+    public static final PrefDouble kRightIntake     = new PrefDouble("Bottom Shooter Intake", -10);
  
     public static final PrefDouble kPLeftMotor = new PrefDouble("kP Left Shooter", 0.2);
     public static final PrefDouble kILeftMotor = new PrefDouble("kI Left Shooter", 0.0004);
@@ -335,40 +335,40 @@ public final class Constants {
     public static final double kPivotMaxPos = 108;
     public static final double kPivotMinPos = -72;
  
-    public static final PrefDouble kSpeakerPosition  = new PrefDouble("Pivot Speaker Position", -52.5);
-    public static final PrefDouble kSpeakerPositionAuto  = new PrefDouble("Pivot Speaker Position Auto", -46);
+    public static final PrefDouble kSpeakerPosition     = new PrefDouble("Pivot Speaker Position", -52.5);
+    public static final PrefDouble kSpeakerPositionAuto = new PrefDouble("Pivot Speaker Position Auto", -46);
     public static final PrefDouble kSpeakerPositionAutoStart  = new PrefDouble("Pivot Speaker Position Auto", -40); 
-    public static final PrefDouble kSpeakerPositionAutoStart2  = new PrefDouble("Pivot Speaker Position Auto", -27); 
+    public static final PrefDouble kSpeakerPositionAutoStart2 = new PrefDouble("Pivot Speaker Position Auto", -27); 
     public static final PrefDouble kSpeakerPosition2 = new PrefDouble("Pivot Speaker Position 2", -31);
     public static final PrefDouble kSpeakerPosition3 = new PrefDouble("Pivot Speaker Position 3", -29);
     public static final PrefDouble kNeutralPosition  = new PrefDouble("Pivot Neutral Position", 36);
     public static final PrefDouble kAmpPosition      = new PrefDouble("Pivot Amp Position"    , 41.6);
-    public static final PrefDouble kHandoffPosition  = new PrefDouble("Pivot Handoff Position", -45);
-    public static final PrefDouble kEjectPosition  = new PrefDouble("Pivot Eject Position", -30);
+    public static final PrefDouble kHandoffPosition  = new PrefDouble("Pivot Handoff Position",  -45);
+    public static final PrefDouble kEjectPosition    = new PrefDouble("Pivot Eject Position",    -30);
     public static final PrefDouble kHandoffPosition2 = new PrefDouble("Pivot Handoff Position2", -37);  
    
     public static final PrefDouble k4PieceHandoffPosition1 = new PrefDouble("4 Piece Handoff Position 1", -37);
     public static final PrefDouble k4PieceHandoffPosition2 = new PrefDouble("4 Piece Handoff Position 2", -37);
     public static final PrefDouble k4PieceHandoffPosition3 = new PrefDouble("4 Piece Handoff Position 3", -37);  
-    public static final PrefDouble k6PieceHandoffPosition = new PrefDouble("6 Piece Handoff Position", -43);
+    public static final PrefDouble k6PieceHandoffPosition  = new PrefDouble("6 Piece Handoff Position", -43);
  
-    public static final PrefDouble kFullStowPosition = new PrefDouble("Pivot Full Stow Position", -60);
+    public static final PrefDouble kFullStowPosition  = new PrefDouble("Pivot Full Stow Position", -60);
     public static final PrefDouble kPrepClimbPosition = new PrefDouble("Pivot Prep Climb Position", 0);
  
     public static final PrefDouble kPPivotMotor = new PrefDouble("kP Shooter Pivot", 60); //Old values from Abruticus
-    public static final PrefDouble kIPivotMotor = new PrefDouble("kI Shooter Pivot", 0); //Old values from Abruticus
-    public static final PrefDouble kDPivotMotor = new PrefDouble("kD Shooter Pivot", 0); //Old values from Abruticus
+    public static final PrefDouble kIPivotMotor = new PrefDouble("kI Shooter Pivot",  0); //Old values from Abruticus
+    public static final PrefDouble kDPivotMotor = new PrefDouble("kD Shooter Pivot",  0); //Old values from Abruticus
     public static final PrefDouble kVPivotMotor = new PrefDouble("kV Shooter Pivot", 25); //Old values from Abruticus
-    public static final PrefDouble kSPivotMotor = new PrefDouble("kS Shooter Pivot", 0.26); //Old values from Abruticus
-    public static final PrefDouble kAPivotMotor = new PrefDouble("kA Shooter Pivot", 0.5); //Old values from Abruticus
-    public static final PrefDouble kGPivotMotor = new PrefDouble("kG Shooter Pivot", 0.44); //Old values from Abruticus
+    public static final PrefDouble kSPivotMotor = new PrefDouble("kS Shooter Pivot",  0.26); //Old values from Abruticus
+    public static final PrefDouble kAPivotMotor = new PrefDouble("kA Shooter Pivot",  0.5); //Old values from Abruticus
+    public static final PrefDouble kGPivotMotor = new PrefDouble("kG Shooter Pivot",  0.44); //Old values from Abruticus
  
     public static final PrefDouble kCruiseAcceleration = new PrefDouble("Shooter Pivot Cruise Acceleration", 1.7);
-    public static final PrefDouble kCruiseVelocity = new PrefDouble("Shooter Pivot Cruise Velocity", 0.425);
+    public static final PrefDouble kCruiseVelocity     = new PrefDouble("Shooter Pivot Cruise Velocity", 0.425);
  
     // in degrees
-    public static final PrefDouble kPivotDeadband = new PrefDouble ("Shooter Pivot Deadband", 14.4);
-    public static final PrefDouble kPivotDeadbandClose = new PrefDouble ("Shooter Pivot Deadband Close", 2);
+    public static final PrefDouble kPivotDeadband = new PrefDouble("Shooter Pivot Deadband", 14.4);
+    public static final PrefDouble kPivotDeadbandClose = new PrefDouble("Shooter Pivot Deadband Close", 2);
  
     // in degrees
     public static final PrefDouble kPivotOffset = new PrefDouble("Shooter Pivot Offset", 0); //Old values from Abruticus 248.4
@@ -399,7 +399,7 @@ public final class Constants {
     public static final double kIndexerNeutralDeadband = 0.05;
 
     public static final PrefDouble kIndexerVelocityRPS = new PrefDouble("Indexer Velocity", 90); //Old values from Abruticus
-    public static final PrefDouble kTrapVelocityRPS = new PrefDouble("Trap Velocity", 81); //Old values from Abruticus
+    public static final PrefDouble kTrapVelocityRPS    = new PrefDouble("Trap Velocity",    81); //Old values from Abruticus
 
     public static final PrefDouble kIndexerReverseRPS = new PrefDouble("Indexer Reverse Velocity", -10); //Old values from Abruticus
     public static final double kIndexerMinVelocityRPS = -100; //Old values from Abruticus

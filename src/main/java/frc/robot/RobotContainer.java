@@ -299,7 +299,6 @@ public class RobotContainer implements Reportable {
     // Driver left joystick controls SwerveDrive movement
     // Driver right joystick controls SwerveDrive turning
 
-    commandOperatorController.L2().whileTrue(superSystem.intakeUntilSensed());
     // commandOperatorController.R2().whileTrue(shooterRoller.shootSpeaker()); -> is unbound
     // commandOperatorController.L1().whileTrue( -> is unbound
     //   Commands.sequence(
