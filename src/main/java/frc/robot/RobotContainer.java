@@ -233,8 +233,8 @@ public class RobotContainer implements Reportable {
         shooterPivot.setPositionCommand(ShooterConstants.kSpeakerPosition.get()),
         Commands.waitUntil(() -> shooterPivot.hasReachedPositionAccurate(ShooterConstants.kSpeakerPosition.get())),
         Commands.waitUntil(() -> shooterRoller.atTargetVelocityRight()),
-        shooterRoller.setLeftVelocityCommand(-1),
-        Commands.waitUntil(() -> !shooterBeamBreak.noteSensed())
+        shooterRoller.setLeftVelocityCommand(-1)
+        //Commands.waitUntil(() -> !shooterBeamBreak.noteSensed())
       )).onFalse(
         Commands.sequence(
           shooterPivot.setEnabledCommand(false),
@@ -262,8 +262,8 @@ public class RobotContainer implements Reportable {
     commandOperatorController.L2().whileTrue(
       Commands.sequence(
         intakeRoller.setEnabledCommand(true),
-        intakeRoller.intakeCommand(),
-        Commands.waitUntil(() -> intakeBeamBreak.noteSensed())
+        intakeRoller.intakeCommand()
+        // Commands.waitUntil(() -> intakeBeamBreak.noteSensed())
       )).onFalse(
         intakeRoller.setEnabledCommand(false)
     );
@@ -288,8 +288,8 @@ public class RobotContainer implements Reportable {
     commandOperatorController.cross().whileTrue(
       Commands.sequence(
         tramp.setEnabledCommand(true),
-        tramp.setTrampShootCommand(),
-        Commands.waitUntil(() -> trampBeamBreak.noteSensed())
+        tramp.setTrampShootCommand()
+        //Commands.waitUntil(() -> trampBeamBreak.noteSensed())
       )).onFalse(
         tramp.setEnabledCommand(false)
       );
