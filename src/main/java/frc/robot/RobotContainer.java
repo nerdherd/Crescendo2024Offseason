@@ -144,51 +144,19 @@ public class RobotContainer implements Reportable {
       swerveDrive,
       () -> -commandDriverController.getLeftY(), // Horizontal translation
       commandDriverController::getLeftX, // Vertical Translation
-      // () -> 0.0, // debug
       () -> {
-        // if (driverController.getL2Button()) {
-        //   SmartDashboard.putBoolean("Turn to angle 2", true);
-        //   double turnPower = apriltagCamera.getTurnToTagPower(swerveDrive, angleError, IsRedSide() ? 4 : 7, adjustmentCamera); 
-        //   SmartDashboard.putNumber("Turn Power", turnPower);
-        //   return turnPower;
-        // }
-        // SmartDashboard.putBoolean("Turn to angle 2", false);
         return commandDriverController.getRightX(); // Rotation
       },
-      // driverController::getSquareButton, // Field oriented
-      () -> false, // should be robot oriented now on true
-      () -> false,
-      // driverController::getCrossButton, // Towing
+      () -> true, // should be field oriented now on true
+      () -> false, // tow supplier
       driverController::getR2Button, // Precision/"Sniper Button"
-      // () -> driverController.getR2Button(), // Precision mode (disabled)
       () -> {
-        return (
-          driverController.getR1Button() 
-          || driverController.getL1Button() 
-          || driverController.getL2Button() 
-          || driverController.getCircleButton()
-          || driverController.getTriangleButton()
-          // || (
-          //   driverController.getTouchpad() && superSystem.getIsPassing()
-          // )
-          // || driverController.getPSButton()
-        ); // Turn to angle
-      }, 
-      // () -> false, // Turn to angle (disabled)
+        if (driverController.getCircleButton() || driverController.getCrossButton() || driverController.getTriangleButton()) {
+          return true;
+        }
+        return false;
+      },
       () -> { // Turn To angle Direction | TODO WIP
-        // if (
-        // (driverController.getTouchpad() && superSystem.getIsPassing())
-        // || 
-        // driverController.getTriangleButton()) { // turn shooter to speaker
-        //   return 0.0;
-        // }
-        // if (driverController.getSquareButton()) { // turn shooter to shoot over stage
-        //   if (!IsRedSide()) {
-        //     return 315.0;
-        //   } else {
-        //     return 45.0;
-        //   }
-        // }
         if (driverController.getCircleButton()) { // turn to amp
           if (!IsRedSide()){
             return 90.0;
@@ -197,27 +165,14 @@ public class RobotContainer implements Reportable {
         }
         if (driverController.getCrossButton()) {
            return 180.0;
-         }
-        
-         if(driverController.getTriangleButton()) {
-            return 0.0;
-         }
-        if (driverController.getL2Button()) {
-          return swerveDrive.getTurnToSpecificTagAngle(IsRedSide() ? 4 : 7); // 4 if red side, 7 if blue | TODO, update?
         }
-        if (driverController.getL1Button()) {
+        if(driverController.getTriangleButton()) {
           return 0.0;
         }
-        if (driverController.getR1Button()) {
-          return 0.0;
-        }
-        // if (driverController.getPSButton()) { // Turn to shuffleboard angle
-        //   return SmartDashboard.getNumber("Test Desired Angle", 0);
-        // }
-        return 0.0;
+        return swerveDrive.getImu().getHeading();
       }
-
     );
+
     swerveDrive.setDefaultCommand(swerveJoystickCommand);
 }
 

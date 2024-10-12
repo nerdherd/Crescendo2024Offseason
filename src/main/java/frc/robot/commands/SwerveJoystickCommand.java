@@ -7,6 +7,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.SwerveAutoConstants;
@@ -43,9 +44,9 @@ public class SwerveJoystickCommand extends Command {
      * @param turningSpdFunction    A supplier returning the desired turning speed
      * @param fieldOrientedFunction A boolean supplier that toggles field oriented/robot oriented mode.
      * @param towSupplier           A boolean supplier that toggles the tow mode.
-     * @param dodgeSupplier         A boolean supplier that toggles the dodge mode.
-     * @param dodgeDirectionSupplier A supplier that supplies the dodge direction.
-     * @param precisionSupplier     A boolean supplier that toggles the precision mode.
+     * @param precisionSupplier     A boolean supplier that puts robot into slow mode.
+     * @param turntoAngleSupplier   A boolean supplier that toggles turn to Angle 
+     * @param desiredAngleSupplier  A boolean supplier that toggles desired Angle
      */
     public SwerveJoystickCommand(SwerveDrivetrain swerveDrive,
             Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, 
@@ -124,9 +125,9 @@ public class SwerveJoystickCommand extends Command {
 
         // Turn to angle
         if (turnToAngleSupplier.get()) {
-            // turnToAngleController.setP(SmartDashboard.getNumber("kP Theta Teleop", SwerveAutoConstants.kPTurnToAngle));
-            // turnToAngleController.setI(SmartDashboard.getNumber("kI Theta Teleop", SwerveAutoConstants.kITurnToAngle));
-            // turnToAngleController.setD(SmartDashboard.getNumber("kD Theta Teleop", SwerveAutoConstants.kDTurnToAngle));
+            turnToAngleController.setP(SmartDashboard.getNumber("kP Theta Teleop", SwerveAutoConstants.kPTurnToAngle));
+            turnToAngleController.setI(SmartDashboard.getNumber("kI Theta Teleop", SwerveAutoConstants.kITurnToAngle));
+            turnToAngleController.setD(SmartDashboard.getNumber("kD Theta Teleop", SwerveAutoConstants.kDTurnToAngle));
             double targetAngle = desiredAngle.get();
             turningSpeed = turnToAngleController.calculate(swerveDrive.getImu().getHeading(), targetAngle);
             turningSpeed = Math.toRadians(turningSpeed);
@@ -152,7 +153,7 @@ public class SwerveJoystickCommand extends Command {
         
         ChassisSpeeds chassisSpeeds;
         // Check if in field oriented mode
-        if (!fieldOrientedFunction.get()) {
+        if (fieldOrientedFunction.get()) {
             swerveDrive.setDriveMode(DRIVE_MODE.FIELD_ORIENTED);
             chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                 filteredXSpeed, filteredYSpeed, filteredTurningSpeed, 
