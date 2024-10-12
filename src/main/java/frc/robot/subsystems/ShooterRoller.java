@@ -408,17 +408,30 @@ public class ShooterRoller extends SubsystemBase implements Reportable {
     @Override
     public void initShuffleboard(LOG_LEVEL priority) {
         ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
-        tab.addBoolean("Shooter Roller Enabled", () -> this.enabled);
-        tab.addNumber("Left Velocity", () -> getVelocityLeft());
-        tab.addNumber("Right Velocity", () -> getVelocityRight());
-        tab.addNumber("Left Target Velocity", () -> leftVelocityRequest.Velocity);
-        tab.addNumber("Right Target Velocity", () -> rightVelocityRequest.Velocity);
-        tab.addNumber("Left Supply Current", () -> leftShooter.getSupplyCurrent().getValueAsDouble());
-        tab.addNumber("Left Stator Current", () -> leftShooter.getStatorCurrent().getValueAsDouble());
-        tab.addNumber("Right Supply Current", () -> rightShooter.getSupplyCurrent().getValueAsDouble());
-        tab.addNumber("Right Stator Current", () -> rightShooter.getStatorCurrent().getValueAsDouble());
-        tab.addNumber("Right Shooter Applied Voltage", () -> rightShooter.getMotorVoltage().getValueAsDouble());
-        tab.addNumber("Left Shooter Applied Voltage", () -> leftShooter.getMotorVoltage().getValueAsDouble());
+
+        switch (priority) {
+            case ALL:
+            case MEDIUM:
+            tab.addNumber("Left Position", () -> leftShooter.getPosition().getValueAsDouble());
+            tab.addNumber("Right Position", () -> rightShooter.getPosition().getValueAsDouble());
+            case MINIMAL:
+            tab.addBoolean("Shooter Roller Enabled", () -> this.enabled);
+            tab.addNumber("Left Velocity", () -> getVelocityLeft());
+            tab.addNumber("Right Velocity", () -> getVelocityRight());
+            tab.addNumber("Left Target Velocity", () -> leftVelocityRequest.Velocity);
+            tab.addNumber("Right Target Velocity", () -> rightVelocityRequest.Velocity);
+            tab.addNumber("Left Supply Current", () -> leftShooter.getSupplyCurrent().getValueAsDouble());
+            tab.addNumber("Left Stator Current", () -> leftShooter.getStatorCurrent().getValueAsDouble());
+            tab.addNumber("Right Supply Current", () -> rightShooter.getSupplyCurrent().getValueAsDouble());
+            tab.addNumber("Right Stator Current", () -> rightShooter.getStatorCurrent().getValueAsDouble());
+            tab.addNumber("Right Shooter Applied Voltage", () -> rightShooter.getMotorVoltage().getValueAsDouble());
+            tab.addNumber("Left Shooter Applied Voltage", () -> leftShooter.getMotorVoltage().getValueAsDouble());    
+                break;
+        
+            default:
+                break;
+        }
+        
     }
 }
  

@@ -150,10 +150,28 @@ public class Tramp extends SubsystemBase implements Reportable{
     @Override
     public void initShuffleboard(LOG_LEVEL priority) {
         ShuffleboardTab tab = Shuffleboard.getTab("Climb");
-        tab.addBoolean("Tramp Subsystem Enabled", () -> enabled);
-        tab.addDouble("Elevator Position", () -> elevator.getPosition().getValueAsDouble());
-        tab.addDouble("Elevator Velocity", () -> elevator.getVelocity().getValueAsDouble());
-        tab.addDouble("Tramp Position", () -> trampShot.getPosition().getValueAsDouble());
-        tab.addDouble("Tramp Velocity", () -> trampShot.getVelocity().getValueAsDouble());
+
+        switch (priority) {
+            case ALL:
+
+            case MEDIUM:
+            tab.addDouble("Elevator Velocity", () -> elevator.getVelocity().getValueAsDouble());
+            tab.addDouble("Tramp Position", () -> trampShot.getPosition().getValueAsDouble());
+            case MINIMAL:
+            tab.addBoolean("Tramp Subsystem Enabled", () -> enabled);
+            tab.addDouble("Elevator Stator Current", () -> elevator.getStatorCurrent().getValueAsDouble());
+            tab.addDouble("Tramp Stator Current", () -> trampShot.getStatorCurrent().getValueAsDouble());
+            tab.addDouble("Elevator Supply Current", () -> elevator.getSupplyCurrent().getValueAsDouble());
+            tab.addDouble("Tramp Supply Current", () -> trampShot.getSupplyCurrent().getValueAsDouble());
+            tab.addDouble("Tramp Velocity", () -> trampShot.getVelocity().getValueAsDouble());
+            tab.addDouble("Elevator Position", () -> elevator.getPosition().getValueAsDouble());
+
+                break;
+        
+            default:
+                break;
+        }
+        
+
     }
 }

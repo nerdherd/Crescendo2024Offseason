@@ -226,9 +226,28 @@ public class Climb extends SubsystemBase implements Reportable {
     @Override
     public void initShuffleboard(LOG_LEVEL priority) {
         ShuffleboardTab tab = Shuffleboard.getTab("Climb");
-        tab.addBoolean("Climb Motor Enabled", () -> enabled);
-        tab.addDouble("Climb Motor Position", () -> leftClimbMotor.getPosition().getValueAsDouble());
-        tab.addDouble("Climb Motor Velocity", () -> leftClimbMotor.getVelocity().getValueAsDouble());
+
+        switch (priority) {
+            case ALL:
+            case MEDIUM:
+            tab.addDouble("Left Climb Motor Velocity", () -> leftClimbMotor.getVelocity().getValueAsDouble());
+            tab.addDouble("Right Climb Motor Velocity", () -> rightClimbMotor.getVelocity().getValueAsDouble());
+
+            case MINIMAL:
+            tab.addBoolean("Climb Motor Enabled", () -> enabled);
+            tab.addDouble("Left Climb Motor Position", () -> leftClimbMotor.getPosition().getValueAsDouble());
+            tab.addDouble("Right Climb Motor Position", () -> rightClimbMotor.getPosition().getValueAsDouble());
+            tab.addDouble("Left Motor Stator Current", () -> leftClimbMotor.getStatorCurrent().getValueAsDouble());
+            tab.addDouble("Left Motor Supply Current", () -> leftClimbMotor.getSupplyCurrent().getValueAsDouble());
+            tab.addDouble("Right Motor Stator Current", () -> rightClimbMotor.getStatorCurrent().getValueAsDouble());
+            tab.addDouble("Right Motor Supply Current", () -> rightClimbMotor.getSupplyCurrent().getValueAsDouble());
+                break;
+        
+            default:
+                break;
+        }
+        
+
     }
 
 }
