@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.ClimbConstants.ClimbPostions;
 import frc.robot.Constants.ShooterConstants;
@@ -207,15 +208,18 @@ public class SuperSystem {
     public Command shootSpeaker() {
         Command command = Commands.sequence(
             shooterRoller.setEnabledCommand(true),
-            shooterRoller.shootSpeakerRight(),
+            shooterRoller.setRightVelocityCommand(Constants.ShooterConstants.kRightOuttakeHigh.get()),
             Commands.deadline(
-                Commands.waitUntil(() ->
-                    shooterRoller.atTargetVelocityRight()),
-                Commands.waitSeconds(1)
+                Commands.waitUntil(() -> shooterRoller.atTargetVelocityRight()),
+                Commands.waitSeconds(2)
             ),
             shooterPivot.setEnabledCommand(true),
             shooterPivot.moveToSpeaker(),
-            shooterRoller.setLeftVelocityCommand(-1)
+            Commands.deadline(
+                Commands.waitUntil(() -> shooterPivot.atTargetPosition()),
+                Commands.waitSeconds(2)
+            ),
+            shooterRoller.shootSpeaker()
         ).finallyDo(() -> {
             indexer.stop();
             shooterPivot.stop();

@@ -33,12 +33,7 @@ public class FourPieceMid extends SequentialCommandGroup {
                 
                 Commands.sequence(      
                     // Preload
-                    superSystem.shooterRoller.setRightVelocityCommand(-1),
-                    Commands.deadline(
-                        Commands.waitUntil(() -> superSystem.shooterRoller.atTargetVelocityRight()),
-                        Commands.waitSeconds(2)
-                    ),
-                    superSystem.shooterRoller.setLeftVelocityCommand(-1),
+                    superSystem.shootSpeaker(),
 
                     // Drive to note 1
                     Commands.parallel(
@@ -52,22 +47,7 @@ public class FourPieceMid extends SequentialCommandGroup {
 
                     // shoot first note after preload
                     AutoBuilder.followPath(pathGroup.get(1)),//a10
-                    // Stop note from popping out
-                    superSystem.shooterRoller.setRightVelocityCommand(-1),
-                    Commands.deadline(
-                        Commands.waitUntil(() -> superSystem.shooterRoller.atTargetVelocityRight()),
-                        Commands.waitSeconds(2)
-                    ),
-                    superSystem.shooterRoller.setLeftVelocityCommand(-1),
-
-
-                    // Preload
-                    superSystem.shooterRoller.setRightVelocityCommand(-1),
-                    Commands.deadline(
-                        Commands.waitUntil(() -> superSystem.shooterRoller.atTargetVelocityRight()),
-                        Commands.waitSeconds(2)
-                    ),
-                    superSystem.shooterRoller.setLeftVelocityCommand(-1),
+                    superSystem.shootSpeaker(),
 
                     // Drive to note 2
                     Commands.parallel(
@@ -79,23 +59,9 @@ public class FourPieceMid extends SequentialCommandGroup {
                         // )
                     ),
 
-                    // shoot first note after preload
+                    // shoot second note after preload
                     AutoBuilder.followPath(pathGroup.get(3)),//a20
-                    // Stop note from popping out
-                    superSystem.shooterRoller.setRightVelocityCommand(-1),
-                    Commands.deadline(
-                        Commands.waitUntil(() -> superSystem.shooterRoller.atTargetVelocityRight()),
-                        Commands.waitSeconds(2)
-                    ),
-                    superSystem.shooterRoller.setLeftVelocityCommand(-1),
-
-                    // Preload
-                    superSystem.shooterRoller.setRightVelocityCommand(-1),
-                    Commands.deadline(
-                        Commands.waitUntil(() -> superSystem.shooterRoller.atTargetVelocityRight()),
-                        Commands.waitSeconds(2)
-                    ),
-                    superSystem.shooterRoller.setLeftVelocityCommand(-1),
+                    superSystem.shootSpeaker(),
 
                     // Drive to note 3
                     Commands.parallel(
@@ -107,15 +73,9 @@ public class FourPieceMid extends SequentialCommandGroup {
                         // )
                     ),
 
-                    // shoot first note after preload
+                    // shoot third note after preload
                     AutoBuilder.followPath(pathGroup.get(5)),//a30
-                    // Stop note from popping out
-                    superSystem.shooterRoller.setRightVelocityCommand(-1),
-                    Commands.deadline(
-                        Commands.waitUntil(() -> superSystem.shooterRoller.atTargetVelocityRight()),
-                        Commands.waitSeconds(2)
-                    ),
-                    superSystem.shooterRoller.setLeftVelocityCommand(-1)
+                    superSystem.shootSpeaker()
                 )  
         );
     }
