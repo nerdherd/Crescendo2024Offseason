@@ -21,13 +21,11 @@ public class LED extends SubsystemBase {
     private boolean paused = false;
 
     private Color[] stripColors = new Color[LEDConstants.CANdleLength];
-    
-    private Color[] disabledPattern = new Color[LEDConstants.CANdleLength];
 
     private State state = State.DISABLED;
     public enum State {
-        DISABLED, // when the robot is disabled
-        TELEOP, // 
+        DISABLED, // when the robot is disabled (nerdherd blue to white fade)
+        TELEOP, // alliance color + white scrol (RED WHITE BLUE 🦅🦅)
         AUTO, // fire 🔥🔥🔥🔥
         DISCONNECTED,
         HAS_NOTE, // note is in indexer (blue)
@@ -46,12 +44,6 @@ public class LED extends SubsystemBase {
         candle.configAllSettings(configAll, 100); 
         
         setStrip(toPattern(Colors.BLACK), LEDStrips.ALL);
-        for (int i = 0; i < disabledPattern.length; i++) {
-            if (i <= disabledPattern.length / 2)
-                disabledPattern[i] = Colors.NERDHERD_BLUE;
-            else 
-                disabledPattern[i] = Color(1.0, 1.0, 1.0);
-        }
     }
 
     private void setLED(int r, int g, int b, int index) {
@@ -206,6 +198,19 @@ public class LED extends SubsystemBase {
     public void configStatusLedBehavior(boolean offWhenActive) { candle.configStatusLedState(offWhenActive, 0); }
     
     /**
+     * linear interpolate between two colors
+     * @param a first color
+     * @param b second color
+     * @param t [0,1] lerp coefficient
+     * @return
+     */
+    private Color lerpColor(Color a, Color b, double t) {
+        return Color(a.red * (1.0 - t) + b.red * t,
+                    a.green * (1.0 - t) + b.green * t,
+                    a.blue * (1.0 - t) + b.blue * t);
+    }
+
+    /**
      * applies strip colors
      */
     private void updateCANdle() {
@@ -224,12 +229,13 @@ public class LED extends SubsystemBase {
     }
 
     private int delay = 0;
-    private int rot = 0; // rotation value to reuse across scrolls
+    private int time = 0; // time value
     // Runs 5 times a second
     @Override
     public void periodic() {
         if (!paused) delay++;
         if (delay >= 10 && !paused) { delay = 0;
+            time++;
             updateState();
             setStrip(toPattern(Colors.BLACK), LEDStrips.ALL); // clear strip
             // draws go here
@@ -238,11 +244,11 @@ public class LED extends SubsystemBase {
                     
                     break;
                 default:
-                    rot++;
-                    setStrip(disabledPattern, LEDStrips.ALL, rot);
+                    double t = (Math.sin(time / 10.0) + 1.0) / 2.0;
+                    setStrip(toPattern(lerpColor(Colors.WHITE, Colors.NERDHERD_BLUE, t)), LEDStrips.ALL);
                     break;
             }
-            rot = rot % (disabledPattern.length); // probably unecessary but...
+            
             updateCANdle(); // push draws
         }
     }
