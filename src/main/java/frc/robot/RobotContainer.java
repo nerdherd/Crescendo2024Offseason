@@ -292,6 +292,11 @@ public class RobotContainer implements Reportable {
     swerveDrive.initShuffleboard(loggingLevel);
     swerveDrive.initModuleShuffleboard(loggingLevel);
     intakeRoller.initShuffleboard(loggingLevel);
+    climb.initShuffleboard(loggingLevel);
+    indexer.initShuffleboard(loggingLevel);
+    shooterPivot.initShuffleboard(loggingLevel);
+    shooterRoller.initShuffleboard(loggingLevel);
+    tramp.initShuffleboard(loggingLevel);
 
     ShuffleboardTab tab = Shuffleboard.getTab("Main");
     tab.addNumber("Total Current Draw", pdp::getTotalCurrent);

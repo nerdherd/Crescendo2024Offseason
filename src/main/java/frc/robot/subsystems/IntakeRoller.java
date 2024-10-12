@@ -221,8 +221,24 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
     @Override
     public void initShuffleboard(LOG_LEVEL priority) {
         ShuffleboardTab tab = Shuffleboard.getTab("Intake");
-        tab.addBoolean("Intake Roller Enabled", () -> enabled);
-        tab.addDouble("Intake Velocity", () -> intakeMotor.getVelocity().getValueAsDouble());
+
+        switch (priority) {
+            case ALL:
+            case MEDIUM:
+            tab.addDouble("Intake Position", () -> intakeMotor.getPosition().getValueAsDouble());
+
+            case MINIMAL:
+            tab.addBoolean("Intake Roller Enabled", () -> enabled);
+            tab.addDouble("Intake Velocity", () -> intakeMotor.getVelocity().getValueAsDouble());
+            tab.addDouble("Intake Motor Supply Current", () -> intakeMotor.getSupplyCurrent().getValueAsDouble());
+            tab.addDouble("Intake Motor Stator Current", () -> intakeMotor.getStatorCurrent().getValueAsDouble());
+                break;
+        
+            default:
+                break;
+        }
+        
+
     }
     
 }

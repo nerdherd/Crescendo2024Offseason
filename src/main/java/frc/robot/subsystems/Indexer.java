@@ -198,8 +198,22 @@ public class Indexer extends SubsystemBase implements Reportable {
     @Override
     public void initShuffleboard(LOG_LEVEL priority) {
         ShuffleboardTab tab = Shuffleboard.getTab("Climb");
-        tab.addBoolean("Indexer Subsystem Enabled", () -> enabled);
-        tab.addDouble("Indexer Position", () -> indexer.getPosition().getValueAsDouble());
-        tab.addDouble("Indexer Velocity", () -> indexer.getVelocity().getValueAsDouble());
+
+        switch  (priority) {
+            case ALL:
+            case MEDIUM:
+            tab.addDouble("Indexer Position", () -> indexer.getPosition().getValueAsDouble());
+
+            case MINIMAL:
+            tab.addBoolean("Indexer Subsystem Enabled", () -> enabled);
+            tab.addDouble("Indexer Velocity", () -> indexer.getVelocity().getValueAsDouble());
+            tab.addDouble("Indexer Stator Current", () -> indexer.getStatorCurrent().getValueAsDouble());
+            tab.addDouble("Indexer Supply Current", () -> indexer.getSupplyCurrent().getValueAsDouble());
+                break;
+            default:
+                break;
+
+        }
+        
     }
 }
