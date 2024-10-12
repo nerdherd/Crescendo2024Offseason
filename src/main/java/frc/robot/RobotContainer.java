@@ -226,20 +226,7 @@ public class RobotContainer implements Reportable {
     );
     
     commandDriverController.L2().whileTrue(
-      Commands.sequence(
-        shooterPivot.setEnabledCommand(true),
-        shooterRoller.setEnabledCommand(true),
-        shooterRoller.setRightVelocityCommand(-1),
-        shooterPivot.setPositionCommand(ShooterConstants.kSpeakerPosition.get()),
-        Commands.waitUntil(() -> shooterPivot.hasReachedPositionAccurate(ShooterConstants.kSpeakerPosition.get())),
-        Commands.waitUntil(() -> shooterRoller.atTargetVelocityRight()),
-        shooterRoller.setLeftVelocityCommand(-1)
-        //Commands.waitUntil(() -> !shooterBeamBreak.noteSensed())
-      )).onFalse(
-        Commands.sequence(
-          shooterPivot.setEnabledCommand(false),
-          shooterRoller.setEnabledCommand(false)
-        )
+      superSystem.shootSpeaker()
       );
 
     commandOperatorController.share().whileTrue(
