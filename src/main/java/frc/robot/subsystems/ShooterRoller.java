@@ -101,19 +101,19 @@ public class ShooterRoller extends SubsystemBase implements Reportable {
     }
  
     public void configurePID() {
-        ShooterConstants.kTopOuttakeHigh.loadPreferences();
-        ShooterConstants.kTopOuttakeLow.loadPreferences();
-        ShooterConstants.kTopOuttakeAmp.loadPreferences();
-        ShooterConstants.kTopOuttakeAuto1.loadPreferences();
-        ShooterConstants.kTopOuttakeAuto2.loadPreferences();
-        ShooterConstants.kTopIntake.loadPreferences();
+        ShooterConstants.kLeftOuttakeHigh.loadPreferences();
+        ShooterConstants.kLeftOuttakeLow.loadPreferences();
+        ShooterConstants.kLeftOuttakeAmp.loadPreferences();
+        ShooterConstants.kLeftOuttakeAuto1.loadPreferences();
+        ShooterConstants.kLeftOuttakeAuto2.loadPreferences();
+        ShooterConstants.kLeftIntake.loadPreferences();
  
-        ShooterConstants.kBottomOuttakeHigh.loadPreferences();
-        ShooterConstants.kBottomOuttakeLow.loadPreferences();
-        ShooterConstants.kBottomOuttakeAmp.loadPreferences();
-        ShooterConstants.kBottomOuttakeAuto1.loadPreferences();
-        ShooterConstants.kBottomOuttakeAuto2.loadPreferences();
-        ShooterConstants.kBottomIntake.loadPreferences();
+        ShooterConstants.kRightOuttakeHigh.loadPreferences();
+        ShooterConstants.kRightOuttakeLow.loadPreferences();
+        ShooterConstants.kRightOuttakeAmp.loadPreferences();
+        ShooterConstants.kRightOuttakeAuto1.loadPreferences();
+        ShooterConstants.kRightOuttakeAuto2.loadPreferences();
+        ShooterConstants.kRightIntake.loadPreferences();
         TalonFXConfiguration leftMotorConfigs = new TalonFXConfiguration();
        
         leftShooterConfigurator.refresh(leftMotorConfigs);
@@ -268,8 +268,8 @@ public class ShooterRoller extends SubsystemBase implements Reportable {
         return Commands.runOnce(() -> setVelocity(velocity));
     }
  
-    public Command setVelocityCommand(double topVelocity, double bottomVelocity) {
-        return Commands.runOnce(() -> setVelocity(topVelocity, bottomVelocity));
+    public Command setVelocityCommand(double leftVelocity, double rightVelocity) {
+        return Commands.runOnce(() -> setVelocity(leftVelocity, rightVelocity));
     }
  
     public Command incrementLeftVelocityCommand(double increment) {
@@ -372,30 +372,30 @@ public class ShooterRoller extends SubsystemBase implements Reportable {
     }
  
     public Command shootSpeaker() {
-        return setVelocityCommand(ShooterConstants.kTopOuttakeHigh.get());
+        return setVelocityCommand(ShooterConstants.kLeftOuttakeHigh.get());
     }
  
     public Command shootSpeakerSlow() {
-        return setVelocityCommand(ShooterConstants.kTopOuttakeLow.get());
+        return setVelocityCommand(ShooterConstants.kLeftOuttakeLow.get());
     }
     // shootSpeakerAutoStart
     public Command shootSpeakerAutoStart() {
-        return setVelocityCommand(ShooterConstants.kTopOuttakeMidAutostart.get());
+        return setVelocityCommand(ShooterConstants.kLeftOuttakeMidAutostart.get());
     }
 
     public Command shootSpeakerRight() {
-        return setRightVelocityCommand(ShooterConstants.kTopOuttakeHigh.get());
+        return setRightVelocityCommand(ShooterConstants.kLeftOuttakeHigh.get());
     }
  
     // no Auto Start 2 
 
     
     public Command shootSpeakerAuto1() {
-        return setVelocityCommand(ShooterConstants.kTopOuttakeAuto1.get(), ShooterConstants.kBottomOuttakeAuto1.get());
+        return setVelocityCommand(ShooterConstants.kLeftOuttakeAuto1.get(), ShooterConstants.kRightOuttakeAuto1.get());
     }
  
     public Command shootAmpRightCommand() {
-        return setRightVelocityCommand(ShooterConstants.kTopOuttakeAmp.get());
+        return setRightVelocityCommand(ShooterConstants.kLeftOuttakeAmp.get());
     }
 
     

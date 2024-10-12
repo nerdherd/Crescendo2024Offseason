@@ -176,30 +176,36 @@ public class RobotContainer implements Reportable {
       }, 
       // () -> false, // Turn to angle (disabled)
       () -> { // Turn To angle Direction | TODO WIP
-        if (
+        // if (
         // (driverController.getTouchpad() && superSystem.getIsPassing())
         // || 
-        driverController.getTriangleButton()) { // turn shooter to speaker
-          return 0.0;
-        }
-        if (driverController.getSquareButton()) { // turn shooter to shoot over stage
-          if (!IsRedSide()) {
-            return 315.0;
-          } else {
-            return 45.0;
-          }
-        }
+        // driverController.getTriangleButton()) { // turn shooter to speaker
+        //   return 0.0;
+        // }
+        // if (driverController.getSquareButton()) { // turn shooter to shoot over stage
+        //   if (!IsRedSide()) {
+        //     return 315.0;
+        //   } else {
+        //     return 45.0;
+        //   }
+        // }
         if (driverController.getCircleButton()) { // turn to amp
           if (!IsRedSide()){
             return 90.0;
           }
           return 270.0;
         }
-        if (driverController.getCrossButton()) {
-          return 180.0;
-        }
+        // if (driverController.getCrossButton()) {
+        //   return 180.0;
+        // }
         if (driverController.getL2Button()) {
           return swerveDrive.getTurnToSpecificTagAngle(IsRedSide() ? 4 : 7); // 4 if red side, 7 if blue | TODO, update?
+        }
+        if (driverController.getL1Button()) {
+          return 0.0;
+        }
+        if (driverController.getR1Button()) {
+          return 0.0;
         }
         // if (driverController.getPSButton()) { // Turn to shuffleboard angle
         //   return SmartDashboard.getNumber("Test Desired Angle", 0);
@@ -213,28 +219,33 @@ public class RobotContainer implements Reportable {
 
   public void initDefaultCommands_test() {}
 
-  Trigger armTrigger = new Trigger(
-    () -> shooterPivot.atTargetPositionAccurate()
-        && shooterPivot.getTargetPositionDegrees() > ShooterConstants.kFullStowPosition.get()
-        && shooterRoller.getVelocityLeft() > (shooterRoller.getTargetVelocityLeft() * 0.6)
-        && shooterRoller.getTargetVelocityLeft() > 0
-        && shooterRoller.getVelocityRight() > (shooterRoller.getTargetVelocityRight() * 0.6)
-        && shooterRoller.getTargetVelocityRight() > 0
-    );
+  // Trigger armTrigger = new Trigger(
+  //   () -> shooterPivot.atTargetPositionAccurate()
+  //       && shooterPivot.getTargetPositionDegrees() > ShooterConstants.kFullStowPosition.get()
+  //       && shooterRoller.getVelocityLeft() > (shooterRoller.getTargetVelocityLeft() * 0.6)
+  //       && shooterRoller.getTargetVelocityLeft() > 0
+  //       && shooterRoller.getVelocityRight() > (shooterRoller.getTargetVelocityRight() * 0.6)
+  //       && shooterRoller.getTargetVelocityRight() > 0
+  // );
 
   public void configureBindings_teleop() {
-    commandDriverController.share().whileTrue(Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle()));
-
+    // commandDriverController.share() is unbound
+    commandDriverController.options().whileTrue(
+      Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle())
+    );
+    // commandDriverController.touchpad().whileTrue(superSystem.shoot())
+    //   .whileFalse(superSystem.stow());
+    
     commandDriverController.L2().whileTrue(Commands.sequence( // copypasted from old code
       Commands.race(
         superSystem.shootSpeakerAutoAim(),
         Commands.sequence(
           Commands.race(
-            Commands.waitUntil(() -> 
-              // aimTrigger.getAsBoolean() 
-              // && 
-              armTrigger.getAsBoolean()
-            ),
+            // Commands.waitUntil(() -> 
+            //   // aimTrigger.getAsBoolean() 
+            //   // && 
+            //   armTrigger.getAsBoolean()
+            // ),
             Commands.waitSeconds(1.5)
           ),
           Commands.waitSeconds(0.1),
@@ -261,9 +272,9 @@ public class RobotContainer implements Reportable {
       .whileFalse(superSystem.stow());
     // Driver lleft joystick controls SwerveDrive movement
     // Driver lleft joystick controls SwerveDrive turning
-
+    commandOperatorController.R2().whileTrue(superSystem.climbSequenceHoldCommand()).onFalse(superSystem.climbSequenceRealeaseCommand());
     commandOperatorController.L2().whileTrue(superSystem.intakeUntilSensed());
-    commandOperatorController.R2().whileTrue(shooterRoller.shootSpeaker());
+    //commandOperatorController.R2().whileTrue(shooterRoller.shootSpeaker());
     commandOperatorController.L1().whileTrue(
       Commands.sequence(
         intakeRoller.setEnabledCommand(true),
@@ -282,6 +293,32 @@ public class RobotContainer implements Reportable {
       // commandOperatorController.share() is unbound
       commandOperatorController.touchpad().whileTrue(climb.setPositionStateTopCommand());
       // Operator left joystick manually controlls ShooterPivot
+    // commandDriverController.R2() is in SwerveJoystickCommand
+    // commandDriverController.L1().whileTrue(superSystem.shootSpeaker()); is in SwerveJoystickCommand
+    // commandDriverController.L2().whileTrue(superSystem.shootAmp()); is in SwerveJoystickCommand
+    // Driver left joystick controls SwerveDrive movement
+    // Driver right joystick controls SwerveDrive turning
+
+    commandOperatorController.L2().whileTrue(superSystem.intakeUntilSensed());
+    // commandOperatorController.R2().whileTrue(shooterRoller.shootSpeaker()); -> is unbound
+    // commandOperatorController.L1().whileTrue( -> is unbound
+    //   Commands.sequence(
+    //     intakeRoller.setEnabledCommand(true),
+    //     intakeRoller.setVelocityCommand(-8)
+    //   )).onFalse(intakeRoller.stopCommand());
+    // commandOperatorController.R1().whileTrue(
+    //   Commands.sequence(
+    //     intakeRoller.setEnabledCommand(true),
+    //     intakeRoller.setVelocityCommand(8)
+    //   )).onFalse(intakeRoller.stopCommand());
+    // commandOperatorController.triangle().whileTrue(indexer.indexToElevatorCommand()); -> is unbound
+    commandOperatorController.square().whileTrue(tramp.setElevatorTrapCommand());
+    commandOperatorController.circle().whileTrue(tramp.setElevatorAmpCommand());
+    commandOperatorController.cross().whileTrue(tramp.setTrampShootCommand());
+    // commandOperatorController.share() is unbound
+    // commandOperatorController.share() is unbound
+    // commandOperatorController.touchpad().whileTrue(climb.setPositionStateTopCommand()); -> is unbound
+    // Operator left joystick manually controlls ShooterPivot -> is unbound
   }
 
   public void configureBindings_test() {}
