@@ -24,13 +24,13 @@ public class Taxi extends SequentialCommandGroup {
     
     // to be tested. Do not use it before test
 
-    public Taxi(SwerveDrivetrain swerve, SuperSystem superSystem, NoteAssistance noteCamera, List<PathPlannerPath> pathGroup){
+    public Taxi(SwerveDrivetrain swerve, SuperSystem superSystem, PathPlannerPath path){
         Pose2d startingPose = new Pose2d(1.33, 5.55, new Rotation2d());//GetStartPoseInPath(pathGroup.get(0));
         addCommands(
             Commands.runOnce(swerve.getImu()::zeroAll),
             Commands.runOnce(() -> swerve.resetGyroFromPoseWithAlliance(startingPose)),
             Commands.runOnce(() -> swerve.resetOdometryWithAlliance(startingPose)),
-            AutoBuilder.followPath(pathGroup.get(0))
+            AutoBuilder.followPath(path)
         );  
     }
 }
