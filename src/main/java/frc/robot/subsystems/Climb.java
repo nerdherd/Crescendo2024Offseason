@@ -50,7 +50,7 @@ public class Climb extends SubsystemBase implements Reportable {
         leftClimbMotor.setInverted(false); // todo reversed?????
         leftClimbConfigurator = leftClimbMotor.getConfigurator();
 
-        rightClimbMotor = new TalonFX(Constants.ClimbConstants.kLeftClimbMotorID, SuperStructureConstants.kCANivoreBusName);
+        rightClimbMotor = new TalonFX(Constants.ClimbConstants.kRightClimbMotorID, SuperStructureConstants.kCANivoreBusName);
         rightClimbConfigurator = rightClimbMotor.getConfigurator();
 
         rightClimbMotor.setControl(followRequest);
