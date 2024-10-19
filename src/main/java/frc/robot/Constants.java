@@ -382,10 +382,10 @@ public final class Constants {
 
     // ************************************** INTAKE CONSTANTS *************************************** //
 
-    public static final PrefDouble kIntakeVelocity = new PrefDouble("Intake Velocity", 100);
-    public static final PrefDouble kAutoIntakeVelocity = new PrefDouble("Intake Velocity Auto", 90);
-    public static final double kIntakeMaxVelocity =  100;
-    public static final double kIntakeMinVelocity = -100;
+    public static final PrefDouble kIntakeVelocity = new PrefDouble("Intake Velocity", -20);
+    public static final PrefDouble kAutoIntakeVelocity = new PrefDouble("Intake Velocity Auto", -20);
+    public static final double kIntakeMaxVelocity =  20;
+    public static final double kIntakeMinVelocity = -20;
 
     public static final PrefDouble kPIntakeMotor = new PrefDouble("kP Intake Roller", 1); //Old values from Abruticus
     public static final PrefDouble kIIntakeMotor = new PrefDouble("kI Intake Roller", 0); //Old values from Abruticus

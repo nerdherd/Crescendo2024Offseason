@@ -147,7 +147,7 @@ public class RobotContainer implements Reportable {
       () -> {
         return commandDriverController.getRightX(); // Rotation
       },
-      () -> true, // should be field oriented now on true
+      () -> true, // should be field oriented now on false
       () -> false, // tow supplier
       driverController::getR2Button, // Precision/"Sniper Button"
       () -> {
@@ -213,6 +213,15 @@ public class RobotContainer implements Reportable {
       )).onFalse(
         intakeRoller.setEnabledCommand(false)
     );
+    commandOperatorController.R2().whileTrue(
+      Commands.sequence(
+        intakeRoller.setEnabledCommand(true),
+        intakeRoller.outtakeCommand()
+        // Commands.waitUntil(() -> intakeBeamBreak.noteSensed())
+      )).onFalse(
+        intakeRoller.setEnabledCommand(false)
+    );
+
     commandOperatorController.triangle().whileTrue(
       Commands.sequence(
         shooterPivot.setEnabledCommand(true),
