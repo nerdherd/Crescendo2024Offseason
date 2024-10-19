@@ -36,7 +36,7 @@ public class Climb extends SubsystemBase implements Reportable {
 
     private final Follower followRequest = new Follower(ClimbConstants.kLeftClimbMotorID, true);
 
-    private final PIDController climbPID = new PIDController(0.1, 0, 0);
+    private final PIDController climbPID = new PIDController(1, 0, 0);
 
     private final NeutralOut brakeRequest = new NeutralOut();
     
@@ -124,25 +124,25 @@ public class Climb extends SubsystemBase implements Reportable {
         // STATE MACHINE KYLE HUANG FOREVER
         switch (climbPositionState) {
             case TOP:
-                if (climbPID.atSetpoint()) {
-                    setPositionStateNeutral();
-                    return;
-                }
+                // if (climbPID.atSetpoint()) {
+                //     setPositionStateNeutral();
+                //     return;
+                // }
                 // ClimbConstants.kClimbMaxPosition.loadPreferences();
                 setClimbVelocity(climbPID.calculate(leftClimbMotor.getPosition().getValueAsDouble(), 0.27));
                 leftClimbMotor.setControl(leftClimbMotorVelocityRequest);
                 break;
             case BOTTOM:
-                if (climbPID.atSetpoint()) {
-                    setPositionStateNeutral();
-                    return;
-                }
+                // if (climbPID.atSetpoint()) {
+                //     setPositionStateNeutral();
+                //     return;
+                // }
                 // ClimbConstants.kClimbMinPosition.loadPreferences();
-                setClimbVelocity(climbPID.calculate(leftClimbMotor.getPosition().getValueAsDouble(), 0));
+                setClimbVelocity(-(climbPID.calculate(leftClimbMotor.getPosition().getValueAsDouble(), 0)));
                 leftClimbMotor.setControl(leftClimbMotorVelocityRequest);
                 break;
             default:
-                // climbPID.reset();
+                climbPID.reset();
                 leftClimbMotorVelocityRequest.Velocity = 0;
                 leftClimbMotor.setControl(brakeRequest);
                 break;

@@ -147,7 +147,7 @@ public class RobotContainer implements Reportable {
       () -> {
         return commandDriverController.getRightX(); // Rotation
       },
-      () -> false, // should be field oriented now on true
+      () -> true, // should be field oriented now on true
       () -> false, // tow supplier
       driverController::getR2Button, // Precision/"Sniper Button"
       () -> {

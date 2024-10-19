@@ -444,7 +444,7 @@ public final class Constants {
     public static final PrefDouble kClimbPositionOffset = new PrefDouble("Climb Position Offset", 0.0);
     
 
-    public static final PrefDouble kClimbkP = new PrefDouble("Climb Motor kP", 0.5);
+    public static final PrefDouble kClimbkP = new PrefDouble("Climb Motor kP", 1);
     public static final PrefDouble kClimbkI = new PrefDouble("Climb Motor kI", 0);
     public static final PrefDouble kClimbkD = new PrefDouble("Climb Motor kD", 0.0);
     public static final PrefDouble kClimbPIDErrorTolerance = new PrefDouble("Climb Motor PID Error Tolerance", 0.05);
