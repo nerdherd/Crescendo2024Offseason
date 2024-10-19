@@ -215,6 +215,16 @@ public class RobotContainer implements Reportable {
         intakeRoller.setEnabledCommand(false)
     );
 
+    // for testing purposes (delete ltr)
+    commandDriverController.L1().whileTrue(
+      Commands.sequence(
+        intakeRoller.setEnabledCommand(true),
+        intakeRoller.outtakeCommand()
+        // Commands.waitUntil(() -> intakeBeamBreak.noteSensed())
+      )).onFalse(
+        intakeRoller.setEnabledCommand(false)
+    );
+
     commandOperatorController.L2().whileTrue(
       Commands.sequence(
         intakeRoller.setEnabledCommand(true),
@@ -289,8 +299,7 @@ public class RobotContainer implements Reportable {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    Command currentAuto = new DriveForward(swerveDrive);
-
+    Command currentAuto = new DriveForward(swerveDrive, intakeRoller);
     swerveDrive.setDriveMode(DRIVE_MODE.AUTONOMOUS);
     return currentAuto;
   }

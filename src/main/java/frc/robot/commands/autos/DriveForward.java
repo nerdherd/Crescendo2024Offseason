@@ -5,35 +5,42 @@
 package frc.robot.commands.autos;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.subsystems.IntakeRoller;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 
-public class DriveForward extends Command {
+public class DriveForward extends SequentialCommandGroup {
   private final SwerveDrivetrain swerveDrive;
+  private final IntakeRoller intakeRoller;
 
-  public DriveForward(SwerveDrivetrain swerve) {
+  public DriveForward(SwerveDrivetrain swerve, IntakeRoller intake) {
     this.swerveDrive = swerve;
-  }
+    this.intakeRoller = intake;
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-  }
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    swerveDrive.drive(1.0, 0, 0);
-  }
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-    swerveDrive.stopModules();
-  }
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
+    addCommands(
+      Commands.sequence(
+        intakeRoller.setEnabledCommand(true),
+        Commands.race(
+          Commands.parallel(
+            Commands.run(() -> swerveDrive.drive(1.0, 0, 0)),  
+            intakeRoller.intakeCommand()
+          ),
+          Commands.waitSeconds(5)
+        ),
+        intakeRoller.setEnabledCommand(false),
+        Commands.runOnce(() -> swerveDrive.drive(0,0,0)),
+        Commands.race(
+          Commands.run(() -> swerveDrive.drive(-1.0, 0, 0)),
+          Commands.waitSeconds(3)
+        ),
+        Commands.runOnce(() -> swerveDrive.drive(0,0,0)),
+        intakeRoller.setEnabledCommand(true),
+        intakeRoller.outtakeCommand(),
+        Commands.waitSeconds(3),
+        intakeRoller.setEnabledCommand(false)
+      )
+    );
+      
+    
   }
 }

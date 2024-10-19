@@ -209,7 +209,7 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
     }
 
     public Command outtakeCommand() {
-        return setVelocityCommand(-IntakeConstants.kIntakeVelocity.get());
+        return setVelocityCommand(IntakeConstants.kOutakeVelocity.get());
     }
 
     @Override
