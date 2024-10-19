@@ -147,7 +147,7 @@ public class RobotContainer implements Reportable {
       () -> {
         return commandDriverController.getRightX(); // Rotation
       },
-      () -> true, // should be field oriented now on false
+      () -> false, // should be field oriented now on true
       () -> false, // tow supplier
       driverController::getR2Button, // Precision/"Sniper Button"
       () -> {
@@ -260,10 +260,11 @@ public class RobotContainer implements Reportable {
     swerveDrive.initModuleShuffleboard(loggingLevel);
     intakeRoller.initShuffleboard(loggingLevel);
     climb.initShuffleboard(loggingLevel);
-    indexer.initShuffleboard(loggingLevel);
-    shooterPivot.initShuffleboard(loggingLevel);
-    shooterRoller.initShuffleboard(loggingLevel);
-    tramp.initShuffleboard(loggingLevel);
+    // indexer.initShuffleboard(loggingLevel);
+    // shooterPivot.initShuffleboard(loggingLevel);
+    // shooterRoller.initShuffleboard(loggingLevel);
+    // tramp.initShuffleboard(loggingLevel);
+    imu.initShuffleboard(loggingLevel);
 
     ShuffleboardTab tab = Shuffleboard.getTab("Main");
     tab.addNumber("Total Current Draw", pdp::getTotalCurrent);
