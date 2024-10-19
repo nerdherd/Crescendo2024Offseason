@@ -447,8 +447,8 @@ public final class Constants {
     public static final PrefDouble kClimbkP = new PrefDouble("Climb Motor kP", 1);
     public static final PrefDouble kClimbkI = new PrefDouble("Climb Motor kI", 0);
     public static final PrefDouble kClimbkD = new PrefDouble("Climb Motor kD", 0.0);
-    public static final PrefDouble kClimbPIDErrorTolerance = new PrefDouble("Climb Motor PID Error Tolerance", 0.05);
-    public static final PrefDouble kClimbPIDErrorDerivativeTolerance = new PrefDouble("Climb Motor PID Error Derivative Tolerance", 0.05);
+    public static final PrefDouble kClimbPIDErrorTolerance = new PrefDouble("Climb Motor PID Error Tolerance", 0.01);
+    public static final PrefDouble kClimbPIDErrorDerivativeTolerance = new PrefDouble("Climb Motor PID Error Derivative Tolerance", 0.01);
     public enum ClimbPostions {
       NEUTRAL,
       TOP,

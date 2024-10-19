@@ -42,7 +42,7 @@ public class Climb extends SubsystemBase implements Reportable {
     
     private ClimbPostions climbPositionState = ClimbPostions.NEUTRAL;
 
-    private boolean enabled = true;
+    private boolean enabled = false;
     public boolean velocityControl = true;
 
     public Climb() {
@@ -107,8 +107,11 @@ public class Climb extends SubsystemBase implements Reportable {
     @Override
     public void periodic() {
         if (!enabled) {
-            leftClimbMotor.setControl(brakeRequest);
+            // leftClimbMotor.setControl(brakeRequest);
             setPositionStateNeutral();
+            climbPID.reset();
+            leftClimbMotorVelocityRequest.Velocity = 0;
+            leftClimbMotor.setControl(leftClimbMotorVelocityRequest);
             return;
         }
 
@@ -144,7 +147,8 @@ public class Climb extends SubsystemBase implements Reportable {
             default:
                 climbPID.reset();
                 leftClimbMotorVelocityRequest.Velocity = 0;
-                leftClimbMotor.setControl(brakeRequest);
+                leftClimbMotor.setControl(leftClimbMotorVelocityRequest);
+                // leftClimbMotor.setControl(brakeRequest);
                 break;
         }
     }
