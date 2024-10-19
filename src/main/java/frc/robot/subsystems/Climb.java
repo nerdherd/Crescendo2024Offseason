@@ -36,7 +36,7 @@ public class Climb extends SubsystemBase implements Reportable {
 
     private final Follower followRequest = new Follower(ClimbConstants.kLeftClimbMotorID, true);
 
-    private final PIDController climbPID = new PIDController(0, 0, 0);
+    private final PIDController climbPID = new PIDController(0.1, 0, 0);
 
     private final NeutralOut brakeRequest = new NeutralOut();
     
@@ -119,7 +119,8 @@ public class Climb extends SubsystemBase implements Reportable {
         //     return;
         // }
         
-        leftClimbMotor.setControl(leftClimbMotorVelocityRequest);
+        // leftClimbMotor.setControl(leftClimbMotorVelocityRequest);
+
         // STATE MACHINE KYLE HUANG FOREVER
         switch (climbPositionState) {
             case TOP:
@@ -127,8 +128,8 @@ public class Climb extends SubsystemBase implements Reportable {
                     setPositionStateNeutral();
                     return;
                 }
-                ClimbConstants.kClimbMaxPosition.loadPreferences();
-                setClimbVelocity(climbPID.calculate(leftClimbMotor.getPosition().getValueAsDouble(), ClimbConstants.kClimbMaxPosition.get()));
+                // ClimbConstants.kClimbMaxPosition.loadPreferences();
+                setClimbVelocity(climbPID.calculate(leftClimbMotor.getPosition().getValueAsDouble(), 0.27));
                 leftClimbMotor.setControl(leftClimbMotorVelocityRequest);
                 break;
             case BOTTOM:
@@ -136,12 +137,12 @@ public class Climb extends SubsystemBase implements Reportable {
                     setPositionStateNeutral();
                     return;
                 }
-                ClimbConstants.kClimbMinPosition.loadPreferences();
-                setClimbVelocity(climbPID.calculate(leftClimbMotor.getPosition().getValueAsDouble(), ClimbConstants.kClimbMinPosition.get()));
+                // ClimbConstants.kClimbMinPosition.loadPreferences();
+                setClimbVelocity(climbPID.calculate(leftClimbMotor.getPosition().getValueAsDouble(), 0));
                 leftClimbMotor.setControl(leftClimbMotorVelocityRequest);
                 break;
             default:
-                climbPID.reset();
+                // climbPID.reset();
                 leftClimbMotorVelocityRequest.Velocity = 0;
                 leftClimbMotor.setControl(brakeRequest);
                 break;
@@ -237,7 +238,7 @@ public class Climb extends SubsystemBase implements Reportable {
         ShuffleboardTab tab = Shuffleboard.getTab("Climb");
 
         switch (priority) {
-            case ALL:
+            case ALL:   
             case MEDIUM:
             tab.addDouble("Left Climb Motor Velocity", () -> leftClimbMotor.getVelocity().getValueAsDouble());
             tab.addDouble("Right Climb Motor Velocity", () -> rightClimbMotor.getVelocity().getValueAsDouble());
@@ -250,6 +251,8 @@ public class Climb extends SubsystemBase implements Reportable {
             tab.addDouble("Left Motor Supply Current", () -> leftClimbMotor.getSupplyCurrent().getValueAsDouble());
             tab.addDouble("Right Motor Stator Current", () -> rightClimbMotor.getStatorCurrent().getValueAsDouble());
             tab.addDouble("Right Motor Supply Current", () -> rightClimbMotor.getSupplyCurrent().getValueAsDouble());
+            tab.addString("Climb Position State", () -> climbPositionState.toString());
+            tab.addDouble("Climb Desired Velocity Request", () -> leftClimbMotorVelocityRequest.Velocity);
                 break;
         
             default:
