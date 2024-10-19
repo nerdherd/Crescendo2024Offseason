@@ -310,8 +310,8 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     }
 
     public void zeroGyroAndPoseAngle() {
-        // gyro.zeroHeading();
-        // gyro.setOffset(0);
+        gyro.zeroHeading();
+        gyro.setOffset(0);
         Pose2d pose = getPose();
         Pose2d newPose = new Pose2d(pose.getX(), pose.getY(), RobotContainer.IsRedSide() ? Rotation2d.fromDegrees(180) : Rotation2d.fromDegrees(0));
         poseEstimator.resetPosition(gyro.getRotation2d(), getModulePositions(), newPose);

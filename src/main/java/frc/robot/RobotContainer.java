@@ -25,7 +25,7 @@ import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.commands.autos.DriveForward;
 // import frc.robot.subsystems.BeamBreakSensor;
-import frc.robot.subsystems.Climb;
+// import frc.robot.subsystems.Climb;
 // import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.IntakeRoller;
 import frc.robot.subsystems.Reportable;
@@ -48,7 +48,7 @@ public class RobotContainer implements Reportable {
   // public ShooterPivot shooterPivot = new ShooterPivot();
   // public ShooterRoller shooterRoller = new ShooterRoller();
   // public Tramp tramp = new Tramp();
-  public Climb climb = new Climb();
+  // public Climb climb = new Climb();
   // public BeamBreakSensor intakeBeamBreak = new BeamBreakSensor(0); // TODO value is placeholder
   // public BeamBreakSensor trampBeamBreak = new BeamBreakSensor(1); // TODO value is placeholder
   // public BeamBreakSensor shooterBeamBreak = new BeamBreakSensor(2); // TODO value is placeholder
@@ -180,7 +180,7 @@ public class RobotContainer implements Reportable {
 
   public void configureBindings_teleop() {
 
-    commandDriverController.options().whileTrue(
+    commandDriverController.options().onTrue(
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle())
     );
     
@@ -188,23 +188,33 @@ public class RobotContainer implements Reportable {
     //   superSystem.shootSpeaker()
     //   );
 
-    commandOperatorController.povUp().whileTrue(
+    // commandOperatorController.povUp().whileTrue(
+    //   Commands.sequence(
+    //     climb.setEnabledCommand(true),
+    //     climb.setPositionStateTopCommand()
+
+    //   )).onFalse(
+    //     climb.setEnabledCommand(false)
+    //   );
+
+    // commandOperatorController.povDown().whileTrue(
+    //   Commands.sequence(
+    //     climb.setEnabledCommand(true),
+    //     climb.setPositionStateBottomCommand()
+
+    //   )).onFalse(
+    //     climb.setEnabledCommand(false)
+    //   );
+    
+    commandDriverController.L2().whileTrue(
       Commands.sequence(
-        climb.setEnabledCommand(true),
-        climb.setPositionStateTopCommand()
-
+        intakeRoller.setEnabledCommand(true),
+        intakeRoller.intakeCommand()
+        // Commands.waitUntil(() -> intakeBeamBreak.noteSensed())
       )).onFalse(
-        climb.setEnabledCommand(false)
-      );
+        intakeRoller.setEnabledCommand(false)
+    );
 
-    commandOperatorController.povDown().whileTrue(
-      Commands.sequence(
-        climb.setEnabledCommand(true),
-        climb.setPositionStateBottomCommand()
-
-      )).onFalse(
-        climb.setEnabledCommand(false)
-      );
     commandOperatorController.L2().whileTrue(
       Commands.sequence(
         intakeRoller.setEnabledCommand(true),
@@ -259,7 +269,7 @@ public class RobotContainer implements Reportable {
     swerveDrive.initShuffleboard(loggingLevel);
     swerveDrive.initModuleShuffleboard(loggingLevel);
     intakeRoller.initShuffleboard(loggingLevel);
-    climb.initShuffleboard(loggingLevel);
+    // climb.initShuffleboard(loggingLevel);
     // indexer.initShuffleboard(loggingLevel);
     // shooterPivot.initShuffleboard(loggingLevel);
     // shooterRoller.initShuffleboard(loggingLevel);
