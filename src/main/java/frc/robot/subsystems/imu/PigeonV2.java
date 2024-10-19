@@ -83,7 +83,7 @@ public class PigeonV2 extends SubsystemBase implements Gyro {
     }
 
     public double getYaw() {
-        double currentYaw = (pigeon.getPitch().getValue() - offset) % 360;   //yaw = roll
+        double currentYaw = (pigeon.getYaw().getValue() - offset) % 360;
         if (currentYaw < 0) {
             return currentYaw + 360;
         } else {
@@ -92,7 +92,7 @@ public class PigeonV2 extends SubsystemBase implements Gyro {
     }
 
     public double getPitch() {
-        return (-pigeon.getYaw().getValue() - pitchOffset) % 360;
+        return (-pigeon.getPitch().getValue() - pitchOffset) % 360;
     }
 
     public double getRoll() {
