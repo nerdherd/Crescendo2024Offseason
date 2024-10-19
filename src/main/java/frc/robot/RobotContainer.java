@@ -20,19 +20,19 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ControllerConstants;
-import frc.robot.Constants.ShooterConstants;
+// import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.commands.autos.DriveForward;
-import frc.robot.subsystems.BeamBreakSensor;
+// import frc.robot.subsystems.BeamBreakSensor;
 import frc.robot.subsystems.Climb;
-import frc.robot.subsystems.Indexer;
+// import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.IntakeRoller;
 import frc.robot.subsystems.Reportable;
-import frc.robot.subsystems.ShooterPivot;
-import frc.robot.subsystems.ShooterRoller;
-import frc.robot.subsystems.SuperSystem;
-import frc.robot.subsystems.Tramp;
+// import frc.robot.subsystems.ShooterPivot;
+// import frc.robot.subsystems.ShooterRoller;
+// import frc.robot.subsystems.SuperSystem;
+// import frc.robot.subsystems.Tramp;
 import frc.robot.subsystems.imu.Gyro;
 import frc.robot.subsystems.imu.PigeonV2;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
@@ -43,17 +43,17 @@ import frc.robot.util.NerdyMath;
 public class RobotContainer implements Reportable {
   public Gyro imu = new PigeonV2(2);
   
-  public Indexer indexer = new Indexer();
+  // public Indexer indexer = new Indexer();
   public IntakeRoller intakeRoller = new IntakeRoller();
-  public ShooterPivot shooterPivot = new ShooterPivot();
-  public ShooterRoller shooterRoller = new ShooterRoller();
-  public Tramp tramp = new Tramp();
+  // public ShooterPivot shooterPivot = new ShooterPivot();
+  // public ShooterRoller shooterRoller = new ShooterRoller();
+  // public Tramp tramp = new Tramp();
   public Climb climb = new Climb();
-  public BeamBreakSensor intakeBeamBreak = new BeamBreakSensor(0); // TODO value is placeholder
-  public BeamBreakSensor trampBeamBreak = new BeamBreakSensor(1); // TODO value is placeholder
-  public BeamBreakSensor shooterBeamBreak = new BeamBreakSensor(2); // TODO value is placeholder
+  // public BeamBreakSensor intakeBeamBreak = new BeamBreakSensor(0); // TODO value is placeholder
+  // public BeamBreakSensor trampBeamBreak = new BeamBreakSensor(1); // TODO value is placeholder
+  // public BeamBreakSensor shooterBeamBreak = new BeamBreakSensor(2); // TODO value is placeholder
 
-  public SuperSystem superSystem = new SuperSystem(intakeRoller, indexer, shooterPivot, shooterRoller, tramp, climb, intakeBeamBreak, trampBeamBreak, shooterBeamBreak);
+  // public SuperSystem superSystem = new SuperSystem(intakeRoller, indexer, climb, intakeBeamBreak, trampBeamBreak, shooterBeamBreak);
 
   public SwerveDrivetrain swerveDrive;
   public PowerDistribution pdp = new PowerDistribution(1, ModuleType.kRev);
@@ -88,8 +88,8 @@ public class RobotContainer implements Reportable {
     }
     intakeRoller = new IntakeRoller();
 
-    LimelightHelpers.setLEDMode_ForceBlink(VisionConstants.kLimelightBackName);
-    LimelightHelpers.setLEDMode_ForceBlink(VisionConstants.kLimelightFrontName);
+    // LimelightHelpers.setLEDMode_ForceBlink(VisionConstants.kLimelightBackName);
+    // LimelightHelpers.setLEDMode_ForceBlink(VisionConstants.kLimelightFrontName);
 
     // Configure the trigger bindings
     // Moved to teleop init
@@ -122,22 +122,22 @@ public class RobotContainer implements Reportable {
   }
 
   public void initDefaultCommands_teleop() {
-    shooterPivot.setDefaultCommand(
-      new RunCommand(
-        () -> {
-          double increment = Math.signum(
-              NerdyMath.deadband(
-                -operatorController.getLeftY(), //0.5 rev/second 
-                -ControllerConstants.kDeadband, 
-                ControllerConstants.kDeadband)
-            ) * 0.1;
-          SmartDashboard.putNumber("Increment", increment);
-          shooterPivot.incrementPosition(increment);
-             // (20 * x) degrees per second
-            // If x = 0.1, then v = 2 degrees per second
-        },
-        shooterPivot
-      ));
+    // shooterPivot.setDefaultCommand(
+    //   new RunCommand(
+    //     () -> {
+    //       double increment = Math.signum(
+    //           NerdyMath.deadband(
+    //             -operatorController.getLeftY(), //0.5 rev/second 
+    //             -ControllerConstants.kDeadband, 
+    //             ControllerConstants.kDeadband)
+    //         ) * 0.1;
+    //       SmartDashboard.putNumber("Increment", increment);
+    //       shooterPivot.incrementPosition(increment);
+    //          // (20 * x) degrees per second
+    //         // If x = 0.1, then v = 2 degrees per second
+    //     },
+    //     shooterPivot
+    //   ));
 
     swerveJoystickCommand = 
     new SwerveJoystickCommand(
@@ -184,11 +184,11 @@ public class RobotContainer implements Reportable {
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle())
     );
     
-    commandDriverController.L2().whileTrue(
-      superSystem.shootSpeaker()
-      );
+    // commandDriverController.L2().whileTrue(
+    //   superSystem.shootSpeaker()
+    //   );
 
-    commandOperatorController.share().whileTrue(
+    commandOperatorController.povUp().whileTrue(
       Commands.sequence(
         climb.setEnabledCommand(true),
         climb.setPositionStateTopCommand()
@@ -197,7 +197,7 @@ public class RobotContainer implements Reportable {
         climb.setEnabledCommand(false)
       );
 
-    commandOperatorController.options().whileTrue(
+    commandOperatorController.povDown().whileTrue(
       Commands.sequence(
         climb.setEnabledCommand(true),
         climb.setPositionStateBottomCommand()
@@ -222,32 +222,32 @@ public class RobotContainer implements Reportable {
         intakeRoller.setEnabledCommand(false)
     );
 
-    commandOperatorController.triangle().whileTrue(
-      Commands.sequence(
-        shooterPivot.setEnabledCommand(true),
-        shooterPivot.moveToNeutral()
-      )).onFalse(
-        shooterPivot.setEnabledCommand(false)
+    // commandOperatorController.triangle().whileTrue(
+    //   Commands.sequence(
+    //     shooterPivot.setEnabledCommand(true),
+    //     shooterPivot.moveToNeutral()
+    //   )).onFalse(
+    //     shooterPivot.setEnabledCommand(false)
 
 
-    );
+    // );
 
-    commandOperatorController.square().whileTrue(
-      Commands.sequence(
-        tramp.setEnabledCommand(true),
-        tramp.setElevatorAmpCommand()
-      )).onFalse(
-        tramp.setEnabledCommand(false)
-      );
+    // commandOperatorController.square().whileTrue(
+    //   Commands.sequence(
+    //     tramp.setEnabledCommand(true),
+    //     tramp.setElevatorAmpCommand()
+    //   )).onFalse(
+    //     tramp.setEnabledCommand(false)
+    //   );
     
-    commandOperatorController.cross().whileTrue(
-      Commands.sequence(
-        tramp.setEnabledCommand(true),
-        tramp.setTrampShootCommand()
-        //Commands.waitUntil(() -> trampBeamBreak.noteSensed())
-      )).onFalse(
-        tramp.setEnabledCommand(false)
-      );
+    // commandOperatorController.cross().whileTrue(
+    //   Commands.sequence(
+    //     tramp.setEnabledCommand(true),
+    //     tramp.setTrampShootCommand()
+    //     //Commands.waitUntil(() -> trampBeamBreak.noteSensed())
+    //   )).onFalse(
+    //     tramp.setEnabledCommand(false)
+    //   );
     
   }
 
@@ -264,12 +264,11 @@ public class RobotContainer implements Reportable {
     // shooterPivot.initShuffleboard(loggingLevel);
     // shooterRoller.initShuffleboard(loggingLevel);
     // tramp.initShuffleboard(loggingLevel);
-    imu.initShuffleboard(loggingLevel);
 
     ShuffleboardTab tab = Shuffleboard.getTab("Main");
     tab.addNumber("Total Current Draw", pdp::getTotalCurrent);
     tab.addNumber("Voltage", () -> Math.abs(pdp.getVoltage()));
-    tab.addNumber("apriltag angle", () -> swerveDrive.getTurnToSpecificTagAngle(IsRedSide() ? 4 : 7));
+    // tab.addNumber("apriltag angle", () -> swerveDrive.getTurnToSpecificTagAngle(IsRedSide() ? 4 : 7));
   }
 
   public void initDefaultCommands() {}

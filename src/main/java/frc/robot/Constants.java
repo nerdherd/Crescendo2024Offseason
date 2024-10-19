@@ -439,16 +439,16 @@ public final class Constants {
     public static final int kLeftClimbMotorID = 54;
     public static final int kRightClimbMotorID = 57;
 
-    public static final PrefDouble kClimbMinPosition = new PrefDouble("Climb Min Position", 0.0);
-    public static final PrefDouble kClimbMaxPosition = new PrefDouble("Climb Max Position", 0.24);
+    public static final PrefDouble kClimbMinPosition = new PrefDouble("Climb Min Position", 0);
+    public static final PrefDouble kClimbMaxPosition = new PrefDouble("Climb Max Position", 0.27);
     public static final PrefDouble kClimbPositionOffset = new PrefDouble("Climb Position Offset", 0.0);
     
 
-    public static final PrefDouble kClimbkP = new PrefDouble("Climb Motor kP", 0.0);
+    public static final PrefDouble kClimbkP = new PrefDouble("Climb Motor kP", 0.5);
     public static final PrefDouble kClimbkI = new PrefDouble("Climb Motor kI", 0.1);
     public static final PrefDouble kClimbkD = new PrefDouble("Climb Motor kD", 0.0);
-    public static final PrefDouble kClimbPIDErrorTolerance = new PrefDouble("Climb Motor PID Error Tolerance", 5.0);
-    public static final PrefDouble kClimbPIDErrorDerivativeTolerance = new PrefDouble("Climb Motor PID Error Derivative Tolerance", 10.0);
+    public static final PrefDouble kClimbPIDErrorTolerance = new PrefDouble("Climb Motor PID Error Tolerance", 0.05);
+    public static final PrefDouble kClimbPIDErrorDerivativeTolerance = new PrefDouble("Climb Motor PID Error Derivative Tolerance", 0.05);
     public enum ClimbPostions {
       NEUTRAL,
       TOP,

@@ -4,6 +4,7 @@
 
 package frc.robot.commands.autos;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 
 public class DriveForward extends Command {
@@ -15,12 +16,13 @@ public class DriveForward extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    swerveDrive.drive(1.0, 0, 1.0);
+    swerveDrive.drive(1.0, 0, 0);
   }
 
   // Called once the command ends or is interrupted.

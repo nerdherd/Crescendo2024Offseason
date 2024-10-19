@@ -56,6 +56,7 @@ public class Climb extends SubsystemBase implements Reportable {
         rightClimbMotor.setControl(followRequest);
         
         configureMotor();
+        configurePID();
     }
     /**
      * configure motors things
@@ -111,12 +112,12 @@ public class Climb extends SubsystemBase implements Reportable {
             return;
         }
 
-        if(Math.abs(leftClimbMotorVelocityRequest.Velocity) < 0.5) {
-            leftClimbMotorVelocityRequest.Velocity = 0;
-            leftClimbMotor.setControl(brakeRequest);
-            setPositionStateNeutral();
-            return;
-        }
+        // if(Math.abs(leftClimbMotorVelocityRequest.Velocity) < 0.5) {
+        //     leftClimbMotorVelocityRequest.Velocity = 0;
+        //     leftClimbMotor.setControl(brakeRequest);
+        //     setPositionStateNeutral();
+        //     return;
+        // }
         
         leftClimbMotor.setControl(leftClimbMotorVelocityRequest);
         // STATE MACHINE KYLE HUANG FOREVER
@@ -126,16 +127,18 @@ public class Climb extends SubsystemBase implements Reportable {
                     setPositionStateNeutral();
                     return;
                 }
-                //ClimbConstants.kClimbMaxPosition.loadPreferences();
+                ClimbConstants.kClimbMaxPosition.loadPreferences();
                 setClimbVelocity(climbPID.calculate(leftClimbMotor.getPosition().getValueAsDouble(), ClimbConstants.kClimbMaxPosition.get()));
+                leftClimbMotor.setControl(leftClimbMotorVelocityRequest);
                 break;
             case BOTTOM:
                 if (climbPID.atSetpoint()) {
                     setPositionStateNeutral();
                     return;
                 }
-                //ClimbConstants.kClimbMinPosition.loadPreferences();
+                ClimbConstants.kClimbMinPosition.loadPreferences();
                 setClimbVelocity(climbPID.calculate(leftClimbMotor.getPosition().getValueAsDouble(), ClimbConstants.kClimbMinPosition.get()));
+                leftClimbMotor.setControl(leftClimbMotorVelocityRequest);
                 break;
             default:
                 climbPID.reset();
@@ -179,6 +182,7 @@ public class Climb extends SubsystemBase implements Reportable {
     private void setClimbVelocity(double verbosity) {
         leftClimbMotorVelocityRequest.Velocity = verbosity; // verbosity
     }
+    
 
     // ~~~~~~ CONTROL COMMANDS ~~~~~~
     /**

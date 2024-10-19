@@ -35,12 +35,9 @@ public class SuperSystem {
     private double angleOffset = 0.0;
     private NerdyLine angleLine;
 
-    public SuperSystem(IntakeRoller intakeRoller, Indexer indexer, ShooterPivot shooterPivot, ShooterRoller shooterRoller, Tramp tramp, Climb climb, BeamBreakSensor intakeBeamBreak, BeamBreakSensor trampBeamBreak, BeamBreakSensor shooterBeamBreak) {
+    public SuperSystem(IntakeRoller intakeRoller, Indexer indexer, Climb climb, BeamBreakSensor intakeBeamBreak, BeamBreakSensor trampBeamBreak, BeamBreakSensor shooterBeamBreak) {
         this.intakeRoller = intakeRoller;
         this.indexer = indexer;
-        this.shooterPivot = shooterPivot;
-        this.shooterRoller = shooterRoller;
-        this.tramp = tramp;
         this.intakeBeamBreak = intakeBeamBreak;
         this.trampBeamBreak = trampBeamBreak;
         this.shooterBeamBreak = shooterBeamBreak;
