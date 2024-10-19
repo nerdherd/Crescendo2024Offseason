@@ -29,11 +29,13 @@ import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.commands.autos.DriveForward;
 import frc.robot.commands.autos.Taxi;
+import frc.robot.commands.autos.threepieceouttake;
 // import frc.robot.subsystems.BeamBreakSensor;
 import frc.robot.subsystems.Climb;
 // import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.IntakeRoller;
 import frc.robot.subsystems.Reportable;
+import frc.robot.subsystems.SuperSystem;
 // import frc.robot.subsystems.ShooterPivot;
 // import frc.robot.subsystems.ShooterRoller;
 // import frc.robot.subsystems.SuperSystem;
@@ -60,6 +62,7 @@ public class RobotContainer implements Reportable {
 
   // public SuperSystem superSystem = new SuperSystem(intakeRoller, indexer, climb, intakeBeamBreak, trampBeamBreak, shooterBeamBreak);
 
+  
   public SwerveDrivetrain swerveDrive;
   public PowerDistribution pdp = new PowerDistribution(1, ModuleType.kRev);
   
@@ -284,8 +287,15 @@ public class RobotContainer implements Reportable {
    * @return the command to run in autonomous
    */
   PathPlannerPath sourceauto = PathPlannerPath.fromPathFile("source taxi");
+  PathPlannerPath f07 = PathPlannerPath.fromPathFile("f07");
+  PathPlannerPath e7Z = PathPlannerPath.fromPathFile("e7Z");
+  PathPlannerPath fZ8 = PathPlannerPath.fromPathFile("fZ8");
+  PathPlannerPath e8Z = PathPlannerPath.fromPathFile("e8Z");
+
+
+
   public Command getAutonomousCommand() {
-    Command currentAuto = new Taxi(swerveDrive, List.of(sourceauto));
+    Command currentAuto = new threepieceouttake(swerveDrive, intakeRoller, List.of(f07, e7Z, fZ8, e8Z));
     swerveDrive.setDriveMode(DRIVE_MODE.AUTONOMOUS);
     return currentAuto;
   }
