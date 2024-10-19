@@ -4,6 +4,10 @@
 
 package frc.robot;
 
+import java.util.List;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathPlannerPath;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.fasterxml.jackson.databind.deser.impl.BeanAsArrayBuilderDeserializer;
 
@@ -24,6 +28,7 @@ import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.commands.autos.DriveForward;
+import frc.robot.commands.autos.Taxi;
 // import frc.robot.subsystems.BeamBreakSensor;
 import frc.robot.subsystems.Climb;
 // import frc.robot.subsystems.Indexer;
@@ -278,9 +283,9 @@ public class RobotContainer implements Reportable {
    *
    * @return the command to run in autonomous
    */
+  PathPlannerPath sourceauto = PathPlannerPath.fromPathFile("source taxi");
   public Command getAutonomousCommand() {
-    Command currentAuto = new DriveForward(swerveDrive);
-
+    Command currentAuto = new Taxi(swerveDrive, List.of(sourceauto));
     swerveDrive.setDriveMode(DRIVE_MODE.AUTONOMOUS);
     return currentAuto;
   }
