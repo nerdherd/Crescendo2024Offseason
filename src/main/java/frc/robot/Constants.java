@@ -383,7 +383,7 @@ public final class Constants {
     // ************************************** INTAKE CONSTANTS *************************************** //
 
     public static final PrefDouble kIntakeVelocity = new PrefDouble("Intake Velocity", -20);
-    public static final PrefDouble kOutakeVelocity = new PrefDouble("Outake Velocity", 30);
+    public static final PrefDouble kOutakeVelocity = new PrefDouble("Outake Velocity", 40);
     public static final PrefDouble kAutoIntakeVelocity = new PrefDouble("Intake Velocity Auto", -20);
     public static final double kIntakeMaxVelocity =  20;
     public static final double kIntakeMinVelocity = -20;

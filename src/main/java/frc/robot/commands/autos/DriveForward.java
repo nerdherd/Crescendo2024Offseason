@@ -18,27 +18,28 @@ public class DriveForward extends SequentialCommandGroup {
     this.intakeRoller = intake;
 
     addCommands(
-      Commands.sequence(
-        intakeRoller.setEnabledCommand(true),
-        Commands.race(
-          Commands.parallel(
-            Commands.run(() -> swerveDrive.drive(1.0, 0, 0)),  
-            intakeRoller.intakeCommand()
-          ),
-          Commands.waitSeconds(5)
-        ),
-        intakeRoller.setEnabledCommand(false),
-        Commands.runOnce(() -> swerveDrive.drive(0,0,0)),
-        Commands.race(
-          Commands.run(() -> swerveDrive.drive(-1.0, 0, 0)),
-          Commands.waitSeconds(3)
-        ),
-        Commands.runOnce(() -> swerveDrive.drive(0,0,0)),
-        intakeRoller.setEnabledCommand(true),
-        intakeRoller.outtakeCommand(),
-        Commands.waitSeconds(3),
-        intakeRoller.setEnabledCommand(false)
-      )
+      Commands.run(()->swerveDrive.drive(2,0,0))
+      // Commands.sequence(
+      //   intakeRoller.setEnabledCommand(true),
+      //   Commands.race(
+      //     Commands.parallel(
+      //       Commands.run(() -> swerveDrive.drive(1.0, 0, 0)),  
+      //       intakeRoller.intakeCommand()
+      //     ),
+      //     Commands.waitSeconds(5)
+      //   ),
+      //   intakeRoller.setEnabledCommand(false),
+      //   Commands.runOnce(() -> swerveDrive.drive(0,0,0)),
+      //   Commands.race(
+      //     Commands.run(() -> swerveDrive.drive(-1.0, 0, 0)),
+      //     Commands.waitSeconds(3)
+      //   ),
+      //   Commands.runOnce(() -> swerveDrive.drive(0,0,0)),
+      //   intakeRoller.setEnabledCommand(true),
+      //   intakeRoller.outtakeCommand(),
+      //   Commands.waitSeconds(3),
+      //   intakeRoller.setEnabledCommand(false)
+      // )
     );
       
     

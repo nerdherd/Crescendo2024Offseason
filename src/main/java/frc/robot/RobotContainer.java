@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.List;
+
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.fasterxml.jackson.databind.deser.impl.BeanAsArrayBuilderDeserializer;
 
@@ -24,6 +26,7 @@ import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.commands.autos.DriveForward;
+import frc.robot.commands.autos.MidNote;
 // import frc.robot.subsystems.BeamBreakSensor;
 // import frc.robot.subsystems.Climb;
 // import frc.robot.subsystems.Indexer;
@@ -33,6 +36,8 @@ import frc.robot.subsystems.Reportable;
 // import frc.robot.subsystems.ShooterRoller;
 // import frc.robot.subsystems.SuperSystem;
 // import frc.robot.subsystems.Tramp;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathPlannerPath;
 import frc.robot.subsystems.imu.Gyro;
 import frc.robot.subsystems.imu.PigeonV2;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
@@ -176,6 +181,8 @@ public class RobotContainer implements Reportable {
     swerveDrive.setDefaultCommand(swerveJoystickCommand);
 }
 
+
+
   public void initDefaultCommands_test() {}
 
   public void configureBindings_teleop() {
@@ -271,6 +278,7 @@ public class RobotContainer implements Reportable {
     
   }
 
+
   public void configureBindings_test() {}
   
   public void configureLEDTriggers() {}
@@ -293,13 +301,21 @@ public class RobotContainer implements Reportable {
 
   public void initDefaultCommands() {}
 
+  PathPlannerPath midnote = PathPlannerPath.fromPathFile("midnote");
+  PathPlannerPath back = PathPlannerPath.fromPathFile("back");
+  
+  final List<PathPlannerPath> pathGroupExample3 = List.of(
+      midnote, back
+    );
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    Command currentAuto = new DriveForward(swerveDrive, intakeRoller);
+    // Command currentAuto = new DriveForward(swerveDrive, intakeRoller);
+    Command currentAuto = new MidNote(swerveDrive, intakeRoller, pathGroupExample3);
     swerveDrive.setDriveMode(DRIVE_MODE.AUTONOMOUS);
     return currentAuto;
   }
