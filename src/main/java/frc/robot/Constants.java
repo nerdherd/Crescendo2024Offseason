@@ -382,10 +382,11 @@ public final class Constants {
 
     // ************************************** INTAKE CONSTANTS *************************************** //
 
-    public static final PrefDouble kIntakeVelocity = new PrefDouble("Intake Velocity", 100);
-    public static final PrefDouble kAutoIntakeVelocity = new PrefDouble("Intake Velocity Auto", 90);
-    public static final double kIntakeMaxVelocity =  100;
-    public static final double kIntakeMinVelocity = -100;
+    public static final PrefDouble kIntakeVelocity = new PrefDouble("Intake Velocity", -20);
+    public static final PrefDouble kOutakeVelocity = new PrefDouble("Outake Velocity", 40);
+    public static final PrefDouble kAutoIntakeVelocity = new PrefDouble("Intake Velocity Auto", -20);
+    public static final double kIntakeMaxVelocity =  20;
+    public static final double kIntakeMinVelocity = -20;
 
     public static final PrefDouble kPIntakeMotor = new PrefDouble("kP Intake Roller", 1); //Old values from Abruticus
     public static final PrefDouble kIIntakeMotor = new PrefDouble("kI Intake Roller", 0); //Old values from Abruticus
@@ -439,16 +440,16 @@ public final class Constants {
     public static final int kLeftClimbMotorID = 54;
     public static final int kRightClimbMotorID = 57;
 
-    public static final PrefDouble kClimbMinPosition = new PrefDouble("Climb Min Position", 0.0);
-    public static final PrefDouble kClimbMaxPosition = new PrefDouble("Climb Max Position", 0.24);
+    public static final PrefDouble kClimbMinPosition = new PrefDouble("Climb Min Position", 0);
+    public static final PrefDouble kClimbMaxPosition = new PrefDouble("Climb Max Position", 0.27);
     public static final PrefDouble kClimbPositionOffset = new PrefDouble("Climb Position Offset", 0.0);
     
 
-    public static final PrefDouble kClimbkP = new PrefDouble("Climb Motor kP", 0.1);
-    public static final PrefDouble kClimbkI = new PrefDouble("Climb Motor kI", 0.0);
+    public static final PrefDouble kClimbkP = new PrefDouble("Climb Motor kP", 1);
+    public static final PrefDouble kClimbkI = new PrefDouble("Climb Motor kI", 0);
     public static final PrefDouble kClimbkD = new PrefDouble("Climb Motor kD", 0.0);
-    public static final PrefDouble kClimbPIDErrorTolerance = new PrefDouble("Climb Motor PID Error Tolerance", 5.0);
-    public static final PrefDouble kClimbPIDErrorDerivativeTolerance = new PrefDouble("Climb Motor PID Error Derivative Tolerance", 10.0);
+    public static final PrefDouble kClimbPIDErrorTolerance = new PrefDouble("Climb Motor PID Error Tolerance", 0.01);
+    public static final PrefDouble kClimbPIDErrorDerivativeTolerance = new PrefDouble("Climb Motor PID Error Derivative Tolerance", 0.01);
     public enum ClimbPostions {
       NEUTRAL,
       TOP,

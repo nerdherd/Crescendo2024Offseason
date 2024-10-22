@@ -24,7 +24,7 @@ public class Taxi extends SequentialCommandGroup {
     
     // to be tested. Do not use it before test
 
-    public Taxi(SwerveDrivetrain swerve, SuperSystem superSystem, PathPlannerPath path){
+    public Taxi(SwerveDrivetrain swerve, PathPlannerPath path){
         Pose2d startingPose = new Pose2d(1.33, 5.55, new Rotation2d());//GetStartPoseInPath(pathGroup.get(0));
         addCommands(
             Commands.runOnce(swerve.getImu()::zeroAll),
@@ -34,3 +34,4 @@ public class Taxi extends SequentialCommandGroup {
         );  
     }
 }
+
