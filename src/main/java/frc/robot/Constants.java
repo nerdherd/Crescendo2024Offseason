@@ -7,21 +7,11 @@ package frc.robot;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.PIDConstants;
 
-import edu.wpi.first.math.MatBuilder;
-import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.Nat;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.util.preferences.PrefBool;
 import frc.robot.util.preferences.PrefDouble;
@@ -55,7 +45,6 @@ public final class Constants {
     public static final double kWheelDiameterMeters = Units.inchesToMeters(4);
     public static final double kDriveMotorGearRatio = 1 / 6.75;
     public static final double kTurningMotorGearRatio = 1 / 21.428; // 150 : 7 : 1 MK4i
-    // public static final double kDriveDistanceLoss = 0.95; // from measuring IRL
     public static final double kDriveDistanceLoss = 1; // from measuring IRL
     public static final double kMetersPerRevolution = kWheelDiameterMeters * Math.PI * kDriveDistanceLoss;
     public static final double kDriveTicksToMeters = (1 / 2048.0) * kMetersPerRevolution; 
@@ -88,15 +77,6 @@ public final class Constants {
   } 
 
   public static final class SwerveDriveConstants {
-    public static final double kVisionSTDx = 0.7; //0.7 abruticus
-    public static final double kVisionSTDy = 0.7; //0.7 abructicus
-    public static final double kVisionSTDtheta = 1000; // 1000 abructicus
-    public static final Matrix<N3, N1> kBaseVisionPoseSTD = MatBuilder.fill(
-                                                              Nat.N3(), Nat.N1(), 
-                                                              kVisionSTDx,
-                                                              kVisionSTDy,
-                                                              kVisionSTDtheta);
-    // VecBuilder.fill(kVisionSTDx, kVisionSTDy, kVisionSTDtheta);
 
     public static final PrefDouble kPThetaTeleop = new PrefDouble("kP Theta Teleop", 4); //4 abruticus
     public static final PrefDouble kIThetaTeleop = new PrefDouble("kI Theta Teleop", 0); //0 abruticus
@@ -185,16 +165,6 @@ public final class Constants {
     public static final double kTurnToAnglePositionToleranceAngle = 5;
     public static final double kTurnToAngleVelocityToleranceAnglesPerSec = 2;
     public static final double kTurnToAngleFeedForwardDegreesPerSecond = 6;
-
-    // public static final double kPXController = new PrefDouble("kPXSpeed", 0.5).get();
-    // public static final double kIXController = new PrefDouble("kIXSpeed", 0).get();
-    // public static final double kDXController = new PrefDouble("kDXSpeed", 0).get();
-    // public static final double kPYController = new PrefDouble("kPYSpeed", 0.5).get();
-    // public static final double kIYController = new PrefDouble("kIYSpeed", 0).get();
-    // public static final double kDYController = new PrefDouble("kDYSpeed", 0).get();
-    // public static final double kPThetaController = new PrefDouble("kPThetaAuto", 6.0).get();
-    // public static final double kIThetaController = new PrefDouble("kIThetaAuto", 0).get();
-    // public static final double kDThetaController = new PrefDouble("kDThetaAuto", 0).get();
     
   }
 
@@ -217,50 +187,6 @@ public final class Constants {
     public static final PIDConstants kPPRotationPIDConstants = new PIDConstants(kPP_ThetaP, kPP_ThetaI, kPP_ThetaD);
 
     public static final boolean kUseAllianceColor = true;
-  }
-
-  public static final class VisionConstants {
-    public static final Pose2d kBlueAmpPose = new Pose2d(new Translation2d(1.85, 7), Rotation2d.fromDegrees(270));
-    public static final double kFrontCameraHeightMeters = 0;
-    public static final double kNoteHeightMeters = 0;
-    public static final double kCameraPitchRadians = 0;
-    public static final PrefDouble kSunflowerP = new PrefDouble("SunflowerP", 0.2);
-    public static final PrefDouble kSunflowerI = new PrefDouble("SunflowerI", 0);
-    public static final PrefDouble kSunflowerD = new PrefDouble("SunflowerD", 0);
-    // todo: fix names and ip's
-    public static final String kLimelightFrontName = "limelight-front"; //kLimelightFrontName abruticus
-    public static final String kLimelightFrontIP = "10.6.87.25:5802"; //kLimelightFrontIP abruticus
-    public static final String kLimelightLeftName = "limelight-left"; //kLimelightLeftName abruticus
-    public static final String kLimelightLeftIP = "10.6.87.25:5802"; // value from kLimelightLeftIP abruticus
-    public static final String kLimelightRightName = "limelight-right"; // value from kLimelightRightName abruticus
-    public static final String kLimelightRightIP = "10.6.87.25:5802"; // value from kLimelightRightIP abruticus
-    public static final String kLimelightBackName = "limelight-back"; // value from kLimelightBackName  abruticus
-    public static final String kLimelightBackIP = "10.6.87.25:5802"; // value from kLimelightBackIP abruticus
-    public static final int kAprilTagPipeline = 4;
-    public static final double fieldXOffset = 8.27; // Certified (Half field dimensions)
-    public static final double fieldYOffset = 4.01; // Certified (Half as well)
-    public static final double kMinimumTA = 0.7;
-    public static final int kNotePipeline = 0;
-    public static final Transform3d fieldPoseOffset = new Transform3d(
-      new Translation3d(-VisionConstants.fieldXOffset, -VisionConstants.fieldYOffset, 0), 
-      new Rotation3d()
-      );
-      
-      public static final String kPhotonVisionFrontName = "laserbean";
-      public static final Transform3d kCameraToRobot = new Transform3d(
-        new Translation3d(),
-        new Rotation3d()
-        ); // distance from camera to center of robot
-
-      public static final PrefDouble kPNoteForward = new PrefDouble("P Note Forward", 0);
-      public static final PrefDouble kINoteForward = new PrefDouble("I Note Forward", 0);
-      public static final PrefDouble kDNoteForward = new PrefDouble("D Note Forward", 0);
-      public static final PrefDouble kPNoteSide = new PrefDouble("P Note Side", 0);
-      public static final PrefDouble kINoteSide = new PrefDouble("I Note Side", 0);
-      public static final PrefDouble kDNoteSide = new PrefDouble("D Note Side", 0);
-      public static final PrefDouble kPNoteAngle = new PrefDouble("P Note Angle", 0);
-      public static final PrefDouble kINoteAngle = new PrefDouble("I Note Angle", 0);
-      public static final PrefDouble kDNoteAngle = new PrefDouble("D Note Angle", 0);
   }
       
   public static final class SuperStructureConstants {

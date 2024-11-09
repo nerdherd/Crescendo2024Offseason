@@ -6,10 +6,6 @@ package frc.robot;
 
 import java.util.List;
 
-import java.util.List;
-
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.fasterxml.jackson.databind.deser.impl.BeanAsArrayBuilderDeserializer;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
 
@@ -20,17 +16,11 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ControllerConstants;
-// import frc.robot.Constants.ShooterConstants;
-import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.SwerveJoystickCommand;
-import frc.robot.commands.autos.DriveForward;
 import frc.robot.commands.autos.Taxi;
 import frc.robot.commands.autos.MidNote;
 // import frc.robot.subsystems.BeamBreakSensor;
@@ -38,18 +28,10 @@ import frc.robot.commands.autos.MidNote;
 // import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.IntakeRoller;
 import frc.robot.subsystems.Reportable;
-// import frc.robot.subsystems.ShooterPivot;
-// import frc.robot.subsystems.ShooterRoller;
-// import frc.robot.subsystems.SuperSystem;
-// import frc.robot.subsystems.Tramp;
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.path.PathPlannerPath;
 import frc.robot.subsystems.imu.Gyro;
 import frc.robot.subsystems.imu.PigeonV2;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import frc.robot.subsystems.swerve.SwerveDrivetrain.DRIVE_MODE;
-import frc.robot.subsystems.vision.jurrasicMarsh.LimelightHelpers;
-import frc.robot.util.NerdyMath;
 
 public class RobotContainer implements Reportable {
   public Gyro imu = new PigeonV2(2);
@@ -64,8 +46,6 @@ public class RobotContainer implements Reportable {
   // public BeamBreakSensor trampBeamBreak = new BeamBreakSensor(1); // TODO value is placeholder
   // public BeamBreakSensor shooterBeamBreak = new BeamBreakSensor(2); // TODO value is placeholder
 
-  // public SuperSystem superSystem = new SuperSystem(intakeRoller, indexer, climb, intakeBeamBreak, trampBeamBreak, shooterBeamBreak);
-
   public SwerveDrivetrain swerveDrive;
   public PowerDistribution pdp = new PowerDistribution(1, ModuleType.kRev);
   
@@ -79,7 +59,6 @@ public class RobotContainer implements Reportable {
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
   
   private SwerveJoystickCommand swerveJoystickCommand;
-  private Command visionShotCommand;
   
   /**
    * The container for the robot. Contain
@@ -101,21 +80,10 @@ public class RobotContainer implements Reportable {
     }
     intakeRoller = new IntakeRoller();
 
-    // LimelightHelpers.setLEDMode_ForceBlink(VisionConstants.kLimelightBackName);
-    // LimelightHelpers.setLEDMode_ForceBlink(VisionConstants.kLimelightFrontName);
-
     initShuffleboard();
     initAutoChoosers();
-
-    // Configure the trigger bindings
-    // Moved to teleop init
     
-
     DriverStation.reportWarning("Initalization complete", false);
-    // NamedCommands.registerCommand("intakeBasic1", superSystem.intakeBasicHold());
-    // NamedCommands.registerCommand("intakeBasic2", superSystem.stopIntaking());
-    // NamedCommands.registerCommand("shootSequence2Far", superSystem.shootSequence2Far());
-    // NamedCommands.registerCommand("shootSequence2", superSystem.shootSequence2());
 
   }
 
@@ -130,11 +98,6 @@ public class RobotContainer implements Reportable {
 
   public static boolean IsRedSide() {
     return isRedSide;
-    // var alliance = DriverStation.getAlliance();
-    // if (alliance.isPresent()) {
-    //     return alliance.get() == DriverStation.Alliance.Red;
-    // }
-    // return false;
   }
 
   public void initDefaultCommands_teleop() {
@@ -203,10 +166,6 @@ public class RobotContainer implements Reportable {
     commandDriverController.options().onTrue(
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle())
     );
-    
-    // commandDriverController.L2().whileTrue(
-    //   superSystem.shootSpeaker()
-    //   );
 
     // commandOperatorController.povUp().whileTrue(
     //   Commands.sequence(
@@ -235,7 +194,6 @@ public class RobotContainer implements Reportable {
         intakeRoller.setEnabledCommand(false)
     );
 
-    // for testing purposes (delete ltr)
     commandDriverController.L1().whileTrue(
       Commands.sequence(
         intakeRoller.setEnabledCommand(true),
@@ -277,8 +235,6 @@ public class RobotContainer implements Reportable {
     //     shooterPivot.moveToNeutral()
     //   )).onFalse(
     //     shooterPivot.setEnabledCommand(false)
-
-
     // );
 
     // commandOperatorController.square().whileTrue(
@@ -297,9 +253,7 @@ public class RobotContainer implements Reportable {
     //   )).onFalse(
     //     tramp.setEnabledCommand(false)
     //   );
-    
   }
-
 
   public void configureBindings_test() {}
   
@@ -336,7 +290,6 @@ public class RobotContainer implements Reportable {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // Command currentAuto = new DriveForward(swerveDrive, intakeRoller);
     Command currentAuto = new MidNote(swerveDrive, intakeRoller, pathGroupExample3);
     swerveDrive.setDriveMode(DRIVE_MODE.AUTONOMOUS);
     return currentAuto;

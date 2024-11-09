@@ -40,8 +40,6 @@ public class TurnToAngleLive extends Command {
             SwerveAutoConstants.kTurnToAngleVelocityToleranceAnglesPerSec * period);
         
         this.pidController.enableContinuousInput(0, 360);
-        
-        // this.limiter = new SlewRateLimiter(Math.PI / 4);
 
         addRequirements(swerveDrive);
     }
@@ -67,7 +65,6 @@ public class TurnToAngleLive extends Command {
             turningSpeed, 
             -SwerveDriveConstants.kTurnToAngleMaxAngularSpeedRadiansPerSecond, 
             SwerveDriveConstants.kTurnToAngleMaxAngularSpeedRadiansPerSecond);
-        // SmartDashboard.putNumber("Turning speed limited", turningSpeed);
         
         // Convert speed into swerve states
         ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(

@@ -55,8 +55,6 @@ public class Indexer extends SubsystemBase implements Reportable {
         indexerConfigs.Voltage.PeakReverseVoltage = -11.5;
         indexerConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         indexerConfigs.MotorOutput.DutyCycleNeutralDeadband = IndexerConstants.kIndexerNeutralDeadband;
-        // indexerConfigs.CurrentLimits.StatorCurrentLimit = 30;
-        // indexerConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
         indexerConfigs.CurrentLimits.SupplyCurrentLimit = 40;
         indexerConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
         indexerConfigs.CurrentLimits.SupplyCurrentThreshold = 30;

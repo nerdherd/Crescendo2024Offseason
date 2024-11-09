@@ -11,15 +11,11 @@ import com.pathplanner.lib.path.RotationTarget;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.BooleanSubscriber;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.RobotContainer;
-import frc.robot.Constants.SuperStructureConstants;
 import frc.robot.subsystems.IntakeRoller;
-import frc.robot.subsystems.SuperSystem;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
-import frc.robot.subsystems.vision.NoteAssistance;
 
 public class MidNote extends SequentialCommandGroup {
     
@@ -41,25 +37,25 @@ public class MidNote extends SequentialCommandGroup {
         //     Commands.runOnce(swerve.getImu()::zeroAll),
         //     Commands.runOnce(() -> swerve.resetGyroFromPoseWithAlliance(startingPose)),
         //     Commands.runOnce(() -> swerve.resetOdometryWithAlliance(startingPose)),
-            // Commands.sequence(
-            //     intake.setEnabledCommand(true),
-            //     Commands.race(
-            //         Commands.parallel(
-            //             AutoBuilder.followPath(pathGroup.get(0)),
-            //             intake.intakeCommand()
-            //         ),
-            //         Commands.waitSeconds(5)
-            //     ),
-            //     intake.setEnabledCommand(false),
-            //     Commands.race(
-            //         AutoBuilder.followPath(pathGroup.get(1)),
-            //         Commands.waitSeconds(3)
-            //     ),
-            //     intake.setEnabledCommand(true),
-            //     intake.outtakeCommand(),
-            //     Commands.waitSeconds(3),
-            //     intake.setEnabledCommand(false)
-            // )
+        //     Commands.sequence(
+        //         intake.setEnabledCommand(true),
+        //         Commands.race(
+        //             Commands.parallel(
+        //                 AutoBuilder.followPath(pathGroup.get(0)),
+        //                 intake.intakeCommand()
+        //             ),
+        //             Commands.waitSeconds(5)
+        //         ),
+        //         intake.setEnabledCommand(false),
+        //         Commands.race(
+        //             AutoBuilder.followPath(pathGroup.get(1)),
+        //             Commands.waitSeconds(3)
+        //         ),
+        //         intake.setEnabledCommand(true),
+        //         intake.outtakeCommand(),
+        //         Commands.waitSeconds(3),
+        //         intake.setEnabledCommand(false)
+        //     )
         // );  
     }
 }

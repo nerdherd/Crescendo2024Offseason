@@ -14,27 +14,6 @@ public class BeamBreakSensor implements Reportable {
         beamBreakSensor = new DigitalInput(port);
     }
 
-    // Commented out because this code doesn't do anything usefull and is
-    // inneficient
-
-    // noteSensed is constatly called by the shuffleboard, so noteDetected
-    // is constantly updated, making noteSensedWithoutPolling useless
-
-    // That means there isn't any use to actually store if a note is 
-    // detected. We should delete these comments and codesoon, I've 
-    // left them in just in case I am wrong.
-
-    // private boolean noteDetected;
-
-    // public boolean noteSensed() {
-    //     noteDetected = !beamBreakSensor.get();
-    //     return noteDetected;
-    // }
-
-    // public boolean noteSensedWithoutPolling() {
-    //     return noteDetected;
-    // }
-
     public boolean noteSensed(){
         return !beamBreakSensor.get();
     }

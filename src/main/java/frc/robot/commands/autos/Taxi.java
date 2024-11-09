@@ -15,14 +15,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.RobotContainer;
-import frc.robot.Constants.SuperStructureConstants;
-import frc.robot.subsystems.SuperSystem;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
-import frc.robot.subsystems.vision.NoteAssistance;
 
 public class Taxi extends SequentialCommandGroup {
-    
-    // to be tested. Do not use it before test
 
     public Taxi(SwerveDrivetrain swerve, PathPlannerPath path){
         Pose2d startingPose = new Pose2d(1.33, 5.55, new Rotation2d());//GetStartPoseInPath(pathGroup.get(0));
